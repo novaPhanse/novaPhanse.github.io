@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мать твоя — Valorant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Sevillana&family=Monoton&family=Zen+Dots&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0b0f;
+  --panel:rgba(26,20,30,.72);
+  --panel-border:rgba(255,90,180,.18);
+  --text:#f3e7f0;
+  --muted:#a98fa6;
+  --pink:#ff5cb8;
+  --pink2:#ff8fd0;
+  --pinkdark:#a1367c;
+  --gold:#f0c66a;
+  --roseb:#3a2f38;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden;position:relative;
+  background-image:radial-gradient(ellipse at 50% -10%, rgba(255,92,184,.08), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(255,92,184,.05), transparent 50%);
+}
+#vg{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(20,15,22,.3),rgba(13,11,15,.96))}
+#vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.5) 100%)}
+
+.wrap{max-width:940px;margin:0 auto;padding:40px 22px 70px}
+
+.spark{position:fixed;z-index:-1;width:2px;height:2px;border-radius:50%;background:#ffb1dd;pointer-events:none;opacity:0;animation:rise linear infinite;box-shadow:0 0 6px rgba(255,120,200,.7)}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.5}60%{opacity:.2}100%{transform:translateY(-100vh);opacity:0}}
+
+/* wandering minimal cats */
+.cat{position:fixed;bottom:-4px;z-index:1;pointer-events:none;opacity:.38;filter:drop-shadow(0 0 4px rgba(255,120,200,.2))}
+.cat .cb{animation:catwalk 8s ease-in-out infinite}
+.cat svg{width:38px;height:38px;overflow:visible;display:block}
+.cat .tail{transform-origin:0 0;animation:tailsway 2.2s ease-in-out infinite}
+@keyframes catwalk{
+  0%,100%{transform:translateX(0) translateY(0) scaleX(1)}
+  25%{transform:translateX(0) translateY(-6px) scaleX(1)}
+  50%{transform:translateX(0) translateY(0) scaleX(1)}
+  75%{transform:translateX(0) translateY(-8px) scaleX(1)}
+}
+@keyframes tailsway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(14deg)}}
+.cat.c1{left:6%;animation:catdrift1 26s linear infinite}
+.cat.c2{right:8%;animation:catdrift2 32s linear infinite}
+.cat.c3{left:46%;animation:catdrift3 30s linear infinite}
+@keyframes catdrift1{0%{transform:translateX(0)}50%{transform:translateX(34vw)}100%{transform:translateX(68vw)}}
+@keyframes catdrift2{0%{transform:translateX(0)}50%{transform:translateX(-36vw)}100%{transform:translateX(-70vw)}}
+.cat.c2 .cb{animation-delay:1.2s}
+.cat.c2 .tail{animation-delay:.7s}
+@keyframes catdrift3{0%{transform:translateX(0)}50%{transform:translateX(24vw)}100%{transform:translateX(46vw)}}
+.cat.c3 .cb{animation-delay:.6s}
+.cat.c3 .tail{animation-delay:1.4s}
+@media(max-width:760px){.cat{display:none}}
+
+/* flying hearts & guns */
+.floaty{position:fixed;z-index:-1;pointer-events:none;opacity:0;filter:drop-shadow(0 0 6px rgba(255,92,184,.25))}
+.floaty.f-heart{font-size:20px;color:#ff7ab8;animation:floatyUp linear infinite;text-shadow:0 0 12px rgba(255,120,200,.8)}
+.floaty.f-heart2{font-size:14px;color:#ff9fcd}
+.floaty.f-gun{font-size:22px;color:#d9a0c4;animation:floatyUpG linear infinite;transform:rotate(12deg)}
+.floaty.f-gun2{font-size:16px;color:#c98fb8;animation:floatyUpG2 linear infinite}
+@keyframes floatyUp{
+  0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}
+  12%{opacity:.8}
+  60%{opacity:.55}
+  100%{transform:translateY(-105vh) translateX(-4vw) rotate(20deg);opacity:0}
+}
+@keyframes floatyUpG{
+  0%{transform:translateY(0) translateX(0) rotate(12deg);opacity:0}
+  12%{opacity:.7}
+  60%{opacity:.5}
+  100%{transform:translateY(-108vh) translateX(5vw) rotate(-20deg);opacity:0}
+}
+@keyframes floatyUpG2{
+  0%{transform:translateY(0) translateX(0) rotate(-8deg);opacity:0}
+  12%{opacity:.6}
+  60%{opacity:.4}
+  100%{transform:translateY(-102vh) translateX(-6vw) rotate(25deg);opacity:0}
+}
+
+/* sakura trees on edges — part of the page background, scroll with content */
+.sakura{position:absolute;top:0;bottom:0;width:26vw;min-width:220px;display:flex;align-items:flex-end;justify-content:var(--align,flex-start);pointer-events:none;z-index:-1;overflow:hidden}
+.sakura .sway{position:relative}
+.sakura svg{height:46vh;min-height:300px;display:block}
+.sakura-left{left:0;--align:flex-start}
+.sakura-right{right:0;--align:flex-end}
+.sakura-right svg{transform:scaleX(-1)}
+@keyframes sway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.4deg)}}
+.sakura .trunk{fill:none;stroke:#2a1c1c;stroke-width:10;stroke-linecap:round}
+.sakura .branch{fill:none;stroke:#2a1c1c;stroke-width:5;stroke-linecap:round}
+.sakura .bloom{fill:#ff8fbe;opacity:.85}
+.sakura .bloom.p{fill:#ffb9d8}
+.sakura .sway{transform-origin:20% 100%;animation:sway 6s ease-in-out infinite}
+
+header.hero{text-align:center;margin-bottom:40px}
+.hero-grid{display:grid;grid-template-columns:1fr 2.3fr 1fr;gap:24px;align-items:center}
+.hero-center{order:2}
+.hero-side{order:1}
+.right-side{order:3}
+.banner{width:100%;max-width:560px;margin:0 auto 26px;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 8px 30px rgba(0,0,0,.5);text-align:center}
+.banner img{width:100%;height:170px;object-fit:cover;display:block}
+.banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(13,11,15,.55));pointer-events:none}
+.side-title{display:flex;flex-direction:column;align-items:center;gap:12px;user-select:none}
+.st-word{
+  font-family:'Trebuchet MS','Segoe UI',sans-serif;
+  font-size:clamp(18px,2.4vw,30px);font-weight:800;letter-spacing:5px;
+  color:var(--pink2);text-transform:uppercase;text-align:center;line-height:1.25;
+  text-shadow:0 0 18px rgba(255,92,184,.4);
+  animation:wordPulse 5s ease-in-out infinite;
+}
+.st-word.d2{animation-delay:.7s}
+.st-word.d3{animation-delay:1.4s}
+@keyframes wordPulse{0%,100%{opacity:.75;text-shadow:0 0 8px rgba(255,92,184,.2)}50%{opacity:1;text-shadow:0 0 22px rgba(255,92,184,.6)}}
+.st-word.sm{font-size:clamp(13px,1.7vw,19px);letter-spacing:2px;font-weight:600;text-transform:none;color:#e8a8d6;animation:wordPulse 6s ease-in-out infinite}
+.st-lines{display:flex;align-items:center;gap:8px;color:var(--pink);opacity:.5}
+.st-lines .sl{display:inline-block;width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--pink));opacity:.6}
+.st-lines i{font-style:normal;font-size:12px;color:var(--pink2);text-shadow:0 0 8px rgba(255,92,184,.6)}
+.st-top{color:#5c3f52;font-size:12px;letter-spacing:5px}
+
+/* envelope */
+.envelope{position:relative;width:190px;height:150px;margin:8px auto;perspective:900px;cursor:pointer}
+.env-body{position:absolute;inset:0;background:linear-gradient(145deg,#2a1f2b,#1a121c);border:1px solid rgba(255,92,184,.25);border-radius:10px;z-index:1}
+.env-body::after{content:'';position:absolute;inset:0;background:
+  linear-gradient(135deg,transparent 48%,rgba(255,92,184,.12) 50%,transparent 52%),
+  linear-gradient(-135deg,transparent 48%,rgba(255,92,184,.12) 50%,transparent 52%);border-radius:10px;pointer-events:none}
+.env-letter{position:absolute;left:22px;right:22px;top:18px;bottom:18px;background:linear-gradient(#241b2b,#1a1320);border-radius:6px;z-index:2;padding:26px 14px 14px;display:flex;flex-direction:column;gap:8px;transition:top .5s ease,opacity .3s;box-shadow:0 0 12px rgba(255,92,184,.15);border:1px solid rgba(255,92,184,.15);opacity:0;}
+.env-line{height:4px;border-radius:2px;background:rgba(255,92,184,.3)}
+.env-line.l2{width:70%}
+.env-line.l3{width:50%}
+.env-flap{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,#3a2c3d,#241b2b);z-index:3;transform-origin:top center;transition:transform .55s cubic-bezier(.4,.1,.2,1);border-radius:10px 10px 0 0;transform-style:preserve-3d;box-shadow:0 0 10px rgba(255,92,184,.2)}
+.env-flap::before{content:'';position:absolute;bottom:0;left:0;right:0;height:0;border-bottom:20px solid #241b2b;border-left:95px solid transparent;border-right:95px solid transparent}
+.env-text{position:absolute;z-index:2;top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;color:#ffd0e8;font-size:12px;letter-spacing:.5px;line-height:1.5;padding:0 12px;opacity:0;transition:opacity .4s .25s;pointer-events:none;text-shadow:0 0 8px rgba(255,92,184,.4)}
+.envelope:hover .env-flap{transform:rotateX(180deg)}
+.envelope:hover .env-letter{top:4px;opacity:1}
+.envelope:hover .env-text{opacity:1}
+.st-hint{color:var(--muted);font-size:11px;letter-spacing:1px;font-style:italic;margin-top:6px}
+
+.avatar{width:170px;height:170px;margin:0 auto 20px;position:relative;display:block}
+.avatar img{
+  width:128px;height:128px;border-radius:50%;object-fit:cover;display:block;position:absolute;
+  left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;
+  border:3px solid var(--pink);box-shadow:0 0 30px rgba(255,92,184,.5),0 0 60px rgba(255,92,184,.2);
+}
+.ring{position:absolute;inset:0;z-index:0;animation:spin 26s linear infinite}
+.ring svg{width:100%;height:100%}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1.name{
+  font-family:'Cinzel Decorative','Pirata One',serif;font-size:clamp(30px,7vw,50px);font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;
+  background:linear-gradient(100deg,#ffffff 0%,#ff9fd0 20%,#ff5cb8 38%,#ffc2e6 50%,#ff5cb8 62%,#ff9fd0 80%,#ffffff 100%);
+  background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-fill-color:transparent;
+  animation:neonRipple 6s linear infinite;
+  filter:drop-shadow(0 0 14px rgba(255,92,184,.4));
+}
+@keyframes neonRipple{
+  0%{background-position:0% 50%}
+  100%{background-position:220% 50%}
+}
+h1.name .dot{
+  background:linear-gradient(100deg,#ff8fd0,#ff4daf);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-fill-color:transparent;
+  animation:dotPulse 3s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(255,92,184,.5))}50%{filter:drop-shadow(0 0 18px rgba(255,92,184,.9))}}
+.rank{display:inline-block;margin-top:8px;padding:7px 18px;border-radius:20px;font-size:14px;font-weight:700;letter-spacing:1px;
+  color:var(--pink2);border:1px solid rgba(255,92,184,.4);background:rgba(255,92,184,.08);text-transform:uppercase;
+  box-shadow:0 0 16px rgba(255,92,184,.2)}
+.dbtn{display:inline-flex;align-items:center;gap:9px;margin-top:14px;padding:11px 24px;border-radius:12px;text-decoration:none;
+  color:#fff;font-weight:700;font-size:15px;letter-spacing:.5px;
+  background:#5865F2;border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 0 18px rgba(88,101,242,.5);transition:.2s}
+.dbtn:hover{transform:translateY(-2px);box-shadow:0 0 26px rgba(88,101,242,.8)}
+.dbtn .dico{width:22px;height:17px;display:block}
+.dbtn span{background:linear-gradient(100deg,#fff,#e6d9ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.divider{width:200px;height:2px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.corner-row{display:flex;justify-content:center;gap:8px;margin-top:10px;color:var(--pinkdark);letter-spacing:4px;opacity:.7}
+
+.section-title{
+  display:flex;align-items:center;gap:12px;justify-content:center;margin:34px 0 20px;
+  color:var(--pink2);font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+}
+.section-title::before,.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--pink),transparent);opacity:.5}
+
+.agents{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.agent{
+  position:relative;background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;overflow:hidden;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);transition:.25s;
+}
+.agent:hover{transform:translateY(-5px);border-color:var(--pink);box-shadow:0 12px 38px rgba(255,92,184,.2)}
+.agent .art{width:100%;height:200px;object-fit:cover;display:block;filter:grayscale(.2);border-bottom:1px solid rgba(255,92,184,.15)}
+.agent .body{padding:16px 16px 18px}
+.agent .an{display:flex;align-items:center;justify-content:space-between}
+.agent .an .nm{font-size:19px;font-weight:800;color:#fff;letter-spacing:1px}
+.agent .an .role{font-size:11px;letter-spacing:2px;color:var(--pink2);text-transform:uppercase;border:1px solid rgba(255,92,184,.3);padding:3px 9px;border-radius:12px}
+.agent .stats{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.agent .stat{background:rgba(0,0,0,.3);border-radius:9px;padding:8px 10px}
+.agent .stat .k{font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.agent .stat .v{font-size:16px;font-weight:700;color:var(--text);margin-top:2px}
+.agent .stat .v.hi{color:var(--pink2)}
+.agent .hours{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
+.agent .hours b{color:var(--pink);font-weight:700}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.statcard{
+  position:relative;background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;
+  padding:18px 16px;text-align:center;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.45);transition:.2s;
+}
+.statcard:hover{transform:translateY(-3px)}
+.statcard .ic{font-size:22px;margin-bottom:4px;filter:drop-shadow(0 0 8px rgba(255,92,184,.4))}
+.statcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent);opacity:.6}
+.statcard.gold{border-color:rgba(240,198,106,.35)}
+.statcard.gold::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.statcard.gold .ic{filter:drop-shadow(0 0 8px rgba(240,198,106,.5))}
+.statcard.pink{border-color:rgba(255,92,184,.35)}
+.statcard .k{font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.statcard .v{font-size:24px;font-weight:800;color:var(--pink2);margin-top:5px;text-shadow:0 0 14px rgba(255,92,184,.35)}
+.statcard .v.gold{color:var(--gold)}
+.statcard .s{font-size:11px;color:var(--muted);margin-top:3px}
+.statcard.gun .k{display:flex;align-items:center;justify-content:center;gap:6px}
+.statcard.gun .gun-ico{color:var(--pink2);font-size:12px;letter-spacing:-1px;text-shadow:0 0 8px rgba(255,92,184,.6)}
+
+.weapons{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.weapon{position:relative;background:linear-gradient(160deg,rgba(255,92,184,.06),rgba(26,20,30,.9));border:1px solid var(--panel-border);border-radius:16px;padding:22px 18px;text-align:center;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.45);transition:.25s}
+.weapon::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--wcol,#ff5cb8),transparent);opacity:.7}
+.weapon:hover{transform:translateY(-5px);border-color:var(--wcol,#ff5cb8);box-shadow:0 12px 34px rgba(255,92,184,.18)}
+.weapon-ico{display:block;font-size:40px;line-height:1;margin-bottom:10px;color:var(--wcol,#ff5cb8);text-shadow:0 0 18px var(--wcol,#ff5cb8);font-family:serif;opacity:.9}
+.weapon-name{font-size:19px;font-weight:800;letter-spacing:2px;color:#fff;margin-bottom:14px;text-transform:uppercase}
+.weapon-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ws{background:rgba(0,0,0,.3);border-radius:9px;padding:8px 10px}
+.ws-k{display:block;font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.ws-v{display:block;font-size:18px;font-weight:800;color:var(--wcol,#ff8fd0);margin-top:2px}
+.weapon-tag{position:absolute;top:12px;left:12px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--wcol,#ff5cb8);border:1px solid var(--wcol,#ff5cb8);padding:2px 8px;border-radius:10px;opacity:.85}
+.weapon.w1{--wcol:#ff5cb8}
+.weapon.w2{--wcol:#8fd0ff}
+.weapon.w3{--wcol:#b6ff8f}
+
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:40px;letter-spacing:1px}
+footer .sig{color:var(--pink);letter-spacing:2px}
+
+/* gothic-pink side columns */
+.col{position:fixed;top:0;bottom:0;width:44px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:24px 0;z-index:0;pointer-events:none;user-select:none}
+.col .cl{font-size:14px;line-height:2.3;color:#5c3f52;text-shadow:0 0 8px rgba(255,120,200,.15)}
+.col .cl.hi{color:var(--pink2);text-shadow:0 0 12px rgba(255,92,184,.4)}
+.col-left{left:8px}
+.col-right{right:8px}
+.col .ct,.col .cb{font-size:11px;color:var(--muted);letter-spacing:2px}
+
+.bstrip{position:fixed;left:0;right:0;text-align:center;font-size:14px;letter-spacing:14px;color:#5c3f52;opacity:.85;z-index:0;pointer-events:none;user-select:none}
+.bstrip.top{top:7px}
+.bstrip.bottom{bottom:7px}
+.bstrip .fl{color:var(--pink2);opacity:.7}
+
+.corn{position:fixed;font-size:18px;color:#5c3f52;z-index:0;pointer-events:none;user-select:none;text-shadow:0 0 10px rgba(255,120,200,.2)}
+.corn.tr{top:10px;right:14px}
+.corn.tl{top:10px;left:14px;transform:scaleX(-1)}
+.corn.br{bottom:10px;right:14px;transform:scaleY(-1)}
+.corn.bl{bottom:10px;left:14px;transform:scale(-1,1)}
+
+/* music player */
+.player{max-width:360px;margin:8px auto 0}
+.player-card{
+  display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:40px;padding:10px 16px;box-shadow:0 8px 26px rgba(0,0,0,.45);
+}
+.disc{flex:none;width:56px;height:56px;border-radius:50%;position:relative;overflow:hidden;
+  border:2px solid #3a2f38;box-shadow:0 0 12px rgba(255,92,184,.3);}
+.disc img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.disc::after{content:'';position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);
+  border-radius:50%;background:#3a2f38;border:2px solid #ff8fd0;}
+.disc.spin{animation:discspin 8s linear infinite}
+@keyframes discspin{to{transform:rotate(360deg)}}
+/* radial volume dial */
+.voldial{
+  flex:none;position:relative;width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  background:conic-gradient(var(--pink) calc(var(--vol,80)*1%), rgba(255,255,255,.08) 0);
+  box-shadow:0 0 10px rgba(255,92,184,.25);
+}
+.voldial::before{content:'';position:absolute;inset:2px;border-radius:50%;background:var(--panel);}
+.voldial .vnob{position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 6px rgba(255,92,184,.8);}
+.voldial .vicon{position:relative;font-size:15px;color:#fff;text-shadow:0 0 6px rgba(255,92,184,.6);pointer-events:none;}
+.voldial .vtip{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);white-space:nowrap;pointer-events:none;}
+.mbtn{
+  flex:none;cursor:pointer;border:1px solid rgba(255,92,184,.5);padding:11px 18px;border-radius:50%;
+  font-size:16px;background:rgba(255,92,184,.12);color:#fff;transition:.2s;
+}
+.mbtn:hover{background:rgba(255,92,184,.3);box-shadow:0 0 16px rgba(255,92,184,.4)}
+.track-info{flex:1;min-width:0}
+.track-name{color:#fff;font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-artist{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lyrics{margin-top:16px;max-width:480px;margin-left:auto;margin-right:auto;min-height:52px;text-align:center;position:relative}
+.lyric-line{position:absolute;left:0;right:0;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;font-size:15px;color:var(--text);letter-spacing:.3px;line-height:1.5;pointer-events:none}
+.lyric-line.show{opacity:1;transform:translateY(0)}
+.lyric-line .ly{color:#ff9fd0;text-shadow:0 0 10px rgba(255,92,184,.4)}
+.lyric-line .ly.act{color:#ffd0e8;font-weight:700}
+.lyrics .lbar{position:absolute;left:12%;right:12%;bottom:-14px;height:2px;border-radius:2px;background:rgba(255,92,184,.15);overflow:hidden}
+.lyrics .lbar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width .2s linear}
+.seekbar{position:relative;width:100%;max-width:480px;margin:16px auto 0;height:10px;border-radius:6px;background:rgba(255,255,255,.14);cursor:pointer;border:1px solid rgba(255,92,184,.35);box-shadow:0 0 8px rgba(255,92,184,.12)}
+.seekbar:hover{background:rgba(255,255,255,.22);border-color:rgba(255,92,184,.7)}
+.seek-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:6px;background:linear-gradient(90deg,var(--pink),var(--pink2));box-shadow:0 0 10px rgba(255,92,184,.7)}
+.seek-thumb{position:absolute;top:50%;width:20px;height:20px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 10px rgba(255,92,184,.9),0 0 4px #fff;pointer-events:none}
+.seek-time{display:flex;justify-content:space-between;max-width:480px;margin:4px auto 0;color:var(--muted);font-size:11px;letter-spacing:.5px}
+.track-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.18);margin-top:9px;overflow:visible;cursor:pointer;position:relative;border:1px solid rgba(255,92,184,.4);box-shadow:0 0 6px rgba(255,92,184,.15)}
+.track-bar:hover{background:rgba(255,255,255,.26);border-color:rgba(255,92,184,.7)}
+.track-bar .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--pink),var(--pink2));border-radius:5px;box-shadow:0 0 8px rgba(255,92,184,.7);transition:width .1s linear}
+.track-bar .thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(255,92,184,.9),0 0 3px #fff;pointer-events:none;display:none}
+.track-bar:hover .thumb,.track-bar.drag .thumb{display:block}
+
+@media(max-width:760px){
+  .agents{grid-template-columns:1fr}
+  .agent .art{height:180px}
+  .weapons{grid-template-columns:1fr}
+  .col{display:none}
+  .corn{display:none}
+  .sakura{display:none}
+  .hero-grid{grid-template-columns:1fr;gap:18px}
+  .hero-side{order:2}
+  .hero-center{order:1}
+  .side-title{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:12px}
+  .st-lines{display:none}
+}
+</style>
+</head>
+<body>
+<div id="vg"></div>
+<div id="vignette"></div>
+<i class="spark" style="left:10%;bottom:-8px;animation-duration:18s"></i>
+<i class="spark" style="left:30%;bottom:-8px;animation-duration:24s;animation-delay:3s"></i>
+<i class="spark" style="left:52%;bottom:-8px;animation-duration:20s;animation-delay:7s"></i>
+<i class="spark" style="left:72%;bottom:-8px;animation-duration:26s;animation-delay:1s"></i>
+<i class="spark" style="left:88%;bottom:-8px;animation-duration:19s;animation-delay:5s"></i>
+
+<div class="bstrip top"><span class="fl">✦</span> ✧ ✦ ✧ <span class="fl">✦</span> ✧ ✦ ✧ <span class="fl">✦</span> ✧ ✦ ✧ <span class="fl">✦</span> ✧ ✦ ✧ <span class="fl">✦</span></div>
+<div class="bstrip bottom"><span class="fl">✧</span> ✦ ✧ ✦ <span class="fl">✧</span> ✦ ✧ ✦ <span class="fl">✧</span> ✦ ✧ ✦ <span class="fl">✧</span> ✦ ✧ ✦ <span class="fl">✧</span></div>
+
+<div class="corn tl">✦</div>
+<div class="corn tr">✦</div>
+<div class="corn bl">✦</div>
+<div class="corn br">✦</div>
+
+<div class="col col-left">
+  <div class="ct">✧ ✦</div>
+  <div>
+    <div class="cl hi">✦</div>
+    <div class="cl">✧</div>
+    <div class="cl">♥</div>
+    <div class="cl hi">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">✧</div>
+    <div class="cl">♥</div>
+    <div class="cl hi">✦</div>
+    <div class="cl">✧</div>
+    <div class="cl">♥</div>
+    <div class="cl">✦</div>
+    <div class="cl hi">✧</div>
+  </div>
+  <div class="cb">✦ ✧</div>
+</div>
+
+<div class="col col-right">
+  <div class="ct">✦ ✧</div>
+  <div>
+    <div class="cl hi">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">♥</div>
+    <div class="cl hi">✦</div>
+    <div class="cl">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">♥</div>
+    <div class="cl hi">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">♥</div>
+    <div class="cl">✧</div>
+    <div class="cl hi">✦</div>
+  </div>
+  <div class="cb">✧ ✦</div>
+</div>
+
+<div class="cat c1"><div class="cb">
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <path class="tail" d="M52 40 C62 34 64 22 58 16" fill="none" stroke="#ff8fd0" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="32" cy="40" rx="22" ry="17" fill="#ff8fd0"/>
+    <path d="M18 20 L24 34 M46 20 L40 34" stroke="#ff8fd0" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="26" cy="26" r="5" fill="#ff5cb8"/><circle cx="38" cy="26" r="5" fill="#ff5cb8"/>
+    <path d="M32 29 l4 4 4 -4" fill="none" stroke="#fff" stroke-width="1.6"/>
+  </svg>
+</div></div>
+
+<div class="cat c2"><div class="cb">
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <path class="tail" d="M12 40 C2 34 0 22 6 16" fill="none" stroke="#b765b7" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="32" cy="40" rx="22" ry="17" fill="#b765b7"/>
+    <path d="M18 20 L24 34 M46 20 L40 34" stroke="#b765b7" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="26" cy="26" r="5" fill="#8b3a8b"/><circle cx="38" cy="26" r="5" fill="#8b3a8b"/>
+    <path d="M32 29 l4 4 4 -4" fill="none" stroke="#fff" stroke-width="1.6"/>
+  </svg>
+</div></div>
+
+<div class="cat c3"><div class="cb">
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <path class="tail" d="M52 40 C62 34 64 22 58 16" fill="none" stroke="#ffc2e6" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="32" cy="40" rx="22" ry="17" fill="#ffc2e6"/>
+    <path d="M18 20 L24 34 M46 20 L40 34" stroke="#ffc2e6" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="26" cy="26" r="5" fill="#ff8fd0"/><circle cx="38" cy="26" r="5" fill="#ff8fd0"/>
+    <path d="M32 29 l4 4 4 -4" fill="none" stroke="#fff" stroke-width="1.6"/>
+  </svg>
+</div></div>
+
+<span class="floaty f-heart" style="left:12%;bottom:-20px;animation-duration:16s">♥</span>
+<span class="floaty f-heart2" style="left:27%;bottom:-20px;animation-duration:21s;animation-delay:3s">♥</span>
+<span class="floaty f-heart" style="left:43%;bottom:-20px;animation-duration:18s;animation-delay:6s">♥</span>
+<span class="floaty f-heart2" style="left:61%;bottom:-20px;animation-duration:24s;animation-delay:1s">♥</span>
+<span class="floaty f-heart" style="left:78%;bottom:-20px;animation-duration:17s;animation-delay:8s">♥</span>
+<span class="floaty f-heart" style="left:90%;bottom:-20px;animation-duration:22s;animation-delay:4s">♥</span>
+<span class="floaty f-gun" style="left:18%;bottom:-26px;animation-duration:19s;animation-delay:2s"><svg viewBox="0 0 24 24" width="22" height="22"><g fill="none" stroke="#ff8fd0" stroke-width="1.6" stroke-linecap="round"><path d="M3 15 L20 15 L21 13 L16 12 L8 12 Z"/><path d="M3 17 L8 17 L8 18 L4 18 Z"/><path d="M13 12 L15 8 L17 9 L15 12"/></g></svg></span>
+<span class="floaty f-gun2" style="left:36%;bottom:-26px;animation-duration:25s;animation-delay:7s"><svg viewBox="0 0 24 24" width="16" height="16"><g fill="none" stroke="#c98fb8" stroke-width="1.6" stroke-linecap="round"><path d="M4 14 L19 14 L20 12 L16 11 L9 11 Z"/><path d="M4 16 L8 16 L8 17 L5 17 Z"/></g></svg></span>
+<span class="floaty f-gun" style="left:55%;bottom:-26px;animation-duration:20s;animation-delay:5s"><svg viewBox="0 0 24 24" width="22" height="22"><g fill="none" stroke="#ff8fd0" stroke-width="1.6" stroke-linecap="round"><path d="M3 15 L20 15 L21 13 L16 12 L8 12 Z"/><path d="M3 17 L8 17 L8 18 L4 18 Z"/><path d="M13 12 L15 8 L17 9 L15 12"/></g></svg></span>
+<span class="floaty f-gun2" style="left:72%;bottom:-26px;animation-duration:26s;animation-delay:9s"><svg viewBox="0 0 24 24" width="16" height="16"><g fill="none" stroke="#c98fb8" stroke-width="1.6" stroke-linecap="round"><path d="M4 14 L19 14 L20 12 L16 11 L9 11 Z"/><path d="M4 16 L8 16 L8 17 L5 17 Z"/></g></svg></span>
+<span class="floaty f-gun" style="left:86%;bottom:-26px;animation-duration:21s;animation-delay:3s"><svg viewBox="0 0 24 24" width="22" height="22"><g fill="none" stroke="#ff8fd0" stroke-width="1.6" stroke-linecap="round"><path d="M3 15 L20 15 L21 13 L16 12 L8 12 Z"/><path d="M3 17 L8 17 L8 18 L4 18 Z"/><path d="M13 12 L15 8 L17 9 L15 12"/></g></svg></span>
+
+<div class="sakura sakura-left">
+  <div class="sway">
+  <svg viewBox="0 0 200 400" aria-hidden="true">
+    <path class="trunk" d="M30 400 C28 330 34 280 40 240 C46 200 50 160 52 120"/>
+    <path class="branch" d="M40 260 C70 240 95 235 120 245 M70 250 C85 230 92 210 90 190"/>
+    <path class="branch" d="M48 200 C75 180 90 170 105 175 M80 185 C96 170 104 150 100 130"/>
+    <path class="branch" d="M51 150 C70 135 82 128 90 130"/>
+    <g class="bloom"><circle cx="120" cy="245" r="9"/><circle cx="138" cy="250" r="7"/><circle cx="105" cy="258" r="6"/></g>
+    <g class="bloom p"><circle cx="95" cy="200" r="8"/><circle cx="112" cy="185" r="6"/><circle cx="90" cy="180" r="9"/><circle cx="108" cy="170" r="6"/></g>
+    <g class="bloom"><circle cx="100" cy="130" r="8"/><circle cx="85" cy="140" r="6"/><circle cx="115" cy="135" r="5"/></g>
+    <g class="bloom p"><circle cx="90" cy="160" r="7"/><circle cx="78" cy="150" r="5"/></g>
+    <circle class="bloom" cx="125" cy="200" r="6"/><circle class="bloom" cx="130" cy="180" r="5"/>
+  </svg>
+  </div>
+</div>
+
+<div class="sakura sakura-right">
+  <div class="sway" style="animation-delay:2s">
+  <svg viewBox="0 0 200 400" aria-hidden="true">
+    <path class="trunk" d="M170 400 C172 320 166 270 160 230 C154 190 150 150 148 110"/>
+    <path class="branch" d="M162 250 C136 235 112 232 86 240 M132 238 C118 220 111 200 114 180"/>
+    <path class="branch" d="M152 190 C128 170 114 160 100 165 M124 172 C108 158 100 138 105 120"/>
+    <path class="branch" d="M149 130 C132 118 120 112 112 114"/>
+    <g class="bloom"><circle cx="86" cy="240" r="8"/><circle cx="68" cy="248" r="6"/><circle cx="100" cy="250" r="5"/></g>
+    <g class="bloom p"><circle cx="110" cy="195" r="7"/><circle cx="96" cy="180" r="8"/><circle cx="114" cy="172" r="5"/></g>
+    <g class="bloom"><circle cx="105" cy="120" r="7"/><circle cx="120" cy="128" r="5"/><circle cx="92" cy="128" r="5"/></g>
+    <circle class="bloom p" cx="118" cy="150" r="6"/><circle class="bloom" cx="76" cy="210" r="6"/>
+  </svg>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="hero-side left-side">
+        <div class="side-title">
+          <span class="st-top">✦ ✧ ✦</span>
+          <span class="st-word">Я ТУТ</span>
+          <span class="st-lines"><span class="sl"></span><i>♥</i><span class="sl"></span></span>
+          <span class="st-word">ВЛАСТЬ</span>
+          <span class="st-bottom" style="color:#5c3f52;font-size:11px;letter-spacing:2px;font-style:italic">я тут власть</span>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <div class="banner"><img src="banner.jpg" alt="banner"></div>
+        <div class="avatar">
+          <div class="ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="47" fill="none" stroke="#ff5cb8" stroke-width="2" stroke-dasharray="4 10" opacity=".7"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#ff8fd0" stroke-width="1" stroke-dasharray="2 14" opacity=".5"/>
+            </svg>
+          </div>
+          <img src="val_avatar.jpg" alt="avatar">
+        </div>
+        <h1 class="name">Мать <span class="dot">твоя</span></h1>
+        <div class="rank">◈ Silver 1 · LVL 156 ◈</div>
+        <div class="corner-row">✦ ✧ ✦ ✧ ✦</div>
+        <a class="dbtn" href="https://discord.com/users/773553505112817675" target="_blank" rel="noopener">
+          <svg class="dico" viewBox="0 0 127.14 96.36" aria-hidden="true">
+            <path fill="#fff" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36a77.7,77.7,0,0,0,6.42-10.68,69.17,69.17,0,0,1-10-5.19c.71-.52,1.5-1.06,2.21-1.59a75.8,75.8,0,0,0,64.82,0c.71.53,1.5,1.07,2.21,1.59a68.55,68.55,0,0,1-10,5.19,77.7,77.7,0,0,0,6.43,10.68A105.79,105.79,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.59,11.45-12.59S54,46,53.89,53,48.71,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.59,11.45-12.59S96.23,46,96.12,53,91,65.69,84.69,65.69Z"/>
+          </svg>
+          <span>Discord</span>
+        </a>
+        <div class="divider"></div>
+      </div>
+
+      <div class="hero-side right-side">
+        <div class="side-title">
+          <span class="st-top">✦ ♥ ✦</span>
+          <div class="envelope">
+            <div class="env-letter">
+              <div class="env-line l1"></div>
+              <div class="env-line l2"></div>
+              <div class="env-line l3"></div>
+            </div>
+            <div class="env-text">я сложил(а) чувства в конверт<br>и больше за них не отвечаю</div>
+            <div class="env-flap"></div>
+            <div class="env-body"></div>
+          </div>
+          <span class="st-hint">наведи на конверт</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="section-title">✦ Агенты ✦</div>
+  <div class="agents">
+    <div class="agent">
+      <img class="art" src="reyna.jpg" alt="Reyna">
+      <div class="body">
+        <div class="an"><span class="nm">Reyna</span><span class="role">Duelist</span></div>
+        <div class="stats">
+          <div class="stat"><div class="k">Часы</div><div class="v hi">260</div></div>
+          <div class="stat"><div class="k">Матчи</div><div class="v">451</div></div>
+          <div class="stat"><div class="k">% побед</div><div class="v">47.7%</div></div>
+          <div class="stat"><div class="k">K/D</div><div class="v">0.87</div></div>
+          <div class="stat"><div class="k">ADR</div><div class="v">140.7</div></div>
+          <div class="stat"><div class="k">ACS</div><div class="v">209.0</div></div>
+        </div>
+        <div class="hours">Лучшая карта: <b>Бриз</b> — 56% побед</div>
+      </div>
+    </div>
+
+    <div class="agent">
+      <img class="art" src="sage.jpg" alt="Sage">
+      <div class="body">
+        <div class="an"><span class="nm">Sage</span><span class="role">Sentinel</span></div>
+        <div class="stats">
+          <div class="stat"><div class="k">Часы</div><div class="v hi">61</div></div>
+          <div class="stat"><div class="k">Матчи</div><div class="v">106</div></div>
+          <div class="stat"><div class="k">% побед</div><div class="v">44.3%</div></div>
+          <div class="stat"><div class="k">K/D</div><div class="v">0.82</div></div>
+          <div class="stat"><div class="k">ADR</div><div class="v">125.9</div></div>
+          <div class="stat"><div class="k">ACS</div><div class="v">190.0</div></div>
+        </div>
+        <div class="hours">Лучшая карта: <b>Lotus</b> — 44% побед</div>
+      </div>
+    </div>
+
+    <div class="agent">
+      <img class="art" src="vyse.jpg" alt="Vyse">
+      <div class="body">
+        <div class="an"><span class="nm">Vyse</span><span class="role">Sentinel</span></div>
+        <div class="stats">
+          <div class="stat"><div class="k">Часы</div><div class="v hi">38</div></div>
+          <div class="stat"><div class="k">Матчи</div><div class="v">73</div></div>
+          <div class="stat"><div class="k">% побед</div><div class="v">46.6%</div></div>
+          <div class="stat"><div class="k">K/D</div><div class="v">0.79</div></div>
+          <div class="stat"><div class="k">ADR</div><div class="v">126.2</div></div>
+          <div class="stat"><div class="k">ACS</div><div class="v">189.5</div></div>
+        </div>
+        <div class="hours">Лучшая карта: <b>Bind</b> — 67% побед</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">✧ Общая статистика ✧</div>
+  <div class="stats">
+    <div class="statcard"><div class="ic">⏱</div><div class="k">Игровое время</div><div class="v">454<span style="font-size:13px">ч</span></div><div class="s">798 матчей</div></div>
+    <div class="statcard"><div class="ic">⚔</div><div class="k">K/D</div><div class="v">0.84</div><div class="s">10 756 убийств</div></div>
+    <div class="statcard"><div class="ic">🎯</div><div class="k">Урон / раунд</div><div class="v">134.5</div><div class="s">ADR</div></div>
+    <div class="statcard gold"><div class="ic">🏆</div><div class="k">Процент побед</div><div class="v gold">45.5%</div><div class="s">363 побед</div></div>
+    <div class="statcard pink"><div class="ic">💥</div><div class="k">Клатчи 1vX</div><div class="v">122</div><div class="s">1 vs 1</div></div>
+    <div class="statcard pink"><div class="ic">✨</div><div class="k">Безупречные раунды</div><div class="v">499</div><div class="s">колесо</div></div>
+  </div>
+
+  <div class="section-title">✧ Любимое оружие ✧</div>
+  <div class="weapons">
+    <div class="weapon w1">
+      <span class="weapon-ico">υ</span>
+      <div class="weapon-name">V<span style="color:#ff5cb8">A</span>NDAL</div>
+      <div class="weapon-stats">
+        <div class="ws"><span class="ws-k">убийств</span><span class="ws-v">3 745</span></div>
+        <div class="ws"><span class="ws-k">HS</span><span class="ws-v">20.7%</span></div>
+      </div>
+      <span class="weapon-tag">#1</span>
+    </div>
+    <div class="weapon w2">
+      <span class="weapon-ico">∿</span>
+      <div class="weapon-name">P<span style="color:#8fd0ff">H</span>ANTOM</div>
+      <div class="weapon-stats">
+        <div class="ws"><span class="ws-k">убийств</span><span class="ws-v">2 392</span></div>
+        <div class="ws"><span class="ws-k">HS</span><span class="ws-v">17.8%</span></div>
+      </div>
+      <span class="weapon-tag">#2</span>
+    </div>
+    <div class="weapon w3">
+      <span class="weapon-ico">✦</span>
+      <div class="weapon-name">SP<span style="color:#d6ff8f">E</span>CTRE</div>
+      <div class="weapon-stats">
+        <div class="ws"><span class="ws-k">убийств</span><span class="ws-v">1 006</span></div>
+        <div class="ws"><span class="ws-k">HS</span><span class="ws-v">15.6%</span></div>
+      </div>
+      <span class="weapon-tag">#3</span>
+    </div>
+  </div>
+
+  <div class="section-title">♪ Soundtrack ♪</div>
+  <div class="player">
+    <div class="player-card">
+      <div class="disc" id="disc"><img id="discart" src="cover1.jpg" alt="cover"></div>
+      <div class="voldial" id="voldial" title="Громкость"><span class="vnob"></span><span class="vicon">🔊</span><span class="vtip" id="voltip">80%</span></div>
+      <button class="mbtn" id="prevbtn" title="Предыдущий">⏮</button>
+      <button class="mbtn" id="playbtn">▶</button>
+      <button class="mbtn" id="nextbtn" title="Следующий">⏭</button>
+      <div class="track-info">
+        <div class="track-name" id="trackname">Дно — Я хочу</div>
+        <div class="track-artist" id="trackartist">▶ 1/2</div>
+        <div class="track-bar" id="trackbar"><div class="fill" id="trackfill"></div><div class="thumb" id="trackthumb"></div></div>
+      </div>
+    </div>
+    <div class="seekbar" id="seekbar"><div class="seek-fill" id="seekfill"></div><div class="seek-thumb" id="seekthumb"></div></div>
+    <div class="seek-time"><span id="tcur">0:00</span><span id="ttot">0:00</span></div>
+    <div class="lyrics" id="lyrics"><div class="lbar"><div class="fill" id="lfill"></div></div></div>
+  </div>
+
+  <footer>Мать твоя <span class="sig">✦</span> Valorant Profile</footer>
+</div>
+
+<audio id="track" loop></audio>
+<script>
+(function(){
+  var playlist=[
+    {name:'Дно — Я хочу', file:'track1.mp3', cover:'cover1.jpg'},
+    {name:'Боевые секси-роботы — Белый танец', file:'track2.mp3', cover:'cover2.jpg'}
+  ];
+  var LYRICS=[
+    [
+      {t:11, c:'Я хочу стать сильнейшим, чтобы убивать людей'},
+      {t:15, c:'Ведь мне так скучно, одиноко, и мне станет веселей'},
+      {t:19, c:'Я хочу стать лучшим воришкой, и украсть билет'},
+      {t:23, c:'В то кино, где тебя не будет, и никогда нет'},
+      {t:27, c:'Я хочу слушать панк и рок каждый новый день'},
+      {t:31, c:'Но желательно в одиночестве, не люблю детей'},
+      {t:35, c:'Я не люблю и не хочу, я не люблю'},
+      {t:43, c:'Ты хочешь быть ко мне поближе, малой, на что же ты обижен?'},
+      {t:47, c:'Тобою только чувства движут, а я хочу стоять повыше'},
+      {t:52, c:'Я хочу чтобы ты замолчал, ведь я знаю наперёд всё то, что ты хочешь сказать мне'},
+      {t:57, c:'Я упал, и в самом начале, я пройду всё, что мне нужно'},
+      {t:63, c:'Я хочу чтобы ты замолчал, я знаю наперёд всё то, что ты хочешь сказать мне'},
+      {t:71, c:'Я хочу чтобы мне платили все за мою лень'},
+      {t:75, c:'Я хочу чтоб не нужно учиться было каждый день'},
+      {t:79, c:'Я хочу чтоб ты знал, что я у себя на уме'},
+      {t:83, c:'И если что идёт не так, то я всегда так и хотел'},
+      {t:87, c:'Я хочу чтоб животных отпустили с зоопарка'},
+      {t:91, c:'Им там жарко, их не кормят, никому их там не жалко'},
+      {t:96, c:'Я снова так хочу, я снова так хочу'},
+      {t:102,c:'Я хочу чтобы ты замолчал, ведь я знаю наперёд всё то, что ты хочешь сказать мне'},
+      {t:107,c:'Я упал, и в самом начале, я пройду всё, что мне нужно'},
+      {t:113,c:'Я хочу чтобы ты замолчал, я знаю наперёд всё то, что ты хочешь сказать мне'},
+      {t:121,c:'Я ничё не хочу больше'}
+    ],
+    [
+      {t:20, c:'Закружился белый танец, как январская метель'},
+      {t:26, c:'Мы с тобой давно расстались, но иначе всё теперь'},
+      {t:36, c:'Ты в красивом чёрном платье у стены одна стоишь'},
+      {t:44, c:'Соглашусь на танец вряд-ли, но надеюсь пригласишь'},
+      {t:52, c:'А ты всё ждёшь, чего-то ждёшь, ко мне никак не подойдёшь'},
+      {t:57, c:'Чего стоишь, одна стоишь, когда меня ты пригласишь?'},
+      {t:62, c:'Я как в бреду, стою и жду, так подари же мне мечту'},
+      {t:67, c:'Но в сердце боль, тупая боль — танцуешь ты, но не со мной'},
+      {t:79, c:'Закружился белый танец в центре зала: ты и он'},
+      {t:87, c:'А я грустно улыбаюсь, из-под ног уходит пол'},
+      {t:95, c:'Танец кончился, а значит нужно таксу заказать'},
+      {t:103,c:'Оглянулся на удачу, а ты смотришь мне в глаза'},
+      {t:111,c:'А ты всё ждёшь, чего-то ждёшь, ко мне никак не подойдёшь'},
+      {t:116,c:'Чего стоишь, одна стоишь, когда меня ты пригласишь?'},
+      {t:121,c:'Я как в бреду, стою и жду, так подари же мне мечту'},
+      {t:126,c:'Но в сердце боль, тупая боль — танцуешь ты, но не со мной'}
+    ]
+  ];
+  var lyricsBox=document.getElementById('lyrics'),lfill=document.getElementById('lfill');
+  var curLineIdx=-1, curLyrics=[];
+  function showLyric(i){
+    if(i==curLineIdx)return;curLineIdx=i;
+    lyricsBox.querySelectorAll('.lyric-line').forEach(function(n){n.classList.remove('show')});
+    if(i>=0&&i<curLyrics.length){
+      var el=lyricsBox.children[i+1];if(el)el.classList.add('show');
+    }
+  }
+  function updateLyrics(){
+    if(!curLyrics.length){lfill.style.width='0%';return}
+    var t=a.currentTime;var i=curLyrics.length-1;
+    while(i>0&&curLyrics[i].t>t)i--;
+    showLyric(i);
+    var seg=curLyrics[i];
+    var next=curLyrics[i+1]?curLyrics[i+1].t:(a.duration||seg.t+4);
+    lfill.style.width=Math.min(100,Math.max(0,(t-seg.t)/(next-seg.t)*100))+'%';
+    lyricsBox.querySelector('.lbar').style.display='block';
+  }
+  var idx=0,a=document.getElementById('track'),b=document.getElementById('playbtn'),
+      n=document.getElementById('nextbtn'),p=document.getElementById('prevbtn'),
+      nm=document.getElementById('trackname'),ar=document.getElementById('trackartist'),
+      fill=document.getElementById('trackfill'),
+      disc=document.getElementById('disc'),art=document.getElementById('discart');
+  function load(i){
+    idx=(i+playlist.length)%playlist.length;
+    a.src=playlist[idx].file;nm.textContent=playlist[idx].name;
+    ar.textContent='▶ '+(idx+1)+'/'+playlist.length;
+    art.src=playlist[idx].cover;
+    // build lyric lines
+    lyricsBox.querySelectorAll('.lyric-line').forEach(function(n){n.remove()});
+    curLyrics=LYRICS[idx]||[];curLineIdx=-1;lfill.style.width='0%';
+    fill.style.width='0%';tthumb.style.left='0%';moveSeek(0);tcur.textContent='0:00';
+    lyricsBox.querySelector('.lbar').style.display='none';
+    for(var k=0;k<curLyrics.length;k++){
+      var d=document.createElement('div');d.className='lyric-line';d.innerHTML='<span class="ly">'+curLyrics[k].c+'</span>';lyricsBox.appendChild(d);
+    }
+  }
+  function setP(pl){b.textContent=pl?'❚❚':'▶';disc.classList.toggle('spin',pl)}
+  b.addEventListener('click',function(){if(a.paused){a.play();setP(true)}else{a.pause();setP(false)}});
+  var tbar=document.querySelector('.track-bar'),tthumb=document.getElementById('trackthumb');
+  var seekbar=document.getElementById('seekbar'),seekfill=document.getElementById('seekfill'),seekthumb=document.getElementById('seekthumb');
+  var tcur=document.getElementById('tcur'),ttot=document.getElementById('ttot');
+  function fmt(s){s=Math.floor(s||0);var m=Math.floor(s/60),sr=s%60;return m+':'+(sr<10?'0':'')+sr}
+  function moveSeek(p){seekfill.style.width=p+'%';seekthumb.style.left=p+'%';fill.style.width=p+'%';tthumb.style.left=p+'%';}
+  function seekTo(e){
+    if(!a.duration)return;
+    var r=seekbar.getBoundingClientRect();
+    var p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+    a.currentTime=p*a.duration;moveSeek(p*100);
+  }
+  seekbar.addEventListener('mousedown',function(e){seekTo(e);var mm=function(ev){seekTo(ev)};var up=function(){window.removeEventListener('mousemove',mm);window.removeEventListener('mouseup',up)};window.addEventListener('mousemove',mm);window.addEventListener('mouseup',up);});
+  n.addEventListener('click',function(){load(idx+1);a.play();setP(true)});
+  p.addEventListener('click',function(){load(idx-1);a.play();setP(true)});
+  a.addEventListener('timeupdate',function(){if(a.duration){var p=a.currentTime/a.duration*100;moveSeek(p);fill.style.width=p+'%';tthumb.style.left=p+'%';tcur.textContent=fmt(a.currentTime);ttot.textContent=fmt(a.duration);}updateLyrics();});
+  a.addEventListener('ended',function(){load(idx+1);a.play();setP(true)});
+  load(0);a.load();
+  a.addEventListener('durationchange',function(){if(a.duration)ttot.textContent=fmt(a.duration);});
+
+  var dial=document.getElementById('voldial'),vtip=document.getElementById('voltip');
+  a.volume=0.8;
+  function setVol(v){
+    v=Math.max(0,Math.min(1,v));a.volume=v;
+    dial.style.setProperty('--vol',(v*100)+'%');
+    vtip.textContent=Math.round(v*100)+'%';
+    dial.querySelector('.vicon').textContent = v<=0?'🔇':(v<0.5?'🔉':'🔊');
+  }
+  function volFromEvent(e){
+    var r=dial.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    var ang=Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI+90;
+    if(ang<0)ang+=360;return ang/360;
+  }
+  function moveV(e){setVol(volFromEvent(e))}
+  dial.addEventListener('mousedown',function(e){moveV(e);var mm=function(ev){moveV(ev)},mu=function(){window.removeEventListener('mousemove',mm);window.removeEventListener('mouseup',mu)};window.addEventListener('mousemove',mm);window.addEventListener('mouseup',mu);});
+  dial.addEventListener('dblclick',function(){setVol(0.8)});
+})();
+</script>
+</body>
+</html>
