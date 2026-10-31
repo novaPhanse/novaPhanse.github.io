@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>†Nova† — Too skilled to be sane</title>
+<style>
+:root{
+  --bg:#14161a;
+  --bg2:#0e1013;
+  --panel:rgba(30,33,38,.78);
+  --panel-border:rgba(255,255,255,.08);
+  --text:#d9dde3;
+  --muted:#8b919b;
+  --neon:#8ea3bd;
+  --neon2:#cfd6e0;
+  --accent:#b9c4d4;
+  --bone:#e8ecf1;
+  --rose:#3a3f46;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  color:var(--text);background:var(--bg2);line-height:1.65;overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.05), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, rgba(255,255,255,.03), transparent 50%);
+}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;opacity:.14;z-index:-2;filter:grayscale(.8) contrast(1.1)}
+#vg{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(ellipse at 50% 0%, rgba(220,230,240,.06), transparent 55%),
+  linear-gradient(180deg,rgba(20,22,26,.35),rgba(14,16,19,.97))}
+#vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.55) 100%)}
+.particle{position:fixed;z-index:-1;width:2px;height:2px;border-radius:50%;background:#e8ecf1;pointer-events:none;
+  opacity:0;animation:rise linear infinite;box-shadow:0 0 6px rgba(220,230,245,.7)}
+@keyframes rise{
+  0%{transform:translateY(0);opacity:0}
+  10%{opacity:.5}
+  50%{opacity:.25}
+  100%{transform:translateY(-100vh);opacity:0}
+}
+/* drifting gothic wisp-snakes, monochrome like the avatar */
+.wisp{position:fixed;z-index:-1;pointer-events:none;color:#d5dbe3;font-size:28px;opacity:0;
+  animation:wispa float linear infinite;text-shadow:0 0 14px rgba(220,230,245,.5)}
+@keyframes wispa{
+  0%{transform:translateX(-4vw) translateY(0) rotate(0deg);opacity:0}
+  12%{opacity:.35}
+  88%{opacity:.3}
+  100%{transform:translateX(104vw) translateY(-18vh) rotate(40deg);opacity:0}
+}
+.wisp-blow{animation-name:wispa2}
+@keyframes wispa2{
+  0%{transform:translateX(104vw) translateY(0) rotate(0);opacity:0}
+  12%{opacity:.28}
+  88%{opacity:.25}
+  100%{transform:translateX(-4vw) translateY(-14vh) rotate(-45deg);opacity:0}
+}
+
+.wrap{max-width:920px;margin:0 auto;padding:40px 22px 80px}
+
+/* gothic side columns */
+.col{position:fixed;top:0;bottom:0;width:52px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:26px 0;z-index:0;pointer-events:none;user-select:none}
+.col .cl{font-size:15px;line-height:2.35;color:var(--rose);text-shadow:0 0 8px rgba(185,196,212,.25);letter-spacing:0}
+.col .cl.hi{color:var(--neon2);text-shadow:0 0 12px rgba(207,214,224,.6)}
+.col-left{left:12px}
+.col-right{right:12px}
+.col .ct, .col .cb{font-size:12px;color:var(--muted);letter-spacing:2px}
+.col .ct{margin-bottom:10px}
+.col .cb{margin-top:10px}
+
+/* top & bottom ornamental strips */
+.bstrip{position:fixed;left:0;right:0;text-align:center;font-size:15px;letter-spacing:16px;color:var(--rose);opacity:.8;z-index:0;pointer-events:none;user-select:none}
+.bstrip.top{top:8px}
+.bstrip.bottom{bottom:8px}
+.bstrip .fl{color:var(--neon2);opacity:.7}
+
+/* corner ornaments */
+.corn{position:fixed;font-size:20px;color:var(--rose);z-index:0;pointer-events:none;user-select:none;text-shadow:0 0 10px rgba(185,196,212,.3)}
+.corn.tr{top:10px;right:16px}
+.corn.tl{top:10px;left:16px;transform:scaleX(-1)}
+.corn.br{bottom:10px;right:16px;transform:scaleY(-1)}
+.corn.bl{bottom:10px;left:16px;transform:scale(-1,1)}
+
+/* rose garland top */
+.roses-top{text-align:center;font-size:26px;color:var(--rose);letter-spacing:14px;opacity:.8;margin-bottom:-6px;user-select:none}
+.roses-bottom{text-align:center;font-size:22px;color:var(--rose);letter-spacing:12px;opacity:.7;margin-top:26px;user-select:none}
+
+header.hero{margin-bottom:40px}
+.hero-grid{display:grid;grid-template-columns:1fr 2.2fr 1fr;gap:24px;align-items:center;text-align:center}
+.hero-center{order:2}
+.hero-side{order:1}
+.right-side{order:3}
+.side-title{display:flex;flex-direction:column;align-items:center;gap:10px;user-select:none}
+.st-word{
+  font-family:'Trajan Pro','Palatino',Georgia,Baskerville,serif;
+  font-size:clamp(26px,3.5vw,44px);font-weight:600;letter-spacing:8px;
+  color:var(--bone);text-transform:uppercase;writing-mode:horizontal-tb;
+  text-shadow:0 0 18px rgba(200,210,225,.28);
+  animation:wordPulse 5s ease-in-out infinite;
+}
+.st-word.l1{animation-delay:0s}
+.st-word.l2{animation-delay:.8s}
+.st-word.l3{animation-delay:1.6s}
+@keyframes wordPulse{
+  0%,100%{opacity:.75;text-shadow:0 0 8px rgba(200,210,225,.15);transform:translateY(0)}
+  50%{opacity:1;text-shadow:0 0 24px rgba(220,230,245,.6);transform:translateY(-3px)}
+}
+.st-lines{display:flex;align-items:center;gap:10px;color:var(--neon2);opacity:.7;animation:lineGlow 5s ease-in-out infinite}
+.st-lines.i2{animation-delay:1s}
+@keyframes lineGlow{
+  0%,100%{opacity:.4}
+  50%{opacity:.95}
+}
+.st-lines .sl{display:inline-block;width:38px;height:1px;background:linear-gradient(90deg,transparent,var(--neon2));opacity:.6}
+.st-lines i{font-style:normal;font-size:13px;color:var(--neon2);text-shadow:0 0 8px rgba(207,214,224,.6)}
+.st-top{color:var(--rose);font-size:13px;letter-spacing:6px}
+.st-bottom{color:var(--muted);font-size:12px;letter-spacing:3px;font-style:italic;margin-top:4px;text-transform:lowercase}
+.hero-center h1.name,.hero-center .serpent,.hero-center .status{text-align:center}
+.avatar{
+  width:180px;height:180px;margin:0 auto 26px;position:relative;display:block;
+}
+.avatar img{
+  width:104px;height:104px;border-radius:50%;object-fit:cover;display:block;
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  border:2px solid rgba(255,255,255,.22);z-index:1;
+  box-shadow:0 0 34px rgba(0,0,0,.85);
+}
+.snake-ring{position:absolute;inset:0;z-index:2;pointer-events:none;animation:spin 60s linear infinite;filter:drop-shadow(0 0 12px rgba(185,196,212,.35))}
+.snake-img{width:100%;height:100%;object-fit:contain;opacity:.92}
+.orb{
+  position:absolute;z-index:3;font-size:24px;line-height:1;user-select:none;pointer-events:none;
+  animation:bob 5s ease-in-out infinite;
+}
+.orb.o1{color:#cfe6ff;text-shadow:0 0 10px rgba(140,180,255,.8),0 0 24px rgba(120,160,255,.45);top:2px;left:50%;transform:translateX(-50%);animation-delay:0s;filter:drop-shadow(0 0 4px rgba(140,180,255,.35))}
+.orb.o2{color:#ffd0e8;text-shadow:0 0 10px rgba(255,120,200,.8),0 0 24px rgba(255,100,190,.4);top:14px;left:14px;font-size:19px;animation-delay:.6s}
+.orb.o3{color:#d7c4ff;text-shadow:0 0 10px rgba(180,130,255,.8),0 0 24px rgba(160,110,255,.45);top:52px;left:2px;animation-delay:1.2s}
+.orb.o4{color:#c2f0ff;text-shadow:0 0 10px rgba(110,210,255,.8),0 0 24px rgba(90,190,255,.4);top:14px;right:14px;animation-delay:.9s}
+.orb.o5{color:#fff0c0;text-shadow:0 0 10px rgba(255,215,120,.8),0 0 24px rgba(255,200,90,.4);top:52px;right:2px;animation-delay:.3s}
+.orb.o6{color:#ffc9c9;text-shadow:0 0 10px rgba(255,130,130,.8),0 0 24px rgba(255,110,110,.4);bottom:16px;left:50%;margin-left:-12px;animation-delay:1.5s}
+@keyframes bob{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drawring{
+  0%{stroke-dashoffset:520}
+  55%{stroke-dashoffset:0}
+  100%{stroke-dashoffset:-520}
+}
+.snake .ring.turn{transform-origin:50% 50%;animation:spin 24s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.serpent{text-align:center;font-size:20px;color:var(--bone);letter-spacing:3px;margin:6px 0;user-select:none}
+/* ethereal crown above the name */
+.crown{display:flex;align-items:flex-end;justify-content:center;gap:2px;margin-bottom:10px;user-select:none;position:relative}
+.crown .cn{color:#d5dbe3;font-size:22px;opacity:.5;text-shadow:0 0 12px rgba(220,230,245,.5);animation:crownFloat 4s ease-in-out infinite}
+.crown .cn.mid{font-size:32px;opacity:.85;animation-delay:.2s}
+.crown .cn.tip{font-size:18px;animation-delay:.5s}
+@keyframes crownFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);opacity:.5}
+  50%{transform:translateY(-5px) rotate(3deg);opacity:.95}
+}
+.head{transform-origin:50% 50%;position:absolute;animation:headflick 4s ease-in-out infinite}
+@keyframes headflick{
+  0%,100%{transform:rotate(0deg)}
+  30%{transform:rotate(1.5deg)}
+  55%{transform:rotate(-1deg)}
+}
+.head .tongue{stroke:#7d5ba6;animation:forked 4s ease-in-out infinite}
+@keyframes forked{
+  0%,18%{opacity:.25;transform:translateY(0)}
+  30%,60%{opacity:1;transform:translateY(-1px)}
+  100%{opacity:.25;transform:translateY(0)}
+}
+
+h1.name{
+  font-size:clamp(30px,7vw,50px);font-weight:800;letter-spacing:2px;color:#fff;
+  text-shadow:0 0 20px rgba(200,210,225,.25);text-transform:none;
+}
+h1.name .cross{color:var(--neon2);font-weight:400}
+h1.name .thin{color:var(--muted);font-weight:400}
+.status{
+  margin:10px auto 4px;max-width:680px;
+  font-size:clamp(15px,3vw,20px);color:var(--neon);
+  letter-spacing:1px;line-height:1.7;
+}
+.sub{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:14px;letter-spacing:1px;margin-top:2px}
+.sub .sub-l,.sub .sub-r{color:var(--rose);font-size:13px;opacity:.8}
+.sub .sub-txt{font-style:italic;color:var(--muted);letter-spacing:.5px}
+.location{color:var(--rose);font-size:14px;font-style:italic;margin-top:4px}
+
+.divider{width:190px;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,#9aa6b5,transparent)}
+
+.card{
+  position:relative;background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:14px;padding:26px 28px 24px;margin-bottom:22px;backdrop-filter:blur(6px);
+  box-shadow:0 8px 30px rgba(0,0,0,.45);
+  overflow:hidden;
+  --acc:#cfd6e0;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--acc),transparent);
+  opacity:.75;pointer-events:none;
+}
+.card::after{
+  content:'';position:absolute;inset:0;border-radius:13px;pointer-events:none;
+  background:radial-gradient(ellipse at 15% 0%, rgba(255,255,255,.07), transparent 55%),
+             radial-gradient(ellipse at 100% 100%, var(--acc-glow,rgba(150,170,200,.05)), transparent 55%);
+}
+.card:hover{box-shadow:0 10px 36px rgba(0,0,0,.55);border-color:var(--acc,.5)}
+.card h2{
+  position:relative;font-size:19px;font-weight:700;letter-spacing:1px;margin-bottom:16px;color:#fff;
+  display:flex;align-items:center;gap:10px;
+}
+.card h2 .g{cursor:default;color:var(--acc);text-shadow:0 0 10px var(--acc-soft,rgba(207,214,224,.4))}
+.card h2 .hline{margin-left:auto;color:var(--rose);font-size:11px;letter-spacing:6px;opacity:.8}
+.quote{
+  font-size:clamp(15px,3vw,19px);color:var(--neon2);font-weight:600;margin-bottom:6px;font-style:italic;letter-spacing:.5px;
+}
+.quote-sub{color:var(--muted);font-size:13px;letter-spacing:1px;margin-bottom:8px}
+.motto{color:var(--text);font-size:15px;letter-spacing:.5px;margin-top:10px}
+
+.chip-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.chip{
+  position:relative;padding:7px 15px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(255,255,255,.05);
+  border:1px solid var(--chip-bd,rgba(255,255,255,.14));color:var(--chip-tx,var(--neon));letter-spacing:.5px;
+  transition:.2s;
+}
+.chip:hover{border-color:var(--acc);color:#fff;box-shadow:0 0 14px var(--chip-glow,rgba(142,163,189,.4));background:rgba(255,255,255,.09)}
+
+.card-lex{--acc:#9fbaff;--acc-soft:rgba(120,160,255,.45);--acc-glow:rgba(90,130,255,.08);--chip-bd:rgba(130,165,255,.3);--chip-tx:#a9c4ff;--chip-glow:rgba(110,150,255,.45)}
+.card-nihil{--acc:#ff9f9f;--acc-soft:rgba(255,120,120,.45);--acc-glow:rgba(255,80,80,.08);--chip-bd:rgba(255,140,140,.3);--chip-tx:#ffb3b3;--chip-glow:rgba(255,110,110,.45)}
+.card-links{--acc:#c9a6ff;--acc-soft:rgba(180,130,255,.45);--acc-glow:rgba(150,100,255,.08);--chip-bd:rgba(170,130,255,.3);--chip-tx:#c9b0ff;--chip-glow:rgba(160,120,255,.45)}
+.card-sound{--acc:#ffd28a;--acc-soft:rgba(255,200,110,.45);--acc-glow:rgba(255,190,80,.08);--chip-bd:rgba(255,200,120,.3);--chip-tx:#ffd59a;--chip-glow:rgba(255,200,110,.45)}
+
+.links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:12px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border-radius:10px;
+  font-size:15px;font-weight:700;text-decoration:none;letter-spacing:.5px;color:#fff;
+  border:1px solid rgba(255,255,255,.16);background:rgba(20,22,26,.7);transition:.2s;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--acc,var(--neon2));box-shadow:0 0 18px var(--acc-soft,rgba(207,214,224,.25))}
+.btn .ico{color:var(--acc,var(--neon2));font-size:18px}
+
+.player{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+.mbtn{
+  cursor:pointer;border:1px solid rgba(255,255,255,.22);padding:11px 22px;border-radius:10px;
+  font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px;
+  background:linear-gradient(180deg,#2f353d,#22262c);transition:.2s;
+}
+.mbtn:hover{box-shadow:0 0 18px rgba(207,214,224,.3);transform:translateY(-2px)}
+.track{color:var(--muted);font-size:14px;flex:1;min-width:160px}
+.track b{color:var(--neon2);font-weight:700}
+
+.card-achv{--acc:#b9ffd0;--acc-soft:rgba(120,255,180,.4);--acc-glow:rgba(80,255,160,.06);overflow:visible}
+.achv-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:4px}
+.achv{position:relative;text-align:center;padding:6px;cursor:pointer}
+.achv-ico{
+  width:64px;height:64px;border-radius:16px;margin:0 auto;display:flex;align-items:center;justify-content:center;
+  font-size:30px;color:#b9ffd0;background:rgba(185,255,208,.07);
+  border:1px solid rgba(185,255,208,.28);transition:.2s;box-shadow:0 0 12px rgba(120,255,180,.08);
+}
+.achv:hover .achv-ico{transform:translateY(-3px);border-color:#b9ffd0;box-shadow:0 0 20px rgba(120,255,180,.4);background:rgba(185,255,208,.12)}
+.achv-name{margin-top:8px;font-size:10px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase}
+
+.tooltip{
+  position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%) translateY(6px);
+  width:206px;padding:12px 14px;background:rgba(12,14,18,.96);border:1px solid rgba(185,255,208,.3);
+  border-radius:10px;box-shadow:0 8px 26px rgba(0,0,0,.6);
+  opacity:0;visibility:hidden;transition:.18s ease;z-index:20;pointer-events:none;text-align:left;
+}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(185,255,208,.4)}
+.tooltip .tp-title{color:#b9ffd0;font-size:13px;font-weight:700;margin-bottom:5px;letter-spacing:.5px}
+.tooltip .tp-text{color:var(--text);font-size:12.5px;line-height:1.5}
+.achv:hover .tooltip,.achv:focus .tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+.card-comm{--acc:#c9a6ff;--acc-soft:rgba(180,130,255,.4);--acc-glow:rgba(150,100,255,.07)}
+.comm-games,.comm-youtubers{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.comm-youtubers{align-items:center}
+.comm-chip{
+  padding:8px 16px;border-radius:9px;font-size:13.5px;font-weight:700;letter-spacing:1.5px;
+  color:#d0b8ff;border:1px solid rgba(201,166,255,.3);background:rgba(201,166,255,.07);transition:.2s;
+}
+.comm-chip:hover{border-color:#c9a6ff;color:#fff;box-shadow:0 0 14px rgba(180,130,255,.4)}
+.comm-divider{display:flex;align-items:center;gap:14px;margin:16px 0;color:var(--muted);font-size:12px}
+.comm-divider::before,.comm-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.5}
+.comm-divider .cd-fl{color:var(--acc);text-shadow:0 0 8px rgba(180,130,255,.5)}
+.comm-hl{color:var(--muted);font-size:13.5px;letter-spacing:1px;margin-right:4px}
+.comm-chip.yt{color:#ffd28a;border-color:rgba(255,210,138,.35);background:rgba(255,210,138,.07)}
+.comm-chip.yt:hover{border-color:#ffd28a;box-shadow:0 0 14px rgba(255,210,138,.4)}
+
+.book-card{
+  background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;
+  padding:26px 28px 24px;margin-bottom:22px;backdrop-filter:blur(6px);
+  box-shadow:0 8px 30px rgba(0,0,0,.45);overflow:hidden;
+  --gold:#d4af37;--gold-soft:rgba(212,175,55,.4);
+}
+.book-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.75;pointer-events:none}
+.book-title{position:relative;font-size:19px;font-weight:700;letter-spacing:1px;margin-bottom:20px;color:#fff;display:flex;align-items:center;gap:10px;justify-content:center}
+.book-title .g{color:var(--gold);text-shadow:0 0 10px rgba(212,175,55,.4)}
+.book{position:relative;width:min(470px,100%);height:280px;margin:6px auto 0;perspective:1600px;transform-style:preserve-3d}
+
+/* pages base */
+.page{position:absolute;top:0;width:50%;height:100%;border-radius:8px 0 0 8px}
+.page-left{left:0;z-index:2;transform-origin:left center;transform:rotateY(0deg);transition:transform .7s ease}
+.page-right{right:0;z-index:1;border-radius:0 8px 8px 0}
+/* gilded fixed frame, sits ABOVE scrolling text */
+.page::before{
+  content:'';position:absolute;inset:0;border:1px solid rgba(212,175,55,.45);border-radius:inherit;
+  pointer-events:none;z-index:5;
+}
+.page::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:5;
+  background:
+    linear-gradient(180deg, rgba(23,18,10,.85), transparent 9%, transparent 91%, rgba(23,18,10,.85));
+}
+.page .page-inner{
+  position:absolute;inset:0;padding:22px 18px 22px 20px;font-size:13.5px;line-height:1.6;
+  color:var(--text);background:linear-gradient(180deg,#17120a,#120e07);
+  box-shadow:inset 0 0 30px rgba(0,0,0,.7), inset 0 0 3px rgba(212,175,55,.15);
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.5) transparent;
+}
+.page-inner::-webkit-scrollbar{width:6px}
+.page-inner::-webkit-scrollbar-track{background:transparent}
+.page-inner::-webkit-scrollbar-thumb{background:rgba(212,175,55,.4);border-radius:3px}
+.page-inner::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,.65)}
+.page-left .page-inner{border-radius:8px 0 0 8px;border-right:1px solid rgba(212,175,55,.35)}
+.page-right .page-inner{border-radius:0 8px 8px 0;box-shadow:inset 0 0 30px rgba(0,0,0,.7)}
+.page-head{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:10px;text-shadow:0 0 8px rgba(212,175,55,.4)}
+.page p{color:var(--muted)}
+.book-list{list-style:none;padding:0;margin:0;color:#cbb87f}
+.book-list li{position:relative;padding-left:15px;margin-bottom:7px;font-size:12.5px;line-height:1.5}
+.book-list li::before{content:'✦';position:absolute;left:0;color:var(--gold);font-size:9px;top:3px;text-shadow:0 0 6px rgba(212,175,55,.6)}
+.book-list li b{color:#f0d78a}
+
+/* cover */
+.book-cover{
+  position:absolute;top:0;left:0;width:50%;height:100%;z-index:3;
+  background:linear-gradient(150deg,#3a2f17,#1d1506 60%,#0e0a02);
+  border:1px solid #6b5526;border-radius:10px 0 0 10px;
+  transform-origin:left center;transition:transform .9s cubic-bezier(.32,.72,.28,1),box-shadow .9s ease;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset -14px 0 24px rgba(0,0,0,.55), inset 0 0 0 2px rgba(212,175,55,.25), inset 0 0 0 5px rgba(0,0,0,.5);
+  backface-visibility:hidden;
+}
+.book-cover::after{
+  content:'';position:absolute;right:-10px;top:0;bottom:0;width:10px;
+  background:linear-gradient(90deg,#6b5526,#d4af37 45%,#8a6d2a);
+  transform:skewY(0);
+}
+/* gilded corner ornaments on cover */
+.book-cover::before{
+  content:'';
+  position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;
+  background:
+    radial-gradient(circle at 3px 3px, transparent 5px, rgba(212,175,55,.35) 6px),
+    radial-gradient(circle at 3px 3px, transparent 5px, rgba(212,175,55,.35) 6px);
+  background-size:10px 10px;
+  -webkit-mask:linear-gradient(0deg,transparent,#000 30%);
+  mask:linear-gradient(0deg,transparent,#000 30%);
+  opacity:.4;
+}
+.cover-label{border:1px solid rgba(212,175,55,.6);border-radius:6px;padding:14px 20px;color:var(--gold);font-size:11px;letter-spacing:3px;text-align:center;box-shadow:0 0 0 1px rgba(0,0,0,.6), inset 0 0 12px rgba(0,0,0,.5)}
+.cover-label .cl-t{display:block;font-size:16px;letter-spacing:4px;color:#f0d78a;margin-bottom:5px;text-shadow:0 0 10px rgba(212,175,55,.7)}
+.cover-label .cl-sub{display:block;color:#caa94f;letter-spacing:5px;font-size:10px;margin-top:3px}
+
+/* open animation: cover swings open toward viewer, revealing pages & overlay */
+.book-open-cover{display:block;font-size:14px;color:#d4b25a}
+
+.book:hover .page-left{transform:rotateY(0deg)}
+.book:hover .book-cover{
+  transform:rotateY(-108deg);
+  box-shadow:inset 14px 0 30px rgba(0,0,0,.6), inset 0 0 0 2px rgba(212,175,55,.25), inset 0 0 0 5px rgba(0,0,0,.5), 24px 0 40px rgba(212,175,55,.18);
+}
+.book-hint{text-align:center;color:var(--muted);font-size:12px;letter-spacing:2px;margin-top:14px}
+.book-hint:hover{color:var(--gold)}
+
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;letter-spacing:.5px}
+footer .sig{color:var(--neon);letter-spacing:2px}
+
+@media(max-width:480px){
+  .card{padding:20px 18px}
+  .avatar{width:140px;height:140px}
+  .avatar img{width:96px;height:96px}
+  .book{height:230px}
+}
+@media(max-width:760px){
+  .col{display:none}
+  .corn{display:none}
+  .bstrip{font-size:12px;letter-spacing:10px}
+  .hero-grid{grid-template-columns:1fr;gap:18px}
+  .hero-side{order:2}
+  .hero-center{order:1}
+  .side-title{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:16px}
+  .st-lines{display:none}
+  .st-word{font-size:24px;letter-spacing:5px}
+  .st-bottom{display:none}
+}
+</style>
+</head>
+<body>
+<img id="bg" src="bg.jpg" alt="">
+<div id="vg"></div>
+<div id="vignette"></div>
+<i class="particle" style="left:12%;bottom:-10px;animation-duration:16s"></i>
+<i class="particle" style="left:28%;bottom:-10px;animation-duration:22s;animation-delay:3s"></i>
+<i class="particle" style="left:47%;bottom:-10px;animation-duration:19s;animation-delay:7s"></i>
+<i class="particle" style="left:66%;bottom:-10px;animation-duration:25s;animation-delay:1s"></i>
+<i class="particle" style="left:83%;bottom:-10px;animation-duration:18s;animation-delay:5s"></i>
+<i class="particle" style="left:92%;bottom:-10px;animation-duration:23s;animation-delay:9s"></i>
+<i class="particle" style="left:7%;bottom:-10px;animation-duration:20s;animation-delay:11s"></i>
+<i class="particle" style="left:74%;bottom:-10px;animation-duration:21s;animation-delay:4s"></i>
+<i class="particle" style="left:55%;bottom:-10px;animation-duration:26s;animation-delay:8s"></i>
+<i class="wisp" style="top:30%;animation-duration:38s;animation-delay:0s">༄</i>
+<i class="wisp" style="top:55%;animation-duration:46s;animation-delay:-14s">∿</i>
+<i class="wisp wisp-blow" style="top:16%;animation-duration:42s;animation-delay:-22s">≈</i>
+<i class="wisp" style="top:70%;animation-duration:52s;animation-delay:-30s">⏝</i>
+<i class="wisp wisp-blow" style="top:44%;animation-duration:36s;animation-delay:-8s">⋘</i>
+<i class="wisp" style="top:84%;animation-duration:48s;animation-delay:-38s">༺</i>
+<i class="wisp wisp-blow" style="top:24%;animation-duration:44s;animation-delay:-18s">༻</i>
+
+<div class="bstrip top"><span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span></div>
+<div class="bstrip bottom"><span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span></div>
+
+<div class="corn tl">༄</div>
+<div class="corn tr">༄</div>
+<div class="corn bl">༄</div>
+<div class="corn br">༄</div>
+
+<div class="col col-left">
+  <div class="ct">† ✧</div>
+  <div>
+    <div class="cl hi">✧</div>
+    <div class="cl">†</div>
+    <div class="cl">✦</div>
+    <div class="cl">☠</div>
+    <div class="cl">🕸</div>
+    <div class="cl">†</div>
+    <div class="cl hi">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">❄️</div>
+    <div class="cl">†</div>
+    <div class="cl">✧</div>
+    <div class="cl">☠</div>
+    <div class="cl ">🕸</div>
+    <div class="cl hi">✦</div>
+  </div>
+  <div class="cb">✧ †</div>
+</div>
+
+<div class="col col-right">
+  <div class="ct">✦ ✧</div>
+  <div>
+    <div class="cl hi">✦</div>
+    <div class="cl">✧</div>
+    <div class="cl">†</div>
+    <div class="cl">🕸</div>
+    <div class="cl">☠</div>
+    <div class="cl hi">✧</div>
+    <div class="cl">✦</div>
+    <div class="cl">❄️</div>
+    <div class="cl">†</div>
+    <div class="cl">✧</div>
+    <div class="cl">☠</div>
+    <div class="cl">🕸</div>
+    <div class="cl">†</div>
+    <div class="cl hi">✧</div>
+  </div>
+  <div class="cb">† ✧</div>
+</div>
+
+<div class="wrap">
+  <div class="roses-top">▒▒▒▒▒▒▒</div>
+
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="hero-side left-side">
+        <div class="side-title">
+          <span class="st-top">✧ † ✧</span>
+          <span class="st-word l1">LEX</span>
+          <span class="st-lines"><span class="sl"></span><i>₪</i><span class="sl"></span></span>
+          <span class="st-word l2">MEA</span>
+          <span class="st-bottom">† lex mea †</span>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <div class="avatar">
+          <div class="orb o1">†</div>
+          <div class="orb o2">✧</div>
+          <div class="orb o3">✦</div>
+          <div class="orb o4">🕸</div>
+          <div class="orb o5">☠</div>
+          <div class="orb o6">✧</div>
+          <div class="snake-ring">
+            <img class="snake-img" src="snake_ring_sq.png" alt="" aria-hidden="true">
+          </div>
+          <img src="avatar.png" alt="Nova avatar">
+        </div>
+        <div class="serpent">༄ U R O B O R O S ༄</div>
+        <div class="crown"><span class="cn tip">✧</span><span class="cn">✦</span><span class="cn mid">♛</span><span class="cn">✦</span><span class="cn tip">✧</span></div>
+        <h1 class="name"><span class="cross">†</span>Nova<span class="cross">†</span></h1>
+        <div class="status">༒࿇ Too skilled TO BE SAINE.࿇༒</div>
+        <div class="sub"><span class="sub-l">┄</span><span class="sub-txt">for_your_employer.</span><span class="sub-r">┄</span></div>
+        <div class="location">pronouns: me. And only me.</div>
+        <div class="divider"></div>
+      </div>
+
+      <div class="hero-side right-side">
+        <div class="side-title">
+          <span class="st-top">✧ ✦ ✧</span>
+          <span class="st-word l1">NIHIL</span>
+          <span class="st-lines i2"><span class="sl"></span><i>₪</i><span class="sl"></span></span>
+          <span class="st-word l2">EXTRA</span>
+          <span class="st-lines"><span class="sl"></span><i>₪</i><span class="sl"></span></span>
+          <span class="st-word l3">ME</span>
+          <span class="st-bottom">† nihil extra me †</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="card card-lex">
+    <h2><span class="g">✧༒</span> LEX MEA <span class="g">༒✧</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="quote">It's a game game, but I hate going out against German tanks.</div>
+    <div class="quote-sub">War Thunder.</div>
+    <div class="chip-row">
+      <span class="chip">🕸 Tactical gamer</span>
+      <span class="chip">🕸 Survivor</span>
+    </div>
+    <div class="chip-row">
+      <span class="chip">War Thunder</span>
+      <span class="chip">Arma 2</span>
+      <span class="chip">RimWorld</span>
+      <span class="chip">Project Zomboid</span>
+    </div>
+    <div class="chip-row"><span class="chip">🕸 Hating German tanks since forever</span></div>
+  </section>
+
+  <section class="card card-nihil">
+    <h2><span class="g">✧༒</span> NIHIL EXTRA ME <span class="g">༒✧</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="quote">Nothing outside of me.</div>
+    <div class="quote-sub">(Nihil extra me)</div>
+    <p class="motto">🕷 I hate going out. Pronouns: me. And only me.</p>
+  </section>
+
+  <section class="card card-achv">
+    <h2><span class="g">☠</span> ACHIEVEMENTS <span class="g">☠</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="achv-grid">
+
+      <div class="achv" tabindex="0">
+        <div class="achv-ico">🕹</div>
+        <div class="achv-name">GAMER</div>
+        <div class="tooltip">
+          <div class="tp-title">◈ Игрок со стажем</div>
+          <div class="tp-text">Полноценный задрот. Играю с 2018 года.</div>
+        </div>
+      </div>
+
+      <div class="achv" tabindex="0">
+        <div class="achv-ico">🎓</div>
+        <div class="achv-name">GRADUATE</div>
+        <div class="tooltip">
+          <div class="tp-title">◈ Выпускник</div>
+          <div class="tp-text">Закончил школу в 2025 году. Дальше — больше.</div>
+        </div>
+      </div>
+
+      <div class="achv" tabindex="0">
+        <div class="achv-ico">💼</div>
+        <div class="achv-name">HIRED</div>
+        <div class="tooltip">
+          <div class="tp-title">◈ Первая работа</div>
+          <div class="tp-text">Первый рабочий опыт — 2026 год. Начало пути.</div>
+        </div>
+      </div>
+
+      <div class="achv" tabindex="0">
+        <div class="achv-ico">💻</div>
+        <div class="achv-name">DEV</div>
+        <div class="tooltip">
+          <div class="tp-title">◈ IT-студент</div>
+          <div class="tp-text">Учусь на информационные технологии и программирование.</div>
+        </div>
+      </div>
+
+      <div class="achv" tabindex="0">
+        <div class="achv-ico">☠</div>
+        <div class="achv-name">UNIQUE</div>
+        <div class="tooltip">
+          <div class="tp-title">◈ Неординарная личность</div>
+          <div class="tp-text">Ищешь стабильность? Тогда это не ко мне.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="card card-comm">
+    <h2><span class="g">✧</span> COMMUNITIES <span class="g">✧</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="comm-games">
+      <span class="comm-chip">FNAF</span>
+      <span class="comm-chip">UNDERTALE</span>
+      <span class="comm-chip">DELTARUNE</span>
+      <span class="comm-chip">BENDY</span>
+      <span class="comm-chip">ROBLOX</span>
+      <span class="comm-chip">WAR THUNDER</span>
+      <span class="comm-chip">PROJECT ZOMBOID</span>
+    </div>
+    <div class="comm-divider"><span class="cd-fl">✦</span></div>
+    <div class="comm-youtubers">
+      <span class="comm-hl">Любимые ютюберы:</span>
+      <span class="comm-chip yt">Винди</span>
+      <span class="comm-chip yt">Юджин</span>
+    </div>
+  </section>
+
+  <section class="card card-links">
+    <h2><span class="g">✦</span> LINKS <span class="g">✦</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="links">
+      <a class="btn" href="https://discord.com/users/1343271555362197608" target="_blank" rel="noopener"><span class="ico">◈</span> Discord</a>
+      <a class="btn" href="https://t.me/Nova_Phanse" target="_blank" rel="noopener"><span class="ico">✈</span> Telegram</a>
+      <a class="btn" href="https://steamcommunity.com/id/76561199116070653/" target="_blank" rel="noopener"><span class="ico">▣</span> Steam</a>
+    </div>
+  </section>
+
+  <section class="card card-sound">
+    <h2><span class="g">♪</span> SOUNDTRACK <span class="g">♪</span><span class="hline">❖ ❖ ❖</span></h2>
+    <div class="player">
+      <button class="mbtn" id="playbtn">▶ Play</button>
+      <div class="track">Now playing: <b>Genocide</b> — Toby Fox</div>
+    </div>
+  </section>
+
+  <section class="book-card">
+    <h2 class="book-title"><span class="g">⚠</span> ПРЕДОСТЕРЕЖЕНИЯ <span class="g">⚠</span></h2>
+    <div class="book">
+      <div class="page page-left">
+        <div class="page-inner">
+          <div class="page-head">⚠️ ПРЕДОСТЕРЕЖЕНИЕ</div>
+          <p>При общении со мной ты можешь:</p>
+          <ul class="book-list">
+            <li>быть унижен(а)</li>
+            <li>терпеть мой хреновый интернет</li>
+            <li>узнать 100 причин, почему НЕ стоит играть в ROBLOX и WAR THUNDER</li>
+            <li>увидеть, как я переобуваюсь — моё мнение не всегда сходится с твоим</li>
+          </ul>
+        </div>
+      </div>
+      <div class="page page-right">
+        <div class="page-inner">
+          <div class="page-head">⚠️ ПРАВИЛА</div>
+          <ul class="book-list">
+            <li>я спокойно общаюсь с теми, кого ты не перевариваешь</li>
+            <li><b>я НЕ понимаю намёков — говори прямо</b></li>
+            <li>я следую своим принципам</li>
+            <li>есть кола? тогда я за тебя, друг мой</li>
+            <li>думаешь, я тебя ненавижу? нет, бро — мне плевать</li>
+            <li>хочешь — найди способ написать, но главное <b>САМ</b> — не люблю общаться через почтальонов</li>
+            <li><b>этот сайт — МОЙ!</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="book-cover"><div class="cover-label"><span class="cl-t">ПРЕДУПРЕЖДЕНИЕ</span>✦ NOVA ✦<span class="cl-sub">†††</span></div></div>
+    </div>
+    <div class="book-hint">← наведи, чтобы открыть →</div>
+  </section>
+
+  <div class="roses-bottom">▒▒▒▒▒▒▒</div>
+  <footer>Nova_Phanse <span class="sig">†</span> Too skilled to be sane</footer>
+</div>
+
+<audio id="track" src="music.mp3" loop></audio>
+<script>
+(function(){
+  var a=document.getElementById('track'),b=document.getElementById('playbtn');
+  function setP(p){b.textContent=p?'⏸ Pause':'▶ Play'}
+  b.addEventListener('click',function(){
+    if(a.paused){a.play();setP(true)}else{a.pause();setP(false)}
+  });
+  a.addEventListener('ended',function(){setP(false)});
+})();
+</script>
+</body>
+</html>
