@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>АРХИВЫ КЛАНА X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:#000;color:#e6e0de;font-family:'Consolas',monospace;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;overflow:hidden;
+}
+.title{font-family:'Cinzel',serif;font-size:36px;font-weight:900;letter-spacing:8px;color:#fff;
+  text-shadow:0 0 20px rgba(255,60,80,.6),0 0 50px rgba(120,40,60,.4);margin-bottom:6px}
+.subtitle{color:#8a5a66;letter-spacing:3px;font-size:12px;text-transform:uppercase;margin-bottom:40px}
+/* sealed glass orb with a trapped red heart */
+.orb{position:relative;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,120,140,.12),rgba(60,10,20,.2) 60%,rgba(20,4,10,.5));
+  border:2px solid rgba(255,90,110,.45);
+  box-shadow:0 0 60px rgba(255,50,80,.3),inset 0 0 60px rgba(255,40,70,.15),inset -18px -20px 50px rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;
+}
+.orb::before{content:'';position:absolute;top:14px;left:22px;width:52px;height:18px;border-radius:50%;
+  background:rgba(255,255,255,.16);filter:blur(4px);transform:rotate(-24deg)}
+.orb-heart{font-size:96px;position:absolute;
+  animation:heartDash 8s ease-in-out infinite;
+  filter:drop-shadow(0 0 18px rgba(255,40,70,.9)) drop-shadow(0 0 40px rgba(200,20,50,.6))}
+@keyframes heartDash{
+  0%{transform:translate(0,0)}
+  8%{transform:translate(52px,-38px)}
+  16%{transform:translate(-40px,-52px)}
+  24%{transform:translate(34px,44px)}
+  32%{transform:translate(-50px,30px)}
+  40%{transform:translate(20px,-20px)}
+  48%{transform:translate(-30px,-48px)}
+  56%{transform:translate(48px,20px)}
+  64%{transform:translate(-44px,-10px)}
+  72%{transform:translate(10px,50px)}
+  80%{transform:translate(-20px,10px)}
+  88%{transform:translate(40px,-30px)}
+  96%{transform:translate(-10px,-40px)}
+  100%{transform:translate(0,0)}
+}
+.orb-ring{position:absolute;inset:-14px;border-radius:50%;border:1px dashed rgba(255,90,110,.4);
+  animation:spin 12s linear infinite}
+/* small name screen at the top of the orb */
+/* small name tag at the very top, above the title */
+.orb-screen{position:relative;display:inline-block;margin-bottom:14px;
+  font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;color:#ffd7de;
+  background:rgba(30,6,14,.9);border:1px solid rgba(255,90,110,.6);border-radius:4px;
+  padding:5px 14px;white-space:nowrap;text-shadow:0 0 10px rgba(255,60,90,.6)}
+.orb-ring1{position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(255,90,110,.2);
+  animation:spin 20s linear infinite reverse}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* heart color label inside the orb */
+.orb-color{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#ffb3be;
+  text-shadow:0 0 8px rgba(255,60,90,.6);text-transform:lowercase;white-space:nowrap}
+.seal{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:11px;font-weight:900;letter-spacing:3px;color:#ff9aaa;
+  border:1px solid rgba(255,90,110,.5);border-radius:4px;padding:5px 14px;white-space:nowrap;
+  background:rgba(40,6,16,.8);text-shadow:0 0 10px rgba(255,60,90,.5)}
+.note{color:#6a3540;letter-spacing:4px;font-size:12px;margin-top:70px;font-family:'Cinzel',serif}
+/* switch buttons under the orb */
+.orb-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:820px;margin:36px auto 0;z-index:2}
+.ob-btn{padding:10px 26px;cursor:pointer;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;
+  color:#ffc9d1;background:rgba(40,8,18,.7);border:1px solid rgba(255,90,110,.5);border-radius:6px;
+  box-shadow:0 0 18px rgba(255,40,70,.2);transition:.2s}
+.ob-btn:hover{box-shadow:0 0 26px rgba(255,60,90,.4)}
+.ob-btn.active{background:rgba(120,40,200,.35);border-color:#b08aff;color:#e6d6ff;
+  box-shadow:0 0 30px rgba(150,90,255,.5)}
+/* purple orb variant */
+.orb.orb-purple{background:radial-gradient(circle at 35% 30%,rgba(160,90,255,.16),rgba(70,25,150,.25) 60%,rgba(25,10,55,.6));
+  border-color:rgba(170,110,255,.5);box-shadow:0 0 60px rgba(150,90,255,.32),inset 0 0 60px rgba(140,80,255,.18),inset -18px -20px 50px rgba(0,0,0,.6)}
+.orb.orb-purple .orb-ring{inset:-14px;border-color:rgba(170,110,255,.45)}
+.orb.orb-purple .orb-ring1{inset:-6px;border-color:rgba(170,110,255,.25)}
+.orb.orb-purple .seal{color:#dccaff;border-color:rgba(170,110,255,.55);background:rgba(40,15,80,.85);text-shadow:0 0 10px rgba(170,110,255,.6)}
+.orb.orb-purple .orb-heart{filter:drop-shadow(0 0 18px rgba(170,90,255,.95)) drop-shadow(0 0 42px rgba(140,60,255,.7))}
+.orb.orb-purple .orb-screen{color:#e6d6ff;border-color:rgba(170,110,255,.6);background:rgba(40,15,80,.9);text-shadow:0 0 10px rgba(170,110,255,.7)}
+.orb.orb-purple .orb-color{color:#dcc3ff;text-shadow:0 0 8px rgba(170,110,255,.7)}
+/* dark orb variant (Troy) — dark but visible, silvery outline glow */
+.orb.orb-dark{background:radial-gradient(circle at 35% 30%,rgba(160,150,160,.12),rgba(60,58,70,.25) 60%,rgba(20,20,28,.65));
+  border-color:rgba(200,200,220,.5);box-shadow:0 0 50px rgba(150,150,180,.2),inset 0 0 46px rgba(180,180,220,.1),inset -16px -18px 44px rgba(0,0,0,.7)}
+.orb.orb-dark .orb-ring{inset:-14px;border-color:rgba(190,190,215,.35)}
+.orb.orb-dark .orb-ring1{inset:-6px;border-color:rgba(190,190,215,.2)}
+.orb.orb-dark .seal{color:#dfdce6;border-color:rgba(200,200,220,.5);background:rgba(40,40,52,.85);text-shadow:0 0 8px rgba(220,220,240,.5)}
+.orb.orb-dark .orb-heart{font-size:120px;filter:drop-shadow(0 0 4px rgba(255,255,255,.35)) drop-shadow(0 0 16px rgba(210,210,235,.55)) drop-shadow(0 0 34px rgba(150,150,190,.4));
+  -webkit-text-stroke:1px rgba(230,230,245,.85)}
+.orb.orb-dark .orb-color{color:#c8c8d6;text-shadow:0 0 8px rgba(200,200,225,.6)}
+/* colored orb variants for everyone */
+.orb.orb-magenta{background:radial-gradient(circle at 35% 30%,rgba(255,0,255,.14),rgba(140,10,140,.22) 60%,rgba(50,4,50,.55));border-color:rgba(255,80,200,.5);box-shadow:0 0 50px rgba(255,40,180,.28),inset 0 0 46px rgba(255,30,170,.14)}
+.orb.orb-gold   {background:radial-gradient(circle at 35% 30%,rgba(255,220,120,.16),rgba(180,130,30,.25) 60%,rgba(60,45,10,.6));border-color:rgba(235,190,80,.55);box-shadow:0 0 50px rgba(230,180,60,.3),inset 0 0 46px rgba(210,165,50,.16)}
+.orb.orb-orange {background:radial-gradient(circle at 35% 30%,rgba(255,160,80,.16),rgba(200,90,20,.25) 60%,rgba(70,30,8,.6));border-color:rgba(255,140,60,.5);box-shadow:0 0 50px rgba(255,120,40,.3),inset 0 0 46px rgba(240,110,35,.15)}
+.orb.orb-gray   {background:radial-gradient(circle at 35% 30%,rgba(190,190,200,.14),rgba(110,110,125,.25) 60%,rgba(35,35,45,.6));border-color:rgba(200,200,215,.5);box-shadow:0 0 46px rgba(170,170,190,.25),inset 0 0 40px rgba(150,150,170,.14)}
+.orb.orb-white  {background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.2),rgba(200,200,215,.28) 60%,rgba(90,90,105,.5));border-color:rgba(240,240,250,.6);box-shadow:0 0 50px rgba(220,220,240,.35),inset 0 0 46px rgba(230,230,245,.2)}
+.orb.orb-teal   {background:radial-gradient(circle at 35% 30%,rgba(0,255,200,.15),rgba(0,150,120,.24) 60%,rgba(0,50,45,.6));border-color:rgba(0,220,180,.5);box-shadow:0 0 50px rgba(0,200,160,.3),inset 0 0 44px rgba(0,180,140,.16)}
+.orb.orb-green  {background:radial-gradient(circle at 35% 30%,rgba(120,255,140,.16),rgba(40,170,80,.25) 60%,rgba(12,55,30,.6));border-color:rgba(100,230,120,.5);box-shadow:0 0 50px rgba(90,220,110,.3),inset 0 0 44px rgba(80,200,100,.15)}
+.orb.orb-blue   {background:radial-gradient(circle at 35% 30%,rgba(80,150,255,.16),rgba(20,80,200,.25) 60%,rgba(6,28,70,.6));border-color:rgba(100,150,255,.5);box-shadow:0 0 50px rgba(70,130,240,.3),inset 0 0 44px rgba(60,120,230,.16)}
+.orb.orb-sky    {background:radial-gradient(circle at 35% 30%,rgba(140,220,255,.16),rgba(70,150,210,.24) 60%,rgba(20,50,80,.6));border-color:rgba(120,200,255,.5);box-shadow:0 0 46px rgba(100,190,250,.28),inset 0 0 42px rgba(90,175,240,.15)}
+.orb.orb-brown  {background:radial-gradient(circle at 35% 30%,rgba(190,140,90,.16),rgba(120,75,40,.25) 60%,rgba(45,28,14,.6));border-color:rgba(170,120,70,.5);box-shadow:0 0 44px rgba(150,100,55,.25),inset 0 0 40px rgba(140,90,48,.14)}
+.orb.orb-pink   {background:radial-gradient(circle at 35% 30%,rgba(255,150,190,.16),rgba(220,70,130,.24) 60%,rgba(80,25,50,.6));border-color:rgba(255,110,170,.5);box-shadow:0 0 50px rgba(240,90,160,.3),inset 0 0 44px rgba(230,80,150,.16)}
+.orb.orb-steel  {background:radial-gradient(circle at 35% 30%,rgba(190,200,215,.16),rgba(110,120,140,.25) 60%,rgba(30,35,45,.6));border-color:rgba(180,190,205,.5);box-shadow:0 0 48px rgba(160,175,195,.28),inset 0 0 42px rgba(150,165,185,.15)}
+/* orb switch animation */
+.orb.switching{animation:orbSwitch .6s ease both}
+@keyframes orbSwitch{0%{transform:scale(.2);opacity:0;filter:blur(8px)}100%{transform:scale(1);opacity:1;filter:blur(0)}}
+/* subject room panel (right side) */
+.room-panel{position:fixed;right:26px;top:50%;transform:translateY(-50%);width:290px;z-index:5;
+  --acc:#ff5a6e;--acc2:#ff90a0;
+  background:linear-gradient(180deg,rgba(26,6,14,.92),rgba(12,3,8,.96));
+  border:1px solid var(--acc);border-radius:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 34px color-mix(in srgb,var(--acc) 40%,transparent),inset 0 0 40px color-mix(in srgb,var(--acc) 10%,transparent)}
+.room-panel::before{content:'';position:absolute;inset:5px;border:1px solid color-mix(in srgb,var(--acc) 35%,transparent);border-radius:7px;pointer-events:none}
+.rp-head{display:flex;align-items:center;gap:8px;padding:10px 14px;
+  font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#fff;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 45%,#000),#200811);border-bottom:1px solid color-mix(in srgb,var(--acc) 45%,transparent)}
+.rp-ico{font-size:14px}
+.rp-close{margin-left:auto;color:#8a4550;cursor:pointer;font-size:14px}
+.rp-body{padding:16px 16px 12px}
+.rp-name{font-family:'Cinzel',serif;font-size:26px;font-weight:900;letter-spacing:3px;color:#fff;
+  text-shadow:0 0 18px var(--acc),0 0 40px var(--acc2);text-align:center}
+.rp-line{height:1px;margin:13px 0;background:linear-gradient(90deg,transparent,var(--acc),transparent)}
+.rp-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:12.5px}
+.rp-k{color:color-mix(in srgb,var(--acc) 55%,#444);letter-spacing:1px;flex:none}
+.rp-v{color:#f0e6f0;text-align:right}
+.rp-foot{margin-top:13px;text-align:center;color:color-mix(in srgb,var(--acc) 60%,#333);font-size:10px;letter-spacing:1px}
+/* history panel (large screen, left side) */
+.hist-panel{position:fixed;left:26px;top:50%;transform:translateY(-50%);width:340px;max-height:82vh;z-index:5;
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(24,8,20,.94),rgba(10,3,12,.97));
+  border:1px solid rgba(255,90,110,.35);border-radius:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 34px rgba(255,40,70,.14),inset 0 0 40px rgba(255,30,60,.04)}
+.hist-panel::before{content:'';position:absolute;inset:5px;border:1px solid rgba(255,150,170,.12);border-radius:8px;pointer-events:none}
+.hp-head{display:flex;align-items:center;gap:9px;padding:12px 16px;
+  font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;color:#ffe0e6;
+  background:linear-gradient(180deg,#3a0f1c,#200811);border-bottom:1px solid rgba(255,90,110,.3)}
+.hp-ico{font-size:15px}
+.hp-stamp{margin-left:auto;font-size:9px;letter-spacing:1px;color:#8a4550;border:1px solid rgba(255,90,110,.3);padding:2px 8px;border-radius:3px}
+.hp-body{padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:11px}
+.hp-body::-webkit-scrollbar{width:6px}
+.hp-body::-webkit-scrollbar-thumb{background:rgba(255,90,110,.3);border-radius:3px}
+.hp-body p{font-size:13.5px;line-height:1.65;color:#eacad0;letter-spacing:.3px}
+.hp-body b{color:#fff}
+.hp-hl{color:#ff6a7a;font-weight:700;text-shadow:0 0 10px rgba(255,60,80,.5)}
+.hp-hl2{color:#ff4d5e;font-weight:700;text-shadow:0 0 14px rgba(255,40,70,.7)}
+.hp-cut{color:#a05a66;font-style:italic;text-decoration:line-through}
+.hp-del{font-family:'Consolas',monospace;font-size:11px;letter-spacing:2px;color:#7a4350;
+  background:rgba(120,40,55,.12);border:1px solid rgba(120,40,55,.3);border-radius:4px;
+  padding:5px 10px;text-align:center;text-transform:uppercase;pointer-events:none;
+  text-decoration:line-through;animation:delGlitch 5s steps(1) infinite}
+.hp-gap{color:rgba(120,50,60,.3);text-align:center;font-size:9px;letter-spacing:1px;user-select:none;animation:gapFlicker 5s steps(1) infinite}
+@keyframes delGlitch{
+  0%,84%,100%{transform:translateX(0);opacity:1}
+  86%{transform:translateX(-2px);color:#b04a5c}
+  89%{transform:translateX(2px)}
+  92%{transform:translateX(-1px);opacity:.6}
+  94%{transform:translateX(0);opacity:1}
+}
+@keyframes gapFlicker{0%,100%{opacity:.4}50%{opacity:.9}}
+.hp-foot{margin-top:auto;padding:10px;text-align:center;color:#8a4550;font-size:10px;letter-spacing:2px;
+  border-top:1px solid rgba(255,90,110,.2)}
+/* ambient glowing orbs behind everything */
+.amb-app{position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(255,40,70,.12),transparent 70%);
+  animation:ambDrift 12s ease-in-out infinite}
+.amb-app{width:60vmin;height:60vmin;left:8%;top:12%}
+.amb-app.a2{width:55vmin;height:55vmin;left:auto;right:6%;bottom:8%;top:auto;animation-delay:-4s;
+  background:radial-gradient(circle,rgba(180,60,120,.1),transparent 70%)}
+.amb-app.a3{width:40vmin;height:40vmin;left:auto;right:30%;top:0;animation-delay:-8s;
+  background:radial-gradient(circle,rgba(255,120,80,.08),transparent 70%)}
+@keyframes ambDrift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3vmin,-3vmin) scale(1.12)}}
+/* glowing orbit aura around the orb */
+.orb-aura{position:absolute;inset:-38px;border-radius:50%;pointer-events:none;
+  border:1px solid rgba(255,60,90,.25);border-top-color:rgba(255,60,90,.7);
+  animation:auraSpin 14s linear infinite;box-shadow:0 0 24px rgba(255,40,70,.12),inset 0 0 24px rgba(255,40,70,.08)}
+.orb-aura::before{content:'';position:absolute;top:-4px;left:50%;width:6px;height:6px;border-radius:50%;
+  background:#ff5a6e;box-shadow:0 0 14px rgba(255,60,90,.9)}
+.orb-aura2{position:absolute;inset:-56px;border-radius:50%;pointer-events:none;
+  border:1px dashed rgba(255,60,90,.14);animation:auraSpin 26s linear infinite reverse}
+@keyframes auraSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* floating crimson particles */
+.part{position:absolute;width:3px;height:3px;border-radius:50%;background:#ff5a6e;pointer-events:none;
+  box-shadow:0 0 8px rgba(255,60,90,.7);opacity:0;animation:partFloat 9s linear infinite}
+@keyframes partFloat{
+  0%{transform:translateY(20vh) translateX(0);opacity:0}
+  15%{opacity:.8}
+  85%{opacity:.4}
+  100%{transform:translateY(-60vh) translateX(4vw);opacity:0}
+}
+/* back button */
+.back-btn{position:fixed;top:18px;right:20px;z-index:8;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:3px;
+  color:#ffc9d1;background:rgba(40,10,20,.7);border:1px solid rgba(255,90,110,.5);border-radius:6px;
+  padding:9px 18px;text-decoration:none;text-transform:uppercase;
+  box-shadow:0 0 18px rgba(255,40,70,.2);transition:.2s}
+.back-btn:hover{background:rgba(120,30,45,.85);box-shadow:0 0 28px rgba(255,60,90,.4);transform:translateX(-2px)}
+</style>
+</head>
+<body>
+<div class="amb-app"></div>
+<div class="amb-app a2"></div>
+<div class="amb-app a3"></div>
+<a class="back-btn" href="the_x_boot.html?archives=1">← НАЗАД</a>
+<div class="orb-screen">Psyh/псих</div>
+<div class="title">ARCHIVES X</div>
+<div class="subtitle">АРХИВЫ КЛАНА X · запечатано</div>
+
+<div class="hist-panel">
+  <div class="hp-head"><span class="hp-ico">📜</span> ИСТОРИЯ КЛАНА X <span class="hp-stamp">ARCHIVE</span></div>
+  <div class="hp-body">
+    <p>Клан <b>X</b> был основан <span class="hp-hl">12.06.2023</span> силами лидера <b>Эпика</b>. Путь начинался с малого — горстки единомышленников, решивших построить нечто по-настоящему своё.</p>
+    <p>Изначально пост зама занимал <b>Мико</b>, но почти сразу был снят — хреновые поступки перечеркнули доверие клана, и он покинул ряды.</p>
+    <p>Со временем пустующее место потребовало закрыть. Спустя ~месяц <b>Эпик</b> собрал совет и запросил кандидата на пост заместителя. Им стал <b>Трой</b> — верная опора и надёжная рука лидера.</p>
+    <div class="hp-del">[ ФАЙЛ УДАЛЁН ]</div>
+    <div class="hp-gap">▬▬▬▬▬▬▬▬▬▬▬▬</div>
+    <p>Клан рос постепенно, переживая взлёты и спады. Трудности встречались, но каждый раз клан собирался и шёл дальше — насколько сильно, что спустя несколько месяцев по численности участников <b>перегнал NMT-T2</b>.</p>
+    <div class="hp-del">[ ФАЙЛ УДАЛЁН ]</div>
+    <div class="hp-gap">▬▬▬▬▬▬▬▬▬▬</div>
+    <p>Были моменты, когда казалось: провал, конец. Но каждый раз путь к превосходству открывался вновь… Пока не грянул тяжёлый удар.</p>
+    <p>Наступила <span class="hp-hl2">депрессия клана</span> — раскол. Часть людей покинула X. Лидер <b>Эпик</b> не отступил и объявил войну <b>TVS</b> — тем, кто разрушил сервер и поставил собственный клан.</p>
+    <div class="hp-del">[ ФАЙЛ УДАЛЁН ]</div>
+    <div class="hp-gap">▬▬▬▬▬▬▬▬</div>
+    <p>Но былая сила была исчерпана, и пришлось звать союзников — <b>NMT</b>. Спустя пару недель TVS распался. X переформировался на новом сервере.</p>
+    <p>Ещё немного времени — и разразилась новая война с <b>HT</b>. И в разгар её… <span class="hp-cut">запись обрывается — часть данных повреждена.</span></p>
+    <div class="hp-del">[ ФАЙЛ УДАЛЁН ]</div>
+    <div class="hp-gap">▬▬▬▬▬▬▬▬▬▬▬</div>
+  </div>
+  <div class="hp-foot">▪ ▪ ▪ запись восстановлена частично ▪ ▪ ▪</div>
+</div>
+
+<div class="orb" id="orb">
+  <span class="orb-aura"></span>
+  <span class="orb-aura2"></span>
+  <span class="orb-ring"></span>
+  <span class="orb-ring1"></span>
+  <span class="orb-heart" id="orbHeart">❤️</span>
+  <span class="orb-color" id="orbColor">красный</span>
+  <span class="seal" id="orbSeal">ЗАПЕЧАТАНО</span>
+</div>
+<span class="part" style="left:30%;animation-delay:0s"></span>
+<span class="part" style="left:70%;animation-delay:2.4s"></span>
+<span class="part" style="left:45%;animation-delay:4.1s"></span>
+<span class="part" style="left:85%;animation-delay:1.2s;background:#ff8090"></span>
+<span class="part" style="left:15%;animation-delay:5.5s;background:#e8556a"></span>
+<span class="part" style="left:60%;animation-delay:7s"></span>
+<div class="orb-btns" id="orbBtns"></div>
+<audio id="archiveMusic" src="archive_music.mp3" loop preload="auto"></audio>
+<audio id="clickSnd" src="click_sound.mp3" preload="auto"></audio>
+
+<div class="room-panel" id="roomPanel">
+  <div class="rp-head"><span class="rp-ico">🛡</span> КОМНАТА СУБЪЕКТА <span class="rp-close">✕</span></div>
+  <div class="rp-body">
+    <div class="rp-name" id="rpName">ПСИХ</div>
+    <div class="rp-line"></div>
+    <div class="rp-row"><span class="rp-k">статус</span><span class="rp-v" id="rpStatus">участник клана X</span></div>
+    <div class="rp-row"><span class="rp-k">роли</span><span class="rp-v" id="rpRoles">член 3 высших ролей · судья</span></div>
+    <div class="rp-row"><span class="rp-k">стаж</span><span class="rp-v" id="rpVet">ветеран клана (олд)</span></div>
+    <div class="rp-row"><span class="rp-k">допуск</span><span class="rp-v" id="rpAcc">X-3</span></div>
+    <div class="rp-line"></div>
+    <div class="rp-foot" id="rpFoot">запись защищена · доступ по допуску</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var orb=document.getElementById('orb'),heart=document.getElementById('orbHeart'),
+      seal=document.getElementById('orbSeal'),btns=document.getElementById('orbBtns'),
+      panel=document.getElementById('roomPanel');
+  var el={name:document.getElementById('rpName'),status:document.getElementById('rpStatus'),
+          roles:document.getElementById('rpRoles'),vet:document.getElementById('rpVet'),
+          acc:document.getElementById('rpAcc'),foot:document.getElementById('rpFoot'),
+          screen:document.querySelector('.orb-screen'),color:document.getElementById('orbColor')};
+  var people=[
+    {id:'epic',  n:'ЭПИК',  nick:'Epic/эпик',  heart:'💜',  cls:'orb-purple', color:'фиолетовый', seal:'ЛИДЕР',
+      status:'лидер клана X',roles:'единственный глава · верховная власть',vet:'основатель клана',acc:'X-MAX',foot:'печать лидера · приказы не обсуждаются'},
+    {id:'troy',  n:'ТРОЙ',  nick:'Troy/трой',  heart:'🖤',  cls:'orb-dark',    color:'тёмный',      seal:'ЗАМ',
+      status:'заместитель лидера',roles:'правая рука лидера · судья',vet:'давний член клана',acc:'X-2',foot:'зам · держит тыл лидера'},
+    {id:'oyho',  n:'ОЙХО',  nick:'Oyho/ойхо',  heart:'🟣',  cls:'orb-magenta', color:'маджента',    seal:'ЗАМ',
+      status:'заместитель лидера',roles:'вторая правая рука лидера',vet:'старый член клана',acc:'X-2',foot:'зам · всегда на связи'},
+    {id:'psych', n:'ПСИХ',  nick:'Psyh/псих',  heart:'❤️',  cls:'',            color:'красный',     seal:'КОМИТЕТ',
+      status:'участник клана X',roles:'член 3 высших ролей · судья',vet:'ветеран клана (олд)',acc:'X-3',foot:'запись защищена · доступ по допуску'},
+    {id:'dast',  n:'ДАСТ',  nick:'Dast/даст',  heart:'💛',  cls:'orb-gold',    color:'золотой',     seal:'КПА',
+      status:'лидер КПА',roles:'глава клана правительственных агентов',vet:'ярый член клана',acc:'X-2',foot:'КПА · рука правосудия'},
+    {id:'samurai',n:'САМУРАЙ',nick:'Samurai/самурай',heart:'🩶',cls:'orb-gray',color:'серый',      seal:'СКАУТЫ',
+      status:'лидер скаутов',roles:'глава разведки и дозора',vet:'ветеран',acc:'X-2',foot:'скауты · глаза клана'},
+    {id:'hiro',  n:'ХИРО',  nick:'Hiro/хиро',  heart:'🤍',  cls:'orb-white',   color:'белый',      seal:'УЧ·ВОЕН',
+      status:'учитель и военный',roles:'наставник · военная сила',vet:'старый член',acc:'X-1',foot:'наставник нового поколения'},
+    {id:'nikolya',n:'НИКОЛЯ',nick:'Nikolya/николя',heart:'💠',cls:'orb-teal',  color:'бирюзовый',   seal:'УЧ·ВОЕН',
+      status:'учитель и военный',roles:'наставник · военная сила',vet:'старый член',acc:'X-1',foot:'наставник нового поколения'},
+    {id:'heyt',  n:'ХЕЙТ X',nick:'Hate X/хейт',heart:'💚',  cls:'orb-green',   color:'зелёный',     seal:'АДМИН',
+      status:'администратор',roles:'управление кланом',vet:'член клана',acc:'X-2',foot:'админ · порядок в клане'},
+    {id:'joi',   n:'JOI',  nick:'Joi/джой',    heart:'💙',  cls:'orb-blue',    color:'синий',       seal:'МОДЕР',
+      status:'модератор',roles:'следит за порядком',vet:'член клана',acc:'X-1',foot:'модер · следит за чатом'},
+    {id:'sam',   n:'СЭМ',  nick:'Sam/сэм',      heart:'⚙️', cls:'orb-steel',   color:'стальной',    seal:'МЛ·МОДЕР',
+      status:'младший модератор',roles:'помогает модератору',vet:'член клана',acc:'X-3',foot:'мл. модер · на подстраховке'},
+    {id:'dobr',  n:'ДОБР',  nick:'Dobr/добр',  heart:'🩵',  cls:'orb-sky',     color:'голубой',     seal:'СКАУТ',
+      status:'скаут',roles:'разведка и дозор',vet:'член клана',acc:'X-1',foot:'скауты · на посту'},
+    {id:'misivava',n:'МИСИВАВА',nick:'Misivava/мисивава',heart:'🤎',cls:'orb-brown',color:'коричневый',seal:'СКАУТ',
+      status:'скаут',roles:'разведка и дозор',vet:'член клана',acc:'X-1',foot:'скауты · на посту'},
+    {id:'jin',   n:'JIN',  nick:'Jin/джин',    heart:'💗',  cls:'orb-pink',    color:'розовый',     seal:'ЗАМ КПА',
+      status:'зам лидера КПА',roles:'вторая рука КПА',vet:'член клана',acc:'X-2',foot:'КПА · исполнительный'}
+  ];
+  function apply(d){
+    var pal={epic:['#b06aff','#d9a6ff'],troy:['#9a9ab0','#c9c9dd'],oyho:['#ff3fd0','#ff9aec'],psych:['#ff4d5e','#ff8f9b'],
+             dast:['#e8c04a','#ffe08a'],samurai:['#8f8fa8','#b9b9ce'],hiro:['#e8e8f2','#ffffff'],nikolya:['#1fd6b4','#7ff0db'],
+             heyt:['#39d96a','#8beea4'],joi:['#3b82f6','#8db8fb'],dobr:['#5ec6f7','#a5e3fb'],misivava:['#a97c4f','#d0ae8c'],jin:['#ff6fa8','#ffb2d0'],sam:['#9fb2c9','#cfdbe8']}[d.id];
+    if(pal){panel.style.setProperty('--acc',pal[0]);panel.style.setProperty('--acc2',pal[1]);}
+    orb.classList.add('switching');
+    setTimeout(function(){
+      orb.classList.remove('orb-purple','orb-dark','orb-magenta','orb-gold','orb-orange','orb-gray','orb-white','orb-teal','orb-green','orb-blue','orb-sky','orb-brown','orb-pink','orb-steel');
+      if(d.cls)orb.classList.add(d.cls);
+      heart.textContent=d.heart;seal.textContent='ЗАПЕЧАТАНО · '+d.seal;
+      el.name.textContent=d.n;el.status.textContent=d.status;el.roles.textContent=d.roles;
+      el.vet.textContent=d.vet;el.acc.textContent=d.acc;el.foot.textContent=d.foot;
+      if(el.color)el.color.textContent=d.color;
+      if(el.screen)el.screen.textContent=d.nick;
+      orb.classList.remove('switching');
+    },300);
+    var ch=btns.children;for(var i=0;i<ch.length;i++)ch[i].classList.toggle('active',ch[i].dataset.id===d.id);
+  }
+  for(var i=0;i<people.length;i++){
+    var b=document.createElement('button');
+    b.className='ob-btn'+(i===0?' active':'');
+    b.dataset.id=people[i].id;b.textContent=people[i].n;
+    (function(d){b.addEventListener('click',function(){apply(d);});})(people[i]);
+    btns.appendChild(b);
+  }
+  apply(people[0]);
+  /* auto-play archive music on first user interaction (browsers block autoplay) */
+  var am=document.getElementById('archiveMusic');
+  if(am){
+    am.volume=0.35;
+    var started=false;
+    var tryPlay=function(){
+      if(started)return;
+      if(!am.paused&&am.currentTime>0){started=true;cleanup();return;}
+      var p=am.play();
+      if(p&&p.catch)p.catch(function(){});
+      started=true;
+      cleanup();
+    };
+    function cleanup(){
+      document.removeEventListener('click',tryPlay);
+      document.removeEventListener('scroll',tryPlay);
+      document.removeEventListener('keydown',tryPlay);
+    }
+    document.addEventListener('click',tryPlay);
+    document.addEventListener('scroll',tryPlay);
+    document.addEventListener('keydown',tryPlay);
+  }
+  var cs=document.getElementById('clickSnd');
+  if(cs){
+    cs.volume=0.8;
+    document.addEventListener('click',function(e){
+      if(e.target.closest('button,a')){cs.currentTime=0;var p=cs.play();if(p&&p.catch)p.catch(function(){});}
+    });
+  }
+})();
+</script>
+</body>
+</html>

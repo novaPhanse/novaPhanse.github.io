@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE X — Boot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:#000;color:#e6e0de;font-family:'Consolas','Courier New',monospace;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+/* living clan backdrop — pastel flower field, slow breathing zoom */
+#bgLayer{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:url('clan_bg.jpg') center/cover no-repeat;
+  animation:bgBreathe 26s ease-in-out infinite}
+@keyframes bgBreathe{
+  0%,100%{transform:scale(1) translateY(0)}
+  50%{transform:scale(1.12) translateY(-12px)}
+}
+#bgLayer::after{content:'';position:absolute;inset:0;
+  background:
+   linear-gradient(180deg,rgba(14,6,30,.55),rgba(20,8,40,.35) 45%,rgba(10,4,24,.62)),
+   radial-gradient(ellipse at center,transparent 40%,rgba(12,5,28,.5) 100%);
+}
+#petals{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.petal{position:absolute;top:-40px;color:#d9b8ff;will-change:transform,opacity;
+  filter:drop-shadow(0 0 6px rgba(200,150,255,.6));animation:petalFloat linear infinite}
+.petal::before{content:'✦'}
+@keyframes petalFloat{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(.6);opacity:0}
+  8%{opacity:.85}
+  50%{transform:translate3d(var(--sway),45vh,0) rotate(120deg) scale(1)}
+  92%{opacity:.5}
+  100%{transform:translate3d(calc(var(--sway)*1.6),105vh,0) rotate(240deg) scale(.8);opacity:0}
+}
+/* ambient themed backdrop */
+#ambient{position:fixed;inset:0;pointer-events:none;z-index:1}
+#ambient::before{content:'';position:absolute;inset:0;
+  background:
+   radial-gradient(ellipse at 50% -10%,rgba(120,70,255,.16),transparent 55%),
+   radial-gradient(ellipse at 100% 100%,rgba(60,20,120,.12),transparent 55%);
+}
+#ambient::after{content:'';position:absolute;left:0;right:0;bottom:0;height:40%;
+  background:linear-gradient(180deg,transparent,rgba(40,10,80,.12))}
+.glyph-grid{position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:1;
+  background-image:radial-gradient(rgba(180,120,255,.5) 1px,transparent 1px);
+  background-size:34px 34px}
+.corner{position:fixed;width:34px;height:34px;pointer-events:none;z-index:3;opacity:.5;
+  border-color:rgba(150,90,255,.7);filter:drop-shadow(0 0 6px rgba(120,70,255,.5))}
+.corner.tl{top:12px;left:12px;border-top:2px solid;border-left:2px solid}
+.corner.tr{top:12px;right:12px;border-top:2px solid;border-right:2px solid}
+.corner.bl{bottom:12px;left:12px;border-bottom:2px solid;border-left:2px solid}
+.corner.br{bottom:12px;right:12px;border-bottom:2px solid;border-right:2px solid}
+/* dark violet fog around edges + gentle shake on the THE X menu */
+body.power-zone{animation:menuShake 2.6s ease-in-out infinite}
+body.power-zone::before{content:'';position:fixed;inset:0;z-index:55;pointer-events:none;
+  background:
+   radial-gradient(ellipse at 0 50%,rgba(80,30,140,.35),transparent 45%),
+   radial-gradient(ellipse at 100% 50%,rgba(80,30,140,.35),transparent 45%),
+   radial-gradient(ellipse at 50% 0,rgba(80,40,160,.3),transparent 50%),
+   radial-gradient(ellipse at 50% 100%,rgba(60,25,120,.35),transparent 50%);
+  filter:blur(8px);
+}
+body.power-zone::after{content:'';position:fixed;inset:0;z-index:55;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(20,5,40,.55) 100%)}
+@keyframes menuShake{
+  0%,100%{transform:translate(0,0)}
+  20%{transform:translate(1px,-1px)}
+  40%{transform:translate(-1px,1px)}
+  60%{transform:translate(0,1px)}
+  80%{transform:translate(1px,0)}
+}
+/* clickable Maxwell easter egg — animated, meows on click */
+#maxwell{position:fixed;right:18px;bottom:18px;z-index:85;cursor:pointer;width:96px;pointer-events:auto;
+  filter:drop-shadow(0 0 12px rgba(150,110,255,.45));transition:transform .2s ease,filter .2s ease;
+  opacity:0;transform:translateY(30px) scale(.5);animation:maxIn 1s ease .6s forwards}
+#maxwell:hover{transform:scale(1.12) rotate(-3deg);filter:drop-shadow(0 0 22px rgba(190,140,255,.7))}
+#maxwell img{width:100%;display:block;animation:maxBreathe 3.4s ease-in-out infinite}
+@keyframes maxIn{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes maxBreathe{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.03) translateY(-4px)}}
+#maxwell.max-jump img{animation:maxBounce .7s ease}
+@keyframes maxBounce{
+  0%{transform:scale(1) translateY(0)}
+  25%{transform:scale(.9) translateY(-34px) rotate(-6deg)}
+  50%{transform:scale(1.08) translateY(6px) rotate(3deg)}
+  75%{transform:scale(.96) translateY(-8px)}
+  100%{transform:scale(1) translateY(0)}
+}
+#maxwell.toggle-hide{animation:maxHide .5s ease forwards}
+@keyframes maxHide{to{opacity:0;transform:translateY(30px) scale(.4)}}
+#maxwell .max-tag{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Consolas',monospace;font-size:10px;letter-spacing:2px;color:#b9a0e8;text-transform:uppercase;
+  text-shadow:0 0 8px rgba(0,0,0,.8);opacity:.7}
+/* rotating time-echo quotes on the clan main scene */
+#quotesBox{position:fixed;right:34px;top:50%;transform:translateY(-50%);z-index:70;width:min(340px,42vw);
+  pointer-events:none;text-align:right;opacity:0;transition:opacity 1.4s ease}
+body.quotes-on #quotesBox{opacity:1}
+#quotesBox .q-wrap{position:relative;min-height:150px}
+.q-item{position:absolute;top:0;right:0;width:100%;opacity:0;transform:translateY(14px);filter:blur(4px);
+  font-family:'Playfair Display',serif;font-size:17px;line-height:1.65;letter-spacing:.5px;color:#efe6ff;
+  text-shadow:0 0 10px rgba(150,110,255,.5),0 1px 2px rgba(0,0,0,.8);
+  transition:opacity 1.1s ease,transform 1.1s ease,filter 1.1s ease}
+.q-item.show{opacity:1;transform:translateY(0);filter:blur(0)}
+.q-item .q-mark{font-family:'Cinzel',serif;font-size:30px;line-height:1;color:#b99aff;display:block;
+  text-shadow:0 0 14px rgba(150,110,255,.8);margin-bottom:4px}
+/* iridescent finale quote */
+.q-item.q-final{font-family:'Cinzel',serif;font-weight:900;font-size:22px;letter-spacing:3px;
+  background:linear-gradient(90deg,#ff7ab8,#c89bff,#7cc4ff,#ff9ad5);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:irid 7s linear infinite, flowIn 1.4s ease}
+.q-item.q-final::after{content:'';display:block;margin-top:8px;height:2px;width:100%;
+  background:linear-gradient(90deg,transparent,#c89bff,transparent);opacity:.6}
+@keyframes irid{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes flowIn{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+.q-dots{margin-top:18px;display:flex;gap:8px;justify-content:flex-end}
+.q-dots i{width:9px;height:9px;border-radius:50%;background:rgba(160,120,255,.25);transition:.4s}
+.q-dots i.act{background:#c89bff;box-shadow:0 0 10px rgba(200,155,255,.9)}
+/* silent memorial echo — printed once at boot, then fades like a memory */
+#memorial{position:fixed;left:16px;bottom:14px;transform:none;width:min(290px,46vw);z-index:82;
+  text-align:left;pointer-events:none;opacity:0;
+  font-family:'Playfair Display',serif;font-size:13px;line-height:1.6;letter-spacing:.4px;
+  color:#f6eeff;text-shadow:0 0 6px rgba(0,0,0,.9),0 1px 2px rgba(0,0,0,.9);
+  background:rgba(20,8,40,.72);
+  border:1px solid rgba(210,180,255,.28);
+  border-left:3px solid #a584e8;
+  padding:10px 13px;border-radius:8px;
+  transition:opacity 1.4s ease}
+#memorial.on{opacity:1}
+#memorial.fade{opacity:0}
+#memorial .mem-tag{display:block;margin-bottom:7px;font-family:'Cinzel',serif;font-size:9px;font-weight:900;
+  letter-spacing:3px;color:#d8bcff;text-transform:uppercase}
+#memorial .mem-warn{display:block;margin-top:8px;font-family:'Consolas',monospace;font-size:10px;letter-spacing:2px;
+  color:#c9b0ee;text-transform:uppercase;animation:dotBlink 2.4s ease-in-out infinite}
+/* glowing glitchy support hints that fade out like memories */
+.power-hint{
+  position:fixed;z-index:80;font-family:'Cinzel',serif;font-weight:900;
+  color:#c89bff;font-size:26px;letter-spacing:3px;text-align:center;pointer-events:none;
+  text-shadow:0 0 14px rgba(150,90,255,.8),0 0 34px rgba(120,70,255,.5);
+  animation:hintLife 4s ease forwards;
+}
+@keyframes hintLife{
+  0%{opacity:0;transform:translateY(20px) scale(.7);filter:blur(6px)}
+  12%{opacity:.9;transform:translateY(-4px) scale(1);filter:blur(0)}
+  20%{opacity:.4}
+  26%{opacity:1}
+  32%{opacity:.3;transform:translateX(-4px)}
+  36%{opacity:1}
+  45%{opacity:.8}
+  55%{opacity:.2;transform:translateY(-20px) scale(.9);filter:blur(4px)}
+  70%{opacity:.7}
+  100%{opacity:0;transform:translateY(-70px) scale(.6);filter:blur(10px)}
+}
+/* clickable purple heart that plays a phrase */
+.heart-btn{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);z-index:70;cursor:pointer;text-align:center}
+.hb-ico{display:block;font-size:54px;color:#b05cff;line-height:1;cursor:pointer;
+  text-shadow:0 0 18px rgba(160,80,255,.9),0 0 44px rgba(120,60,255,.5);
+  transition:.2s;animation:heartBeat 2s ease-in-out infinite}
+.heart-btn:hover .hb-ico{transform:scale(1.25);color:#d0a0ff;text-shadow:0 0 28px rgba(180,110,255,1)}
+@keyframes heartBeat{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}40%{transform:scale(.95)}60%{transform:scale(1.1)}}
+.hb-msg{display:block;margin-top:12px;max-width:340px;color:#d0aeff;font-size:15px;line-height:1.6;letter-spacing:1px;
+  min-height:48px;text-shadow:0 0 12px rgba(150,90,255,.5)}
+.hb-msg::after{content:'▌';color:#c89bff;animation:msgBlink .5s steps(1) infinite}
+.hb-caret{display:none}
+@keyframes msgBlink{0%,50%{opacity:1}50%,100%{opacity:0}}
+.hb-msg .red{color:#ff4d5e;font-weight:700}
+/* hover encouragement tags on the THE X diary */
+.hover-tags{display:none;position:fixed;left:50%;transform:translateX(-50%);top:14%;z-index:75;text-align:center}
+#powerBtn:hover .hover-tags{display:block}
+.hover-tags span{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Cinzel',serif;font-weight:900;font-size:30px;letter-spacing:3px;color:#e0b8ff;
+  text-shadow:0 0 16px rgba(160,90,255,.9),0 0 40px rgba(120,60,255,.6);
+  opacity:0;animation:hoverTag 1.4s ease-in-out both}
+.hover-tags span:nth-child(1){animation-delay:0s}
+.hover-tags span:nth-child(2){animation-delay:1.4s}
+.hover-tags span:nth-child(3){animation-delay:2.8s}
+.hover-tags span:nth-child(4){animation-delay:4.2s}
+.hover-tags span:nth-child(5){animation-delay:5.6s}
+.hover-tags span:nth-child(6){animation-delay:7s}
+@keyframes hoverTag{
+  0%{opacity:0;transform:translateX(-50%) translateY(14px) scale(.7);filter:blur(5px)}
+  20%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);filter:blur(0)}
+  35%{opacity:1}
+  80%{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.85);filter:blur(3px)}
+  100%{opacity:0}
+}
+/* heart flies away after all phrases */
+.heart-btn.hb-fly{animation:hbFly 1.6s cubic-bezier(.5,.05,.6,.4) forwards}
+.hb-fly .hb-ico{animation:none!important;text-shadow:0 0 24px rgba(180,110,255,1)!important}
+@keyframes hbFly{
+  0%{transform:translateX(-50%) translateY(0) rotate(0deg);opacity:1}
+  30%{transform:translateX(-30%) translateY(-40px) rotate(-8deg)}
+  100%{transform:translateX(60vw) translateY(-120vh) rotate(30deg);opacity:0}
+}
+#boot{
+  position:fixed;inset:0;background:transparent;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.2s ease;
+}
+#boot.done{opacity:0;pointer-events:none}
+/* power button */
+#powerBtn{
+  display:flex;flex-direction:column;align-items:center;gap:22px;cursor:pointer;user-select:none;
+}
+.pwr-ring{
+  width:150px;height:150px;border-radius:50%;
+  border:2px solid rgba(120,80,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(120,80,255,.25),inset 0 0 25px rgba(120,80,255,.2);
+  transition:.3s;
+}
+#powerBtn:hover .pwr-ring{
+  box-shadow:0 0 50px rgba(120,80,255,.5),inset 0 0 40px rgba(120,80,255,.35);
+  border-color:#8b5cff;
+}
+.pwr-ico{color:#8b5cff;font-size:60px;text-shadow:0 0 20px rgba(120,80,255,.8);line-height:1}
+.pwr-label{color:#b8a6e6;letter-spacing:5px;font-size:16px;text-shadow:0 0 12px rgba(120,80,255,.5);text-transform:uppercase}
+/* holographic diary of X-Gaster (Underverse) — the launch button */
+.gast-diary{position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center}
+.gd-book{
+  position:relative;width:104px;height:140px;transform:rotate(-6deg) skewY(-4deg);
+  transform-origin:left center;cursor:pointer;
+  animation:holoFloat 4s ease-in-out infinite,holoGlitch 8s steps(1) infinite;
+}
+.gd-cover{
+  position:absolute;inset:0;border-radius:6px;
+  background:linear-gradient(160deg,rgba(150,90,255,.28),rgba(70,40,150,.45));
+  border:1px solid rgba(180,130,255,.55);
+  box-shadow:0 0 26px rgba(150,90,255,.5),0 0 70px rgba(120,70,255,.3),inset 0 0 22px rgba(180,130,255,.25);
+  backdrop-filter:blur(1px);
+}
+.gd-cover::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:10px;
+  background:rgba(140,90,255,.35);border-right:1px solid rgba(190,150,255,.4);
+  transform:skewY(-6deg)}
+.gd-glyph{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-6deg);
+  color:rgba(230,200,255,.9);font-size:46px;font-weight:bold;text-shadow:0 0 18px rgba(180,120,255,.9),0 0 40px rgba(150,90,255,.5)}
+.gd-rings{position:absolute;border-radius:50%;border:1px solid rgba(150,90,255,.5)}
+.gd-r1{left:-20px;top:-26px;width:150px;height:150px;animation:ringOrb 5s linear infinite}
+.gd-r2{left:-30px;top:-36px;width:170px;height:170px;border-style:dashed;animation:ringOrb 8s linear infinite reverse}
+.gd-r3{left:-10px;top:-16px;width:130px;height:130px;border-color:rgba(180,130,255,.3);animation:ringOrb 3.4s linear infinite}
+.gd-r1::after,.gd-r2::after,.gd-r3::after{content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;
+  background:#d0aeff;box-shadow:0 0 12px #b68bff,0 0 22px rgba(150,90,255,.9)}
+.gd-scan{position:absolute;left:-6px;right:-6px;height:2px;background:linear-gradient(90deg,transparent,rgba(200,160,255,.7),transparent);
+  box-shadow:0 0 12px rgba(170,120,255,.8);animation:scanMove 3s ease-in-out infinite}
+.gd-spark{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;
+  box-shadow:0 0 8px #fff,0 0 20px rgba(190,140,255,.9);opacity:.8;animation:sparkTw 1.6s ease-in-out infinite}
+@keyframes holoFloat{0%,100%{transform:rotate(-6deg) skewY(-4deg) translateY(0)}50%{transform:rotate(-6deg) skewY(-4deg) translateY(-12px)}}
+@keyframes holoGlitch{
+  0%,88%,100%{clip-path:inset(0 0 0 0)}
+  89%{clip-path:inset(10% 0 60% 0);transform:rotate(-6deg) skewY(-4deg) translateX(-3px)}
+  92%{clip-path:inset(0 0 0 0)}
+  94%{clip-path:inset(50% 0 10% 0);transform:rotate(-6deg) skewY(-4deg) translateX(3px)}
+  96%{clip-path:inset(0 0 0 0)}
+}
+@keyframes ringOrb{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes scanMove{0%,100%{top:8%}50%{top:88%}}
+@keyframes sparkTw{0%,100%{opacity:.2;top:15%;left:30%}50%{opacity:1;top:8%;left:20%}}
+/* post-launch: glowing X + boot logs */
+#bootRun{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%}
+#bootRun.on{display:flex}
+.x-glow{
+  font-size:200px;font-weight:bold;color:#8b5cff;line-height:1;
+  text-shadow:0 0 20px rgba(120,80,255,.6),0 0 60px rgba(120,80,255,.5),0 0 120px rgba(120,80,255,.4);
+  opacity:0;animation:xAppear 4s ease forwards;
+}
+/* stuttering loader spin while the X sits centered */
+.x-glow.spin{animation:xAppear 4s ease forwards,xSpin 1.6s ease-in-out .4s 2}
+@keyframes xSpin{
+  0%{transform:rotate(0deg)}
+  25%{transform:rotate(80deg)}
+  45%{transform:rotate(85deg)}
+  70%{transform:rotate(190deg)}
+  90%{transform:rotate(200deg)}
+  100%{transform:rotate(360deg)}
+}
+@keyframes xAppear{0%{opacity:0;text-shadow:none;transform:scale(.6)}100%{opacity:1;text-shadow:0 0 20px rgba(120,80,255,.6),0 0 60px rgba(120,80,255,.5),0 0 120px rgba(120,80,255,.4);transform:scale(1)}}
+/* when X shifts right and CLAN letters appear left, joining */
+.x-glow.flying{transition:transform 1.2s cubic-bezier(.5,.05,.5,.9),opacity .6s}
+.x-glow.flying.tl{transform:translateX(150px)}
+.x-glow.flying.gone{opacity:0}
+#clanScene{position:fixed;left:calc(50% - 390px);top:50%;transform:translateY(-50%);z-index:5;pointer-events:none;display:flex;align-items:flex-end;gap:8px;opacity:0;transition:left 1.6s cubic-bezier(.6,.1,.5,.9),top 1.6s cubic-bezier(.6,.1,.5,.9),transform 1.6s cubic-bezier(.6,.1,.5,.9),opacity .6s}
+#clanScene.final{left:16px;top:16px;right:auto;transform:translateY(0);opacity:1}
+#clanScene.final .clan-ltr{animation:none}
+/* X pulses in place; a glowing ring orbits around it */
+#clanScene.final .join-x{
+  display:inline-block;position:relative;color:#c89bff;padding:0 8px;
+  animation:xPulse 3s ease-in-out infinite;
+}
+#clanScene.final .join-x::before{
+  content:'';position:absolute;left:50%;top:50%;width:72px;height:72px;
+  border:1.5px solid rgba(150,90,255,.5);border-radius:50%;border-top-color:rgba(230,204,255,.95);
+  transform:translate(-50%,-50%);animation:spinRing 2.8s linear infinite;
+  box-shadow:0 0 14px rgba(150,90,255,.3);
+}
+#clanScene.final .join-x::after{
+  content:'';position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;
+  background:#f0dcff;box-shadow:0 0 14px #e6ccff,0 0 30px #8b5cff;
+  transform-origin:0 0;animation:orbDot 2.8s linear infinite;
+}
+/* extra sparkle ring, opposite direction */
+#clanScene.final .join-x .xs{
+  content:'';position:absolute;left:50%;top:50%;width:92px;height:92px;border-radius:50%;
+  border:1px dashed rgba(150,90,255,.4);
+  transform:translate(-50%,-50%);animation:spinRev 5.4s linear infinite;
+}
+/* tiny shimmering dots around X */
+#clanScene.final .join-x i{position:absolute;border-radius:50%;background:#c89bff;
+  box-shadow:0 0 6px #8b5cff;opacity:.8;animation:twinkle 2s ease-in-out infinite}
+#clanScene.final .join-x .d1{left:-8px;top:18px;width:4px;height:4px}
+#clanScene.final .join-x .d2{right:-12px;top:-6px;width:3px;height:3px;animation-delay:.6s}
+#clanScene.final .join-x .d3{bottom:-10px;left:6px;width:5px;height:5px;animation-delay:1.2s}
+@keyframes xPulse{
+  0%,100%{opacity:1;text-shadow:0 0 18px rgba(150,90,255,.7),0 0 40px rgba(120,70,255,.6),0 0 80px rgba(120,70,255,.4)}
+  50%{opacity:.4;text-shadow:0 0 8px rgba(150,90,255,.25)}
+}
+@keyframes spinRing{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes spinRev{from{transform:translate(-50%,-50%) rotate(360deg)}to{transform:translate(-50%,-50%) rotate(0deg)}}
+@keyframes orbDot{from{transform:rotate(0deg) translateX(36px)}to{transform:rotate(360deg) translateX(36px)}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+.clan-word{font-family:'Cinzel',serif;font-size:62px;font-weight:900;color:#8b5cff;letter-spacing:3px;line-height:1;opacity:1;text-shadow:0 0 20px rgba(120,80,255,.6),0 0 60px rgba(120,80,255,.5),0 0 120px rgba(120,80,255,.4)}
+.clan-ltr{display:inline-block;animation:ltrPop .7s both}
+@keyframes ltrPop{
+  0%{opacity:0;transform:translateY(10px) scale(.6);filter:blur(4px)}
+  30%{opacity:1;transform:translateY(0) scale(1.15);filter:blur(0)}
+  45%{opacity:.5}
+  60%{opacity:1}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+#clanWord.appear,#clanX.appear{animation:clanAppear 1.2s steps(2) both}
+@keyframes clanAppear{
+  0%{opacity:0;transform:scale(.5);filter:blur(8px)}
+  20%{opacity:1;transform:scale(1);filter:blur(0)}
+  34%{opacity:.12}
+  46%{opacity:1}
+  58%{opacity:.25}
+  70%{opacity:1}
+  100%{opacity:1}
+}
+.clan-word.join{animation:clanJoin 0.9s cubic-bezier(.5,.05,.5,.9) both}
+@keyframes clanJoin{
+  0%{opacity:1;transform:scale(1)}
+  100%{opacity:1;transform:scale(1.06)}
+}
+#bootLogs{
+  position:fixed;left:0;right:0;bottom:0;padding:14px 22px;text-align:left;
+  font-size:13px;line-height:1.7;letter-spacing:.5px;color:#7d6ea8;
+  max-height:200px;overflow:hidden;
+}
+#bootLogs .cursor{display:inline-block;width:8px;height:14px;background:#8b5cff;animation:blink 1s steps(1) infinite;vertical-align:middle;margin-left:4px}
+#bootLogs .err{color:#ff5c6a;text-shadow:0 0 10px rgba(255,60,80,.5)}
+#bootLogs .warn{color:#d4af37;text-shadow:0 0 10px rgba(212,175,55,.4)}
+@keyframes blink{0%,50%{opacity:1}50%,100%{opacity:0}}
+#logo{position:fixed;bottom:14px;right:18px;color:#3a2f55;font-size:11px;letter-spacing:2px;opacity:.5}
+#idlePrompt{
+  position:fixed;left:0;right:0;bottom:46px;padding:0 22px;text-align:left;
+  color:#7d6ea8;font-size:14px;letter-spacing:1px;
+}
+#idlePrompt::after{content:'_';color:#8b5cff;animation:blink 1s steps(1) infinite;margin-left:4px}
+/* classified-access warning screen */
+#warnScreen{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .8s ease}
+#warnScreen.hide{opacity:0;pointer-events:none}
+.warn-panel{max-width:540px;width:100%;padding:38px 42px;text-align:center;position:relative;
+  background:linear-gradient(180deg,rgba(26,13,44,.72),rgba(10,4,22,.9));border:1px solid rgba(150,90,255,.5);
+  border-radius:12px;box-shadow:0 0 70px rgba(120,70,255,.3),inset 0 0 60px rgba(120,70,255,.08)}
+.warn-panel::before{content:'';position:absolute;inset:7px;border:1px solid rgba(180,130,255,.22);border-radius:8px;pointer-events:none}
+.warn-panel::after{content:'✕·X·✕';position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:#000;padding:0 14px;color:rgba(150,90,255,.7);font-size:11px;letter-spacing:4px}
+.warn-banner{font-family:'Cinzel',serif;font-size:28px;font-weight:900;letter-spacing:5px;color:#ff6a78;text-shadow:0 0 20px rgba(255,60,80,.7),0 0 60px rgba(255,60,80,.35)}
+.warn-line{height:1px;margin:18px 0;background:linear-gradient(90deg,transparent,rgba(150,90,255,.6),transparent)}
+.warn-txt{color:#b7a6d6;font-size:14px;line-height:1.8;letter-spacing:.5px}
+.warn-txt b{color:#e6d6ff}
+.warn-hl{color:#ff5c6a;font-weight:bold;text-decoration:underline;
+  text-decoration-color:#ff1f3d;text-decoration-thickness:2px;text-underline-offset:4px;
+  text-shadow:0 0 12px rgba(255,40,60,.6);animation:hlPulse 1.8s ease-in-out infinite}
+@keyframes hlPulse{0%,100%{text-shadow:0 0 8px rgba(255,40,60,.4)}50%{text-shadow:0 0 20px rgba(255,60,80,.9)}}
+.warn-btn{margin-top:22px;padding:12px 40px;cursor:pointer;font-family:'Cinzel',serif;font-size:14px;letter-spacing:4px;text-transform:uppercase;
+  color:#d0b4ff;background:linear-gradient(180deg,rgba(120,70,255,.14),rgba(80,40,180,.1));border:1px solid rgba(150,90,255,.7);border-radius:6px;
+  box-shadow:0 0 20px rgba(120,70,255,.35),inset 0 0 16px rgba(150,90,255,.1);transition:.2s}
+.warn-btn:hover{background:linear-gradient(180deg,rgba(150,90,255,.3),rgba(90,50,200,.2));
+  box-shadow:0 0 34px rgba(150,90,255,.6),inset 0 0 22px rgba(150,90,255,.2);transform:translateY(-2px)}
+.warn-foot{margin-top:16px;font-size:10px;letter-spacing:2px;color:#6d5a94;text-transform:uppercase}
+.warn-roles{display:flex;flex-direction:column;gap:10px;margin:18px 0 4px}
+.role{display:flex;align-items:center;gap:14px;padding:13px 18px;position:relative;
+  background:linear-gradient(180deg,#1a0508,#0d0102 90%);
+  border:1px solid rgba(200,20,40,.45);border-left:4px solid #ff1f3d;
+  border-radius:3px;overflow:hidden;
+  box-shadow:0 0 20px rgba(255,20,50,.12),inset 0 0 40px rgba(255,20,50,.05);transition:.25s;
+  cursor:default;animation:rolePulse 3s ease-in-out infinite}
+.role::after{content:'';position:absolute;right:14px;top:-14px;bottom:-14px;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(255,40,60,.5),transparent)}
+@keyframes rolePulse{0%,100%{box-shadow:0 0 14px rgba(255,20,50,.1)}50%{box-shadow:0 0 28px rgba(255,40,60,.3)}}
+.role:hover{background:linear-gradient(180deg,#26070c,#150204 90%);
+  box-shadow:0 0 34px rgba(255,30,55,.3),inset 0 0 50px rgba(255,20,50,.1);
+  transform:translateX(3px);border-left-color:#ff4060}
+.rcrown{font-size:28px;color:#ff3348;text-shadow:0 0 16px rgba(255,50,70,.9),0 0 40px rgba(255,20,40,.5);flex:none;width:34px;text-align:center}
+.r-txt{display:flex;flex-direction:column;text-align:left}
+.rname{font-family:'Cinzel',serif;font-size:17px;font-weight:900;letter-spacing:2px;color:#ffdfe3;text-shadow:0 0 14px rgba(255,60,80,.45)}
+.rdesc{font-size:10.5px;letter-spacing:2px;color:#a63b47;text-transform:uppercase;margin-top:2px}
+.rnum{margin-left:auto;font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:rgba(255,40,60,.45);text-shadow:0 0 10px rgba(255,30,50,.3)}
+/* CMD logs dissolve in place, then a small CMD icon grows at the same spot */
+#bootLogs{transition:opacity 1.4s ease,height 1.4s ease,max-height 1.4s ease,padding 1.4s ease}
+#bootLogs.collapsed{opacity:0;height:0;max-height:0;padding-top:0;padding-bottom:0;pointer-events:none;overflow:hidden}
+.cmd-icon{
+  position:fixed;right:14px;bottom:10px;z-index:90;opacity:0;transform:scale(.4);pointer-events:none;
+  transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.9,.3,1.2);
+}
+.cmd-icon.on{opacity:1;transform:scale(1);pointer-events:auto}
+/* REAL audio-driven reaction (CSS vars from analyser) */
+body{--bass:0;--bass2:0}
+body.music-active #ambient::before{opacity:calc(0.55 + var(--bass)*0.7);filter:brightness(calc(1 + var(--bass)*0.8)) hue-rotate(calc(var(--bass)*25deg))}
+body.music-active .corner{opacity:calc(0.4 + var(--bass)*1.2);transform:scale(calc(1 + var(--bass)*0.35));filter:drop-shadow(0 0 calc(var(--bass)*22px) rgba(180,120,255,1))}
+body.music-active .glyph-grid{transform:translateY(calc(var(--bass)*-18px))}
+body.music-active .mx-btn{transform:scale(calc(1 + var(--bass)*0.25));box-shadow:0 0 calc(10px + var(--bass)*30px) rgba(150,90,255,calc(0.3+var(--bass)))}
+body.music-active .mx-logo{transform:scale(calc(1 + var(--bass)*0.4));text-shadow:0 0 calc(8px + var(--bass)*26px) rgba(180,120,255,1)}
+body.music-active .cc-live{opacity:calc(0.4 + var(--bass))}
+body.music-active .gast-diary .gd-book{filter:brightness(calc(1 + var(--bass)*0.7)) drop-shadow(0 0 calc(var(--bass)*30px) rgba(180,120,255,1))}
+body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
+/* music player (top-right, clan theme) */
+.mx-player{
+  position:fixed;right:14px;top:52px;z-index:90;width:min(230px,50vw);
+  display:none;flex-direction:column;gap:8px;padding:12px 14px;
+  background:linear-gradient(180deg,rgba(20,10,40,.9),rgba(10,4,20,.95));
+  border:1px solid rgba(150,90,255,.45);border-radius:10px;
+  box-shadow:0 16px 50px rgba(0,0,0,.85),0 0 26px rgba(120,70,255,.22);
+  opacity:0;transition:opacity .6s ease;transform-origin:top right;
+}
+.mx-player.on{display:flex;opacity:1}
+.mx-head{display:flex;align-items:center;gap:8px}
+.mx-logo{color:#d0aeff;text-shadow:0 0 12px rgba(180,120,255,.7)}
+.mx-title{flex:1;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#e0c8ff}
+.mx-live{font-size:8px;letter-spacing:1px;color:#8b5cff}
+.mx-body{display:flex;align-items:center;justify-content:center;gap:12px}
+.mx-btn{width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;color:#d0aeff;
+  background:linear-gradient(180deg,rgba(120,70,255,.18),rgba(60,30,130,.2));border:1px solid rgba(150,90,255,.5);
+  box-shadow:0 0 14px rgba(120,70,255,.25);transition:.2s}
+.mx-btn:hover{box-shadow:0 0 22px rgba(150,90,255,.5);background:rgba(150,90,255,.3)}
+.mx-play{font-size:20px;width:46px;height:46px}
+.mx-tracks{display:flex;flex-direction:column;gap:3px}
+.mx-trk{padding:5px 9px;border-radius:5px;cursor:pointer;color:#a084c0;font-size:11px;letter-spacing:.5px;transition:.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mx-trk:hover{background:rgba(120,70,255,.12);color:#e0ccff}
+.mx-trk.cur{background:rgba(120,70,255,.2);color:#fff;text-shadow:0 0 8px rgba(180,120,255,.6)}
+.mx-seek{height:7px;border-radius:4px;background:rgba(120,70,255,.15);cursor:pointer;border:1px solid rgba(150,90,255,.2)}
+.mx-seek .mx-fill{width:0;height:100%;border-radius:4px;background:linear-gradient(90deg,#8b5cff,#d0aeff);box-shadow:0 0 8px rgba(150,90,255,.6)}
+.mx-vol{display:flex;align-items:center;gap:8px}
+.mx-vicon{font-size:13px;color:#d0aeff;cursor:pointer}
+.mx-volbar{flex:1;height:5px;border-radius:3px;background:rgba(120,70,255,.15);cursor:pointer}
+.mx-volbar .mx-volfill{width:80%;height:100%;border-radius:3px;background:rgba(180,120,255,.7)}
+/* live clan chat panel */
+.clan-chat{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);z-index:60;
+  width:min(460px,90vw);height:300px;display:none;flex-direction:column;
+  background:linear-gradient(180deg,rgba(14,8,28,.96),rgba(8,4,16,.98));
+  border:1px solid rgba(150,90,255,.45);border-radius:10px;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.9),0 0 34px rgba(120,70,255,.22);
+  opacity:0;transition:opacity .6s ease,transform .4s cubic-bezier(.2,.9,.3,1.2);
+}
+.clan-chat.on{display:flex;opacity:1;transform:translate(-50%,-50%) scale(1)}
+.clan-chat::before{content:'';position:absolute;inset:4px;border:1px solid rgba(180,130,255,.16);border-radius:8px;pointer-events:none;z-index:5}
+.cc-head{display:flex;align-items:center;gap:9px;padding:9px 14px;
+  background:linear-gradient(180deg,#281743,#180c30);border-bottom:1px solid rgba(150,90,255,.35)}
+.cc-ico{font-size:15px}
+.cc-title{flex:1;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#e0c8ff;text-shadow:0 0 10px rgba(150,90,255,.4)}
+.cc-live{color:#5cff8a;font-size:10px;letter-spacing:2px;animation:liveBlink 1.6s ease-in-out infinite}
+@keyframes liveBlink{0%,100%{opacity:1}50%{opacity:.35}}
+.cc-body{flex:1;overflow:hidden;padding:10px 13px;display:flex;flex-direction:column;gap:3px}
+.msg{font-size:12px;line-height:1.5;animation:msgIn .35s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+.msg .m-nick{font-weight:bold;color:#d0aeff;text-shadow:0 0 8px rgba(180,120,255,.4)}
+.msg .m-txt{color:#cbbad9}
+.msg .m-time{color:#5c4a80;font-size:10px;margin-left:5px}
+.msg.sys{color:#7d8a7d;font-style:italic;font-size:11px}
+.cmd-icon .ci-box{
+  display:inline-block;width:34px;height:34px;border-radius:7px;
+  background:linear-gradient(180deg,#1a1530,#0d0a1c);border:1px solid rgba(150,90,255,.5);
+  color:#a78bff;font-size:15px;font-weight:bold;line-height:30px;text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.7),inset 0 0 10px rgba(120,70,255,.2),0 0 12px rgba(120,70,255,.3);
+  cursor:pointer;transition:.2s;
+}
+.cmd-icon:hover .ci-box{box-shadow:0 0 20px rgba(160,90,255,.55),inset 0 0 12px rgba(120,70,255,.3)}
+@keyframes cmdGrow{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+#clanScene .clan-datetime{
+  position:absolute;left:0;right:0;top:calc(100% + 14px);text-align:left;padding-left:4px;
+  font-family:'Consolas',monospace;font-size:13px;letter-spacing:1px;color:#8b74c0;text-shadow:0 0 8px rgba(140,100,240,.4);
+  opacity:0;transition:opacity 1s ease;white-space:nowrap;
+}
+#clanScene.final .clan-datetime{opacity:1}
+/* roles info button, appears when letters settle */
+.clan-btns{position:absolute;left:0;top:calc(100% + 30px);display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+/* proud member counter badge */
+.member-badge{display:flex;align-items:baseline;gap:8px;padding:12px 22px;margin-bottom:4px;position:relative;
+  background:linear-gradient(180deg,rgba(120,70,255,.2),rgba(60,30,130,.15));
+  border:1px solid rgba(150,90,255,.7);border-radius:12px;
+  box-shadow:0 0 28px rgba(120,70,255,.4),inset 0 0 24px rgba(150,90,255,.12);
+  opacity:0;animation:badgeIn 1s ease .2s forwards, badgeGlow 2.6s ease-in-out infinite}
+.member-badge::before{content:'♛';position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#e0b8ff;
+  font-size:20px;text-shadow:0 0 12px rgba(180,120,255,.9)}
+.mb-num{font-family:'Cinzel',serif;font-size:40px;font-weight:900;color:#f0dcff;
+  text-shadow:0 0 18px rgba(180,120,255,.9),0 0 44px rgba(140,80,255,.6);
+  animation:numPulse 2.6s ease-in-out infinite}
+.mb-label{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:1px;color:#c8a8f0;text-transform:uppercase}
+@keyframes badgeIn{from{opacity:0;transform:translateY(-14px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes badgeGlow{0%,100%{box-shadow:0 0 22px rgba(120,70,255,.35)}50%{box-shadow:0 0 38px rgba(160,100,255,.6)}}
+@keyframes numPulse{0%,100%{text-shadow:0 0 18px rgba(180,120,255,.8)}50%{text-shadow:0 0 30px rgba(200,150,255,1)}}
+/* live mode-status tracker — icon, players online, server wars */
+.mode-strip{display:flex;align-items:center;gap:14px;padding:12px 18px;margin-bottom:4px;position:relative;
+  background:linear-gradient(180deg,rgba(120,70,255,.22),rgba(60,30,130,.16));
+  border:1px solid rgba(150,90,255,.7);border-radius:12px;
+  box-shadow:0 0 26px rgba(120,70,255,.4),inset 0 0 22px rgba(150,90,255,.12);
+  opacity:0;animation:badgeIn 1s ease .4s forwards}
+.mode-ico{width:62px;height:62px;border-radius:10px;object-fit:cover;flex:0 0 auto;
+  border:1px solid rgba(150,90,255,.65);box-shadow:0 0 18px rgba(150,90,255,.45),inset 0 0 10px rgba(0,0,0,.4);
+  animation:icoPulse 2.4s ease-in-out infinite}
+@keyframes icoPulse{0%,100%{box-shadow:0 0 16px rgba(150,90,255,.4)}50%{box-shadow:0 0 30px rgba(190,130,255,.75)}}
+.mode-txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.mode-name{font-family:'Cinzel',serif;font-size:13px;font-weight:900;letter-spacing:2px;color:#e0d0ff;
+  text-shadow:0 0 12px rgba(180,120,255,.7)}
+.mode-online{display:flex;align-items:baseline;gap:7px}
+.mode-online .mo-green{color:#7dffb0;font-size:13px;font-family:'Consolas',monospace;letter-spacing:1px;
+  text-shadow:0 0 10px rgba(90,255,160,.6)}
+.mo-dot{width:9px;height:9px;border-radius:50%;background:#4cff8a;display:inline-block;
+  box-shadow:0 0 10px rgba(76,255,138,.9);animation:dotBlink 1.6s ease-in-out infinite}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.35}}
+.mode-online b{font-family:'Cinzel',serif;font-size:26px;font-weight:900;color:#fff;
+  text-shadow:0 0 14px rgba(120,90,255,.9);animation:numPulse 2.6s ease-in-out infinite}
+.mode-online .mo-lbl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:#c8acf0;text-transform:uppercase}
+.mode-servers{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.srv-chip{display:flex;align-items:center;gap:6px;padding:5px 9px;border-radius:6px;font-size:10px;letter-spacing:1px;
+  font-family:'Cinzel',serif;font-weight:700;color:#e6e0ff;background:rgba(40,25,90,.35);
+  border:1px solid rgba(150,90,255,.3);white-space:nowrap}
+.srv-chip .srv-st{width:7px;height:7px;border-radius:50%;display:inline-block}
+.srv-chip.war{border-color:rgba(255,70,90,.55);color:#ffd0d6;box-shadow:0 0 12px rgba(255,60,80,.25)}
+.srv-chip.war .srv-st{background:#ff4d5e;box-shadow:0 0 8px rgba(255,60,90,.9);animation:dotBlink 1.1s ease-in-out infinite}
+.srv-chip.peace{border-color:rgba(90,255,160,.35);color:#bfffd6}
+.srv-chip.peace .srv-st{background:#4cff8a;box-shadow:0 0 8px rgba(76,255,138,.8)}
+.srv-chip.stand{border-color:rgba(255,200,80,.35);color:#ffe9b3}
+.srv-chip.stand .srv-st{background:#ffcf5c;box-shadow:0 0 8px rgba(255,200,80,.8)}
+/* war banner toggled across the strip when any server is at war */
+.mode-strip{position:relative}
+.mode-strip.war-active .mode-name{color:#ff9aa5;text-shadow:0 0 14px rgba(255,60,90,.7)}
+.mode-strip.war-active .mode-txt::after{content:'⚠ КЛАН В ВОЙНЕ';position:absolute;top:-10px;right:10px;
+  font-family:'Cinzel',serif;font-size:10px;font-weight:900;letter-spacing:2px;color:#ff8090;background:rgba(120,10,25,.7);
+  border:1px solid rgba(255,60,90,.5);padding:2px 8px;border-radius:4px;
+  text-shadow:0 0 8px rgba(255,80,110,.8);animation:numPulse 1.2s ease-in-out infinite}
+.roles-btn{
+  padding:9px 18px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;
+  color:#d0b4ff;background:linear-gradient(180deg,rgba(80,40,160,.25),rgba(40,15,90,.35));border:1px solid rgba(150,90,255,.55);border-radius:6px;
+  box-shadow:0 0 18px rgba(120,70,255,.3),inset 0 0 14px rgba(120,70,255,.08);
+  opacity:0;pointer-events:none;transition:opacity 1s ease,background .2s,box-shadow .2s,transform .2s;white-space:nowrap}
+.roles-btn:hover{background:linear-gradient(180deg,rgba(150,90,255,.35),rgba(80,40,180,.25));
+  box-shadow:0 0 30px rgba(150,90,255,.6),inset 0 0 18px rgba(150,90,255,.15);transform:translateX(4px)}
+#clanScene.final .roles-btn{opacity:1;pointer-events:auto}
+/* roles info window */
+.roles-window{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);z-index:100;
+  width:min(520px,92vw);background:linear-gradient(180deg,#140a28,#0a0514);border:1px solid rgba(150,90,255,.5);
+  border-radius:10px;box-shadow:0 30px 90px rgba(0,0,0,.95),0 0 50px rgba(120,70,255,.25);
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s cubic-bezier(.2,.9,.3,1.2)}
+.roles-window.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.rw-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
+  font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:2px;color:#e0c8ff;
+  background:linear-gradient(180deg,#241540,#120a28);border-bottom:1px solid rgba(150,90,255,.3);
+  text-shadow:0 0 12px rgba(150,90,255,.4)}
+.rw-close{cursor:pointer;color:#8a6cb5;font-size:16px;transition:.2s}
+.rw-close:hover{color:#fff;text-shadow:0 0 10px #fff}
+.rw-offline{padding:10px 14px;text-align:center;font-size:11px;letter-spacing:1px;color:#ff7a7a;
+  background:rgba(255,40,60,.1);border-bottom:1px solid rgba(255,60,80,.3);
+  text-shadow:0 0 10px rgba(255,60,80,.4);animation:offlineBlink 1.6s ease-in-out infinite}
+@keyframes offlineBlink{0%,100%{opacity:1}50%{opacity:.5}}
+.rw-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px;max-height:60vh;overflow-y:auto}
+.rw-role{display:flex;gap:14px;align-items:flex-start;padding:12px 14px;
+  background:rgba(120,70,255,.05);border:1px solid rgba(150,90,255,.25);border-left:3px solid #8b5cff;border-radius:6px}
+.rw-ico{font-size:26px;color:#d0aeff;text-shadow:0 0 14px rgba(180,120,255,.6);flex:none}
+.rw-txt{display:flex;flex-direction:column}
+.rw-name{font-family:'Cinzel',serif;font-size:15px;font-weight:900;letter-spacing:1px;color:#e6d6ff;text-shadow:0 0 10px rgba(150,90,255,.4)}
+.rw-desc{font-size:12.5px;color:#b7a6d6;line-height:1.6;margin-top:3px}
+.rw-rule,.rw-link,.rw-album{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;
+  background:rgba(120,70,255,.05);border:1px solid rgba(150,90,255,.22);border-radius:6px}
+.rw-found{display:flex;gap:12px;align-items:center;padding:12px 14px;
+  background:linear-gradient(180deg,rgba(150,90,255,.12),rgba(120,70,255,.06));
+  border:1px solid rgba(150,90,255,.4);border-left:3px solid #d0aeff;border-radius:6px;margin-bottom:2px}
+.rw-rule .rw-num{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:#d0aeff;text-shadow:0 0 10px rgba(180,120,255,.5);flex:none}
+.rw-link .rw-ico,.rw-album .rw-ico{font-size:22px;color:#d0aeff;text-shadow:0 0 12px rgba(180,120,255,.5);flex:none}
+.rw-album .rw-photo{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;
+  border:1px solid rgba(150,90,255,.4);box-shadow:0 0 12px rgba(120,70,255,.25);cursor:zoom-in;transition:.2s}
+.rw-album .rw-photo:hover{transform:scale(1.05);box-shadow:0 0 16px rgba(150,90,255,.5)}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 0 60px rgba(120,70,255,.4);animation:lbIn .3s ease both}
+@keyframes lbIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.cmd-window{
+  position:fixed;right:60px;bottom:60px;width:min(480px,92vw);height:320px;z-index:100;
+  background:rgba(10,6,20,.97);border:1px solid rgba(150,90,255,.5);border-radius:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 30px rgba(120,70,255,.25),inset 0 0 40px rgba(120,70,255,.04);
+  display:none;flex-direction:column;overflow:hidden;
+  transform-origin:bottom right;
+}
+.cmd-window::before{content:'';position:absolute;inset:4px;border:1px solid rgba(180,130,255,.15);border-radius:8px;pointer-events:none;z-index:5}
+.cmd-window.open{display:flex;animation:winOpen .35s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes winOpen{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.cw-head{display:flex;align-items:center;gap:7px;padding:8px 12px;
+  background:linear-gradient(180deg,#221538,#150b28);border-bottom:1px solid rgba(150,90,255,.3)}
+.cw-dot{width:11px;height:11px;border-radius:50%}
+.cw-dot.r{background:#ff5c6a}.cw-dot.y{background:#ffcf5c}.cw-dot.g{background:#5cff8a}
+.cw-title{flex:1;text-align:center;font-size:11px;letter-spacing:1px;color:#b79be0}
+.cw-close{cursor:pointer;color:#8a6cb5;font-size:14px;transition:.2s}
+.cw-close:hover{color:#fff;text-shadow:0 0 10px rgba(255,255,255,.6)}
+.cw-body{flex:1;overflow:hidden;padding:12px 14px;font-family:'Consolas',monospace;font-size:12px;
+  line-height:1.8;color:#9ee09e;text-shadow:0 0 6px rgba(80,200,80,.3);display:flex;flex-direction:column}
+.cw-body .ln{animation:cwIn .4s ease both}
+@keyframes cwIn{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.cw-body .nick{color:#d0aeff;font-weight:bold;text-shadow:0 0 8px rgba(180,120,255,.5)}
+.cw-body .act{color:#9ee09e}
+.cw-body .sys{color:#7d8a7d}
+.cw-body .err{color:#ff7a7a}
+/* unions & wars window groups */
+.sw-group{margin:4px 0 14px;padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.08);position:relative}
+.sw-group .sw-title{font-family:'Cinzel',serif;font-size:13px;font-weight:900;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sw-codes{display:flex;flex-wrap:wrap;gap:8px}
+.sw-chip{padding:6px 13px;border-radius:6px;font-family:'Consolas',monospace;font-size:13px;letter-spacing:2px;font-weight:bold;color:#fff;
+  border:1px solid rgba(255,255,255,.18);text-shadow:0 0 8px rgba(255,255,255,.3);animation:chipIn .5s ease both}
+@keyframes chipIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.sw-group.allies{background:linear-gradient(180deg,rgba(40,120,90,.18),rgba(20,70,50,.12));border-color:rgba(90,255,170,.25)}
+.sw-group.allies .sw-title{color:#7dffb3;text-shadow:0 0 12px rgba(90,255,160,.5)}
+.sw-group.allies .sw-chip{background:linear-gradient(180deg,rgba(50,160,110,.5),rgba(25,90,60,.5));border-color:rgba(120,255,180,.5);box-shadow:0 0 12px rgba(80,255,160,.25)}
+.sw-group.wars{background:linear-gradient(180deg,rgba(140,30,40,.2),rgba(80,15,22,.14));border-color:rgba(255,70,90,.3)}
+.sw-group.wars .sw-title{color:#ff8b96;text-shadow:0 0 12px rgba(255,70,90,.5)}
+.sw-group.wars .sw-chip{background:linear-gradient(180deg,rgba(180,45,60,.55),rgba(110,20,30,.55));border-color:rgba(255,90,110,.5);box-shadow:0 0 12px rgba(255,60,80,.28)}
+.sw-group.neutral{background:linear-gradient(180deg,rgba(120,100,60,.16),rgba(70,55,30,.12));border-color:rgba(255,200,90,.28)}
+.sw-group.neutral .sw-title{color:#ffd98a;text-shadow:0 0 12px rgba(255,200,90,.5)}
+.sw-group.neutral .sw-chip{background:linear-gradient(180deg,rgba(160,130,60,.5),rgba(90,70,35,.5));border-color:rgba(255,210,110,.5);box-shadow:0 0 12px rgba(255,200,90,.25)}
+.sw-note{margin-top:12px;font-family:'Playfair Display',serif;font-size:13px;line-height:1.6;color:#f2e8ff;text-shadow:0 0 8px rgba(160,120,255,.3)}
+.sw-note b{color:#fff;text-shadow:0 0 10px rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+<div id="bgLayer"></div>
+<div id="petals"></div>
+<div class="glyph-grid"></div>
+<div id="ambient"></div>
+<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+<audio id="bootSnd" src="boot.mp3" preload="auto"></audio>
+<audio id="warnMusic" loop preload="auto"></audio>
+<audio id="heartSnd" src="heart_sound.mp3" preload="auto"></audio>
+<audio id="clickSnd" src="click_sound.mp3" preload="auto"></audio>
+<audio id="maxSnd" src="maxwell_meow.mp3" preload="auto"></audio>
+<div id="cmdIcon" class="cmd-icon"><span class="ci-box"><span class="co">C:\&gt;</span></span></div>
+<div id="mxPlayer" class="mx-player">
+  <div class="mx-head"><span class="mx-logo">♫</span><span class="mx-title">THE X SOUND</span><span class="mx-live">DIRECT</span></div>
+  <div class="mx-body">
+    <button class="mx-btn" id="mxPrev">⏮</button>
+    <button class="mx-btn mx-play" id="mxPlay">▶</button>
+    <button class="mx-btn" id="mxNext">⏭</button>
+  </div>
+  <div class="mx-tracks" id="mxTracks"></div>
+  <div class="mx-seek" id="mxSeek"><div class="mx-fill" id="mxFill"></div></div>
+  <div class="mx-vol"><span class="mx-vicon" id="mxVicon">🔊</span><div class="mx-volbar" id="mxVolbar"><div class="mx-volfill" id="mxVolfill"></div></div></div>
+</div>
+<audio id="mxAudio" preload="auto"></audio>
+
+<div id="cmdWindow" class="cmd-window">
+  <div class="cw-head"><span class="cw-dot r"></span><span class="cw-dot y"></span><span class="cw-dot g"></span><span class="cw-title">THE_X_DIVISION — live console</span><span class="cw-close" id="cwClose">✕</span></div>
+  <div class="cw-body" id="cwBody"></div>
+</div>
+
+<div id="clanChat" class="clan-chat">
+  <div class="cc-head"><span class="cc-ico">💬</span><span class="cc-title">КЛАН X · ОБЩИЙ ЧАТ</span><span class="cc-live">● LIVE</span></div>
+  <div class="cc-body" id="ccBody"></div>
+</div>
+
+<div id="rolesWindow" class="roles-window">
+  <div class="rw-head"><span>⛨ ОБЩАЯ ИНФОРМАЦИЯ РОЛЕЙ</span><span class="rw-close" id="rwClose">✕</span></div>
+  <div class="rw-body">
+    <div class="rw-found"><span class="rw-ico">📅</span><span class="rw-txt"><span class="rw-name">Дата создания клана</span><span class="rw-desc">12.06.2023</span></span></div>
+    <div class="rw-role"><span class="rw-ico">♔</span><div class="rw-txt"><span class="rw-name">ЛИДЕР</span><span class="rw-desc">Эпик</span></div></div>
+    <div class="rw-role"><span class="rw-ico">✠</span><div class="rw-txt"><span class="rw-name">ЗАМ</span><span class="rw-desc">трой · ойхо</span></div></div>
+    <div class="rw-role"><span class="rw-ico">⛨</span><div class="rw-txt"><span class="rw-name">ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ</span><span class="rw-desc">псих</span></div></div>
+    <div class="rw-role"><span class="rw-ico">⚖</span><div class="rw-txt"><span class="rw-name">СУДЬЯ</span><span class="rw-desc">псих · трой</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🗝</span><div class="rw-txt"><span class="rw-name">ЛИДЕР КПА</span><span class="rw-desc">Даст · зам: JIN</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🔭</span><div class="rw-txt"><span class="rw-name">ЛИДЕР СКАУТОВ</span><span class="rw-desc">Самурай</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🎖</span><div class="rw-txt"><span class="rw-name">УЧИТЕЛЯ И ВОЕННЫЕ</span><span class="rw-desc">Хиро · Николя</span></div></div>
+    <div class="rw-role"><span class="rw-ico">⚙</span><div class="rw-txt"><span class="rw-name">АДМИНИСТРАТОР</span><span class="rw-desc">Хейт X</span></div></div>
+    <div class="rw-role"><span class="rw-ico">▫</span><div class="rw-txt"><span class="rw-name">МЛАДШИЙ АДМИНИСТРАТОР</span><span class="rw-desc">информации нету</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🛡</span><div class="rw-txt"><span class="rw-name">МОДЕРАТОР</span><span class="rw-desc">joi</span></div></div>
+    <div class="rw-role"><span class="rw-ico">▫</span><div class="rw-txt"><span class="rw-name">МЛАДШИЙ МОДЕРАТОР</span><span class="rw-desc">Сэм</span></div></div>
+    <div class="rw-role"><span class="rw-ico">👥</span><div class="rw-txt"><span class="rw-name">ЛИДЕРЫ КЛАНОВ</span><span class="rw-desc">Хейт · Роза · Тин Эпик · Хт Чара · Андр</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🕵</span><div class="rw-txt"><span class="rw-name">СКАУТЫ</span><span class="rw-desc">Студент Хиро · Добр · Мисивава</span></div></div>
+    <div class="rw-role"><span class="rw-ico">📨</span><div class="rw-txt"><span class="rw-name">ЗАМ КПА</span><span class="rw-desc">JIN</span></div></div>
+    <div class="rw-role"><span class="rw-ico">🏰</span><div class="rw-txt"><span class="rw-name">ДРУГИЕ КЛАНЫ</span><span class="rw-desc">AU · UC · HT · SAT · NMT · DC · DTADA</span></div></div>
+  </div>
+</div>
+
+<div id="codexWindow" class="roles-window">
+  <div class="rw-head"><span>📜 КОДЕКС КЛАНА</span><span class="rw-close" id="codexClose">✕</span></div>
+  <div class="rw-body">
+    <div class="rw-rule"><span class="rw-num">I</span><span class="rw-desc">Верность клану X — выше всего. Предательство карается изгнанием.</span></div>
+    <div class="rw-rule"><span class="rw-num">II</span><span class="rw-desc">Приказы высших ролей исполняются без вопросов и промедлений.</span></div>
+    <div class="rw-rule"><span class="rw-num">III</span><span class="rw-desc">Архивы клана неприкосновенны. Доступ — только по допуску X-1 и выше.</span></div>
+    <div class="rw-rule"><span class="rw-num">IV</span><span class="rw-desc">Каждый несёт ответственность за свои действия перед кланом.</span></div>
+    <div class="rw-rule"><span class="rw-num">V</span><span class="rw-desc">Единство — сила. Разлад внутри клана наказывается советом высших.</span></div>
+  </div>
+</div>
+
+<div id="linksWindow" class="roles-window">
+  <div class="rw-head"><span>🔗 СВЯЗИ КЛАНА</span><span class="rw-close" id="linksClose">✕</span></div>
+  <div class="rw-offline">⚠ СВЯЗИ НЕ ФУНКЦИОНИРУЮТ — ОШИБКА СЕТИ · ОФЛАЙН</div>
+  <div class="rw-body">
+    <div class="rw-link"><span class="rw-ico">◈</span><span class="rw-txt"><span class="rw-name">ЦЕНТРАЛЬНЫЙ УЗЕЛ</span><span class="rw-desc">Основной канал связи клана X — все сигналы сходятся здесь.</span></span></div>
+    <div class="rw-link"><span class="rw-ico">✉</span><span class="rw-txt"><span class="rw-name">ПОЧТА КЛАНА</span><span class="rw-desc">Зашифрованный канал для внутренней переписки высших ролей.</span></span></div>
+    <div class="rw-link"><span class="rw-ico">📡</span><span class="rw-txt"><span class="rw-name">СЛУЖБА ПЕРЕХВАТА</span><span class="rw-desc">Мониторит чужие каналы и следит за безопасностью границ клана.</span></span></div>
+  </div>
+</div>
+
+<div id="alWindow" class="roles-window">
+  <div class="rw-head"><span>🤝 СОЮЗЫ · ВОЙНЫ</span><span class="rw-close" id="alClose">✕</span></div>
+  <div class="rw-body">
+    <div class="sw-group allies">
+      <div class="sw-title">🤝 СОЮЗЫ</div>
+      <div class="sw-codes">
+        <span class="sw-chip" style="animation-delay:.05s">NMT</span>
+        <span class="sw-chip" style="animation-delay:.15s">SAT</span>
+        <span class="sw-chip" style="animation-delay:.25s">DC</span>
+        <span class="sw-chip" style="animation-delay:.35s">OPT</span>
+      </div>
+    </div>
+    <div class="sw-group wars">
+      <div class="sw-title">⚔ ВОЙНЫ</div>
+      <div class="sw-codes">
+        <span class="sw-chip" style="animation-delay:.45s">HT</span>
+      </div>
+    </div>
+    <div class="sw-note">Весь мусор, что пошёл за отребьем, жаждущим лишь власти, падёт под нашим напором.</div>
+    <div class="sw-group neutral">
+      <div class="sw-title">⚖ НЕЙТРАЛЫ</div>
+      <div class="sw-codes">
+        <span class="sw-chip" style="animation-delay:.55s">UC</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="albumWindow" class="roles-window">
+  <div class="rw-head"><span>🖼 АЛЬБОМ КЛАНА</span><span class="rw-close" id="albumClose">✕</span></div>
+  <div class="rw-body">
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_01.png" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 01</span><span class="rw-desc">снимок из переписки</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_02.png" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 02</span><span class="rw-desc">снимок из переписки</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_03.jpg" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 03</span><span class="rw-desc">TROI · 16.10.2023</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_04.jpg" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 04</span><span class="rw-desc">новости клана · 09.2023</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/rank_table.png" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">ТАБЛИЦА РАНГОВ</span><span class="rw-desc">ранги клана X</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_05.png" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 05</span><span class="rw-desc">снимок из переписки</span></span></div>
+    <div class="rw-album"><img class="rw-photo" src="clan_assets/clan_06.jpg" alt="" onclick="openPhoto(this)"><span class="rw-txt"><span class="rw-name">АРХИВ 06</span><span class="rw-desc">снимок · 01.10.2023</span></span></div>
+  </div>
+</div>
+
+<div id="lightbox" class="lightbox" onclick="closePhoto()"><img id="lightboxImg" src="" alt=""></div>
+
+<div id="boot">
+  <div id="bootRun">
+    <span class="x-glow">X</span>
+    <div id="bootLogs"></div>
+  </div>
+  <div id="clanScene">
+    <span class="clan-word clan-ltrs" id="clanWord">CLAN</span>
+    <span class="clan-datetime" id="clanDateTime"></span>
+    <div class="clan-btns">
+      <div class="member-badge" id="memberBadge">
+        <span class="mb-num">111</span>
+        <span class="mb-label">людей в клане</span>
+      </div>
+      <div class="mode-strip" id="modeStrip">
+        <img class="mode-ico" src="clan_mode.jpg" alt="режим">
+        <div class="mode-txt">
+          <span class="mode-name" id="modeName">РЕЖИМ КЛАНА · ОНЛАЙН</span>
+          <span class="mode-online"><span class="mo-dot"></span><b id="modeCount">0</b><span class="mo-lbl">в сети</span></span>
+        </div>
+        <div class="mode-servers" id="modeServers"></div>
+      </div>
+      <button class="roles-btn" id="rolesBtn">⛨ Общая информация ролей</button>
+      <button class="roles-btn" id="codexBtn">📜 Кодекс клана</button>
+      <button class="roles-btn" id="linksBtn">🔗 Связи клана</button>
+      <button class="roles-btn" id="alBtn">🤝 Союзы · Войны</button>
+      <button class="roles-btn" id="albumBtn">🖼 Альбом клана</button>
+      <a class="roles-btn archives-link" href="the_x_archives.html" target="_blank">🗄 Архивы клана</a>
+    </div>
+  </div>
+  <div id="quotesBox">
+    <div class="q-wrap" id="qWrap"></div>
+    <div class="q-dots" id="qDots"></div>
+  </div>
+  <div id="powerBtn">
+    <div class="gast-diary">
+      <span class="gd-spark"></span>
+      <span class="gd-book">
+        <span class="gd-cover"><span class="gd-glyph">✕</span></span>
+        <span class="gd-rings gd-r1"></span>
+        <span class="gd-rings gd-r2"></span>
+        <span class="gd-rings gd-r3"></span>
+      </span>
+      <span class="gd-scan"></span>
+    </div>
+    <span class="pwr-label">запустить программу THE X</span>
+    <div class="hover-tags" id="hoverTags">
+      <span>ЖМИ</span><span>ДАВАЙ</span><span>ДЕЙСТВУЙ</span><span>НЕ ТОРМОЗИ</span><span>ВПЕРЁД!</span><span>ОНИ ГРЕБАННЫЕ ПРЕДАТЕЛИ!</span>
+    </div>
+  </div>
+  <div class="heart-btn" id="heartBtn" title="нажми на сердце">
+    <span class="hb-ico">♡</span>
+    <span class="hb-msg" id="heartMsg"></span>
+  </div>
+  <div id="idlePrompt">C:\THE_X&gt;</div>
+  <div id="memorial">
+    <span class="mem-tag">ПОСЛЕДНЯЯ ЗАПИСЬ · ЛЕТОПИСЬ КЛАНА</span>
+    Сделано в память о клане. Мы больше никогда не вернёмся в юность, и не поговорим со многими товарищами, но позвольте безмятежности окутать вас и вернуть в тёплые воспоминания.
+    <span class="mem-warn">· · · эхо утихает · · ·</span>
+  </div>
+  <div id="maxwell" title="максвел">
+    <img src="maxwell.png" alt="максвел">
+    <span class="max-tag">МЯУ?</span>
+  </div>
+  <div id="warnScreen">
+    <div class="warn-panel">
+      <div class="warn-banner">⚠ СТРОГО СЕКРЕТНО ⚠</div>
+      <div class="warn-line"></div>
+      <p class="warn-txt">
+        Данный терминал содержит материалы ограниченного доступа.<br>
+        Доступ разрешён <b>ТОЛЬКО</b> уполномоченному персоналу.<br><br>
+        Любая попытка несанкционированного входа<br>будет немедленно передана <span class="warn-hl">трём высшим ролям</span> клана X:
+      </p>
+      <div class="warn-roles">
+        <div class="role role1"><span class="rcrown">♔</span><div class="r-txt"><span class="rname">ЛИДЕР</span><span class="rdesc">абсолютная власть</span></div><span class="rnum">I</span></div>
+        <div class="role role2"><span class="rcrown">✠</span><div class="r-txt"><span class="rname">ЗАМЕСТИТЕЛЬ</span><span class="rdesc">второй после главы</span></div><span class="rnum">II</span></div>
+        <div class="role role3"><span class="rcrown">⛨</span><div class="r-txt"><span class="rname">ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ</span><span class="rdesc">приводит приговор в действие</span></div><span class="rnum">III</span></div>
+      </div>
+      <div class="warn-line"></div>
+      <button class="warn-btn" id="warnAccept">продолжить</button>
+      <div class="warn-foot">УРОВЕНЬ ДОПУСКА: X-1</div>
+    </div>
+  </div>
+</div>
+
+<span id="logo">THE X · v0.1</span>
+
+<script>
+(function(){
+  var btn=document.getElementById('powerBtn');
+  var run=document.getElementById('bootRun');
+  var logs=document.getElementById('bootLogs');
+  var snd=document.getElementById('bootSnd');
+  var idle=document.getElementById('idlePrompt');
+  function boot(){
+    document.body.classList.remove('power-zone');
+    if(window.stopHints)window.stopHints();
+    var hb=document.getElementById('heartBtn');
+    if(hb){hb.style.display='none';}
+    btn.style.display='none';
+    var wm=document.getElementById('warnMusic');
+    if(wm){wm.pause();wm.currentTime=0;}
+    if(idle)idle.style.display='none';
+    var mem=document.getElementById('memorial');
+    if(mem)mem.classList.add('fade');
+    run.classList.add('on');
+    var xg=document.querySelector('.x-glow');
+    if(xg)xg.classList.add('spin');
+    snd.currentTime=0;snd.volume=0.8;
+    var p=snd.play();if(p&&p.catch)p.catch(function(){});
+    var lines=[
+      {t:"> INITIALIZING THE X KERNEL ...",c:""},
+      {t:"> MOUNTING VOID FILESYSTEM ............ OK",c:""},
+      {t:"! ERROR: CORE://ghost_seed.dat — FILE CORRUPTED",c:"err"},
+      {t:"> RETRYING SECTOR 0x3F ...",c:"warn"},
+      {t:"! ERROR: MODULE ghost_clan/crypt_x.sys NOT FOUND",c:"err"},
+      {t:"! ERROR: checksum mismatch in boot/archive_07",c:"err"},
+      {t:"> LOADING FALLBACK SEGMENT .............. OK",c:""},
+      {t:"! WARNING: 3 files skipped (damaged)",c:"warn"},
+      {t:"> ESTABLISHING SECURE LINK ............ OK",c:""},
+      {t:"> DECRYPTING ACCESS X ................. OK",c:""},
+      {t:"> SYSTEM READY.",c:""}
+    ];
+    var i=0;
+    function printNext(){
+      if(i>=lines.length){showCursor();return;}
+      var line=lines[i++];
+      var div=document.createElement('div');
+      div.textContent=line.t;
+      div.className=line.c;
+      logs.appendChild(div);
+      logs.scrollTop=logs.scrollHeight;
+      setTimeout(printNext,line.c==='err'?420:620);
+    }
+    function showCursor(){
+      var c=document.createElement('span');c.className='cursor';logs.appendChild(c);
+      setTimeout(clanFinale,800);
+    }
+    function clanFinale(){
+      window.__finalizeClan=clanFinale;
+      var x=document.querySelector('.x-glow');
+      var scene=document.getElementById('clanScene');
+      var word=document.getElementById('clanWord');
+      /* hide the standalone X; add an X inside the scene */
+      x.style.display='none';
+      var xin=document.createElement('span');
+      xin.className='clan-word join-x';
+      xin.style.opacity=0;
+      xin.textContent='X';
+      var xs=document.createElement('span');xs.className='xs';xin.appendChild(xs);
+      ['d1','d2','d3'].forEach(function(c){var i=document.createElement('i');i.className=c;xin.appendChild(i);});
+      scene.appendChild(xin);
+      /* CLAN letters appear left-to-right, each blinking in */
+      setTimeout(function(){
+        scene.style.opacity=1;
+        var txt='CLAN';
+        word.textContent='';
+        for(var i=0;i<txt.length;i++){
+          var s=document.createElement('span');
+          s.className='clan-ltr';
+          s.textContent=txt.charAt(i);
+          s.style.animationDelay=(i*0.18)+'s';
+          word.appendChild(s);
+        }
+        /* X in scene fades in after CLAN starts */
+        setTimeout(function(){xin.style.transition='opacity .6s';xin.style.opacity=1;},900);
+        /* whole «CLAN X» glides to the top-left corner */
+        setTimeout(function(){
+          scene.classList.add('final');
+          document.body.classList.add('quotes-on');
+          var chat=document.getElementById('clanChat');
+          if(chat)setTimeout(function(){chat.classList.add('on');},1600);
+          var mxp=document.getElementById('mxPlayer');
+          if(mxp)setTimeout(function(){mxp.classList.add('on');},2000);
+          var dt=document.getElementById('clanDateTime');
+          if(dt){
+            var now=new Date();
+            var y=now.getFullYear(),mo=String(now.getMonth()+1).padStart(2,'0'),d=String(now.getDate()).padStart(2,'0');
+            var hh,mm;
+            try{var t=new Date(now.toLocaleString('en-US',{timeZone:'Europe/Moscow'}));hh=String(t.getHours()).padStart(2,'0');mm=String(t.getMinutes()).padStart(2,'0');}
+            catch(e){var td=new Date(now);hh=String(td.getHours()).padStart(2,'0');mm=String(td.getMinutes()).padStart(2,'0');}
+            dt.textContent=y+'-'+mo+'-'+d+'  '+hh+':'+mm+' MSK';
+          }
+          var logs=document.getElementById('bootLogs');
+          if(logs)logs.classList.add('collapsed');
+          var ic=document.getElementById('cmdIcon');
+          if(ic)setTimeout(function(){ic.classList.add('on');},1500);
+        },2400);
+      },400);
+    }
+    setTimeout(printNext,900);
+    window.__finalizeClan=clanFinale;
+  }
+  btn.addEventListener('click',boot);
+  window.__boot=boot;
+  window.__showRun=function(){run.classList.add('on');};
+  window.__hidePower=function(){btn.style.display='none';var hb=document.getElementById('heartBtn');if(hb)hb.style.display='none';};
+})();
+(function(){
+  var warn=document.getElementById('warnScreen');
+  var accept=document.getElementById('warnAccept');
+  if(warn&&accept){
+    accept.addEventListener('click',function(){
+      warn.classList.add('hide');
+      document.body.classList.add('power-zone');
+      startHints();
+      var mem=document.getElementById('memorial');
+      if(mem)setTimeout(function(){mem.classList.add('on');},600);
+      var wm=document.getElementById('warnMusic');
+      if(wm){
+        wm.src='menu_music.mp3';
+        wm.volume=0.6;
+        var p=wm.play();if(p&&p.catch)p.catch(function(){});
+      }
+    });
+  }
+  var hintTimer=null;
+  function startHints(){
+    if(hintTimer)return;
+    var phrases=['ОТКРЫВАЙ!','ТЫ БЛИЗОК!','НЕ ОТСТУПАЙ!','ПЕЧЕНЬКИИ!!','ХУЯК.','КАДЕТ БЛЯТЬ.','АХХ^^','МАКАРОШКИ СГОРЕЛИ.'];
+    function spawn(){
+      if(!document.body.classList.contains('power-zone'))return;
+      var el=document.createElement('div');
+      el.className='power-hint';
+      el.textContent=phrases[Math.floor(Math.random()*phrases.length)];
+      el.style.left=(8+Math.random()*72)+'%';
+      el.style.top=(15+Math.random()*60)+'%';
+      if(Math.random()<0.4)el.style.transform='rotate('+(Math.random()*10-5)+'deg)';
+      document.body.appendChild(el);
+      setTimeout(function(){el.remove();},4000);
+    }
+    hintTimer=setInterval(spawn,6000+Math.random()*4000);
+    setTimeout(spawn,5000);
+  }
+  function stopHints(){
+    if(hintTimer){clearInterval(hintTimer);hintTimer=null;}
+    document.querySelectorAll('.power-hint').forEach(function(e){e.remove();});
+  }
+  window.stopHints=stopHints;
+})();
+(function(){
+  var hb=document.getElementById('heartBtn');
+  var msg=document.getElementById('heartMsg');
+  var snd=document.getElementById('heartSnd');
+  if(!hb||!msg||!snd)return;
+  var phrases=[
+    {t:"Порой, то чего мы хотим забыть — с нами навсегда. А то, что хотим запомнить, напрочь вылетает из головы."},
+    {t:"Снова тут? Добро пожаловать, домой", r:"домой"},
+    {t:"Много воды утекло, да?"},
+    {t:"Арбуз, дыня..."},
+    {t:"Привет, давно не виделись."},
+    {t:"Не переживай, мы сильнейшие!"},
+    {t:"Ещё немного — и сам UC будет под нами!"}
+  ];
+  var typing=false,cur=0;
+  function playPhrase(){
+    if(typing)return;
+    typing=true;
+    if(cur>=phrases.length){
+      /* all phrases done — heart flies away */
+      hb.style.pointerEvents='none';
+      hb.classList.add('hb-fly');
+      return;
+    }
+    var ph=phrases[cur++];
+    var full=ph.t, red=ph.r;
+    /* start looping sound */
+    snd.loop=true;snd.currentTime=0;snd.volume=0.8;
+    var sp=snd.play();if(sp&&sp.catch)sp.catch(function(){});
+    msg.innerHTML='';
+    var i=0;
+    var redStart=red?full.indexOf(red):-1;
+    function type(){
+      if(i<=full.length){
+        var rendered='';
+        var prefix=full.slice(0,i);
+        if(redStart>=0&&i>redStart){
+          rendered=full.slice(0,redStart)+'<span class="red">'+full.slice(redStart,Math.min(i,redStart+red.length))+'</span>'+full.slice(Math.min(i,redStart+red.length),i);
+        }else{
+          rendered=escapeH(prefix);
+        }
+        msg.innerHTML=rendered;
+        i++;
+        if(i<=full.length){setTimeout(type,55);}
+        else{finish();}
+      }
+    }
+    function finish(){
+      snd.pause();
+      typing=false;
+    }
+    function escapeH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+    type();
+  }
+  hb.addEventListener('click',playPhrase);
+})();
+(function(){
+  var icon=document.getElementById('cmdIcon');
+  var win=document.getElementById('cmdWindow');
+  var body=document.getElementById('cwBody');
+  var close=document.getElementById('cwClose');
+  var nicks=['TROI','EPIC','DAST','PSYH','Joi','Oiho'];
+  var acts=[
+    'правит ядро','дебажит модуль','сливает логи','правки в архиве','меняет доступ','шифрует поток',
+    'пересобирает узел','чистит следы','режет доступ','правит запись','обновляет ядро','переписывает зону',
+    'проверяет щит','латает дыру','синхронизирует','распутывает узел','меняет хэш','заметает следы',
+    'оптимизирует ядро','переключает канал','восстанавливает блок','правит конфиг','чистит буфер',
+    'обнуляет узлы','перевешивает права','режет канал','тестирует новое звено','ставит заплатку',
+    'копает глубже','переписывает сектор X','захлопывает сессию','прячет архив','швыряет правки',
+    'пинает сервер','меняет привязки','прочёсывает память','трещит по швам','переставляет замки',
+    'тасует пароли','правки в ожидании','закручивает гайки','чинит мост','разматывает клубок'
+  ];
+  var targets=['пакет X-7','файл ghost_seed','сектор 0x3F','узел 9','хранилище GHOST','архив 07','ядро 0x1F','канал дельты','массив 42','поток 0x0D','раздел void','лога связи','ключ доступа','табл. ролей','сервер_α','ферму дыма'];
+  var lastNick='';
+  function pickNick(){
+    var n;
+    do{n=nicks[Math.floor(Math.random()*nicks.length)];}while(n===lastNick);
+    lastNick=n;return n;
+  }
+  function fmt(s){
+    return s.replace(/\{n\}/g,'<span class="nick">'+pickNick()+'</span>')
+            .replace(/\{a\}/g,'<span class="act">'+acts[Math.floor(Math.random()*acts.length)]+'</span>')
+            .replace(/\{t\}/g,'<span class="act">'+targets[Math.floor(Math.random()*targets.length)]+'</span>');
+  }
+  var phrases=[
+    '{n} {a} → {t}',
+    '[{n}] {a} · {t}',
+    '{t} ← {n} {a}',
+    'session: {n} / {a} ({t})',
+    '{n} → статус: {a} в {t}',
+    'cmd[{n}] {a}.. {t}',
+    '{n} правки: {t} ({a})',
+    'audit: {n} {a} {t}',
+    '{t} требует {n} — {a}...',
+    '{n} перехватил {t}, {a}',
+    '{t} обновлён ({n}: {a})',
+    'noise: {n} {a}, {t} отмечен',
+    '{n} сбросил {t} после {a}',
+    'watchdog: {n} {a} на {t}',
+    '{t} {a} — инициатор {n}'
+  ];
+  var sysLines=['[ok] система стабильна','[i] фоновый скан идёт','[!!] сигнатура клана подтверждена','[i] хэш совпадает','[ok] канал зашифрован','[i] очередь задач: 12','[!!] чужой не прошёл','[i] снапшот сохранён'];
+  var timer=null;
+  function addLine(html){var d=document.createElement('div');d.className='ln';d.innerHTML=html;body.appendChild(d);}
+  function crop(){while(body.children.length>40){body.removeChild(body.firstChild);}}
+  function tick(){
+    if(Math.random()<0.82){
+      var ph=phrases[Math.floor(Math.random()*phrases.length)];
+      addLine(fmt(ph));
+    }else{
+      addLine('<span class="sys">'+sysLines[Math.floor(Math.random()*sysLines.length)]+'</span>');
+    }
+    crop();
+    body.scrollTop=body.scrollHeight;
+  }
+  function start(){if(timer)return;timer=setInterval(tick,700);}
+  function stop(){if(timer){clearInterval(timer);timer=null;}}
+  icon.addEventListener('click',function(){
+    if(win.classList.contains('open')){win.classList.remove('open');stop();}
+    else{win.classList.add('open');start();}
+  });
+  close.addEventListener('click',function(){win.classList.remove('open');stop();});
+})();
+(function(){
+  function closeAllRoleWindows(){
+    document.querySelectorAll('.roles-window').forEach(function(w){w.classList.remove('open');});
+  }
+  window.closeAllRoleWindows=closeAllRoleWindows;
+  var rw=document.getElementById('rolesWindow');
+  var rclose=document.getElementById('rwClose');
+  if(rw&&rclose){
+    var rbtn=document.getElementById('rolesBtn');
+    if(rbtn)rbtn.addEventListener('click',function(){closeAllRoleWindows();rw.classList.add('open');});
+    rclose.addEventListener('click',function(){rw.classList.remove('open');});
+  }
+  var pairs=[['codexBtn','codexWindow','codexClose'],['linksBtn','linksWindow','linksClose'],['alBtn','alWindow','alClose'],['albumBtn','albumWindow','albumClose']];
+  for(var i=0;i<pairs.length;i++){
+    var b=pairs[i][0],w=pairs[i][1],c=pairs[i][2];
+    var bb=document.getElementById(b),ww=document.getElementById(w),cc=document.getElementById(c);
+    if(bb&&ww){bb.addEventListener('click',(function(win){return function(){closeAllRoleWindows();win.classList.add('open');};})(ww));}
+    if(cc&&ww){cc.addEventListener('click',(function(win){return function(){win.classList.remove('open');};})(ww));}
+  }
+})();
+function openPhoto(img){
+  var lb=document.getElementById('lightbox');
+  var lbi=document.getElementById('lightboxImg');
+  lbi.src=img.src;lb.classList.add('open');
+}
+function closePhoto(){
+  var lb=document.getElementById('lightbox');
+  if(lb)lb.classList.remove('open');
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePhoto();});
+(function(){
+  var plEl=document.getElementById('mxPlayer');
+  if(!plEl)return;
+  var playlist=[
+    {name:'Underverse — Vanquisher (X Undyne)', file:'nex_music1.mp3'},
+    {name:'Underverse — Overwrite (X!Chara)', file:'nex_music2.mp3'},
+    {name:'Underverse — DUPLICITY (X!Frisk)', file:'nex_music3.mp3'}
+  ];
+  var a=document.getElementById('mxAudio'),idx=0,
+      pb=document.getElementById('mxPlay'),prev=document.getElementById('mxPrev'),nx=document.getElementById('mxNext'),
+      tracks=document.getElementById('mxTracks'),seek=document.getElementById('mxSeek'),fill=document.getElementById('mxFill'),
+      vbar=document.getElementById('mxVolbar'),vfill=document.getElementById('mxVolfill'),vicon=document.getElementById('mxVicon');
+  function load(i){
+    idx=(i+playlist.length)%playlist.length;
+    a.src=playlist[idx].file;
+    var ch=tracks.children;for(var k=0;k<ch.length;k++)ch[k].classList.toggle('cur',k===idx);
+    fill.style.width='0%';
+  }
+  function setP(pl){pb.textContent=pl?'❚❚':'▶';document.body.classList.toggle('music-active',pl)}
+  for(var i=0;i<playlist.length;i++){
+    var d=document.createElement('div');d.className='mx-trk'+(i===0?' cur':'');d.textContent=playlist[i].name;
+    (function(idx2){d.addEventListener('click',function(){load(idx2);a.play();setP(true)});})(i);
+    tracks.appendChild(d);
+  }
+  a.addEventListener('timeupdate',function(){if(a.duration)fill.style.width=(a.currentTime/a.duration*100)+'%';});
+  a.addEventListener('ended',function(){load(idx+1);a.play();setP(true);});
+  seek.addEventListener('click',function(e){
+    if(!a.duration)return;var r=seek.getBoundingClientRect();
+    a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration;
+  });
+  pb.addEventListener('click',function(){if(a.paused){a.play();setP(true)}else{a.pause();setP(false)}});
+  nx.addEventListener('click',function(){load(idx+1);a.play();setP(true)});
+  prev.addEventListener('click',function(){load(idx-1);a.play();setP(true)});
+  a.addEventListener('play',function(){document.body.classList.add('music-active');startPulse();});
+  a.addEventListener('pause',function(){document.body.classList.remove('music-active');});
+  var curVol=0.8;
+  function setVol(v){curVol=v;a.volume=v;vfill.style.width=(v*100)+'%';vicon.textContent=v<=0?'🔇':(v<0.5?'🔉':'🔊');}
+  setVol(0.8);
+  vbar.addEventListener('click',function(e){var r=vbar.getBoundingClientRect();var v=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));setVol(v);});
+  vicon.addEventListener('click',function(){setVol(0);});
+  /* pseudo music reaction: gentle pulsing while playing (no Web Audio to keep sound safe) */
+  var pulseT=null;
+  function startPulse(){
+    if(pulseT)return;
+    var t=0;
+    pulseT=setInterval(function(){
+      t+=0.08;
+      var lvl=0.25+0.75*Math.abs(Math.sin(t*2.4))+0.08*Math.sin(t*7.3);
+      document.body.style.setProperty('--bass',lvl.toFixed(3));
+      document.body.style.setProperty('--bass2',(lvl*lvl).toFixed(3));
+    },80);
+  }
+  a.addEventListener('pause',function(){if(pulseT){clearInterval(pulseT);pulseT=null;document.body.style.setProperty('--bass','0');document.body.style.setProperty('--bass2','0');}});
+  load(0);a.load();
+})();
+(function(){
+  var chat=document.getElementById('clanChat');
+  if(!chat)return;
+  var body=document.getElementById('ccBody');
+  var nicks=['TROI','EPIC','PSYH','JIN','DUST','ERROR','HETA','SAMYRAI'];
+  var msgs=[
+    '{N}: скинь куда летим','{N}: гайд на узел скину?','{N}: я на месте, ждём','{N}: кто чинит сервер?',
+    '{N}: там засада, не лезьте','{N}: сделал, проверяйте','{N}: +rep','{N}: срочно все на связь',
+    '{N}: дай доступ на архив','{N}: ворую фиксы у TVSS','{N}: ну вы и тормоза','{N}: зафиксировал, гони дальше',
+    '{N}: где все?','{N}: прикрываю спину','{N}: нубов выгоняйте','{N}: я прокинул канал',
+    '{N}: на севере чисто','{N}: кодекс читали?','{N}: предупреждал же','{N}: отбой, все по домам',
+    '{N}: лидер входит','{N}: не шумите','{N}: фарм поехал','{N}: щиты на максимум',
+    '{N}: за базу прикрыли','{N}: кто сломает — горю в аду','{N}: высылаю дозор','{N}: вторая волна'
+  ];
+  var sys=['[система] добавлен участник','[система] права обновлены','[система] сигнал чист','[система] слежка отключена','[система] вход в архив'];
+  var lastNick='';
+  function pickNick(){var n;do{n=nicks[Math.floor(Math.random()*nicks.length)];}while(n===lastNick);lastNick=n;return n;}
+  function timeNow(){var d=new Date();var t=d.toTimeString().split(' ')[0];return t.slice(0,5);}
+  function add(msg){
+    var wrap=document.createElement('div');
+    if(msg.sys){wrap.className='msg sys';wrap.textContent=msg.txt;}
+    else{
+      wrap.className='msg';
+      var nick=document.createElement('span');nick.className='m-nick';nick.textContent=msg.nick+': ';
+      var txt=document.createElement('span');txt.className='m-txt';txt.textContent=msg.txt;
+      var tm=document.createElement('span');tm.className='m-time';tm.textContent=timeNow();
+      wrap.appendChild(nick);wrap.appendChild(txt);wrap.appendChild(tm);
+    }
+    body.appendChild(wrap);
+    while(body.children.length>14)body.removeChild(body.firstChild);
+  }
+  var timer=null;
+  function tick(){
+    if(Math.random()<0.85){
+      var txt=msgs[Math.floor(Math.random()*msgs.length)].replace('{N}',pickNick());
+      add({nick:lastNick,txt:txt});
+    }else{
+      add({sys:true,txt:sys[Math.floor(Math.random()*sys.length)]});
+    }
+  }
+  var obs=new MutationObserver(function(){body.scrollTop=body.scrollHeight;});
+  obs.observe(body,{childList:true});
+  function start(){
+    if(timer)return;
+    for(var k=0;k<6;k++)tick();
+    timer=setInterval(tick,1200);
+  }
+  document.addEventListener('DOMContentLoaded',function(){});
+  /* start chat when it appears */
+  var mo=new MutationObserver(function(){if(chat.classList.contains('on'))start();});
+  mo.observe(chat,{attributes:true,attributeFilter:['class']});
+})();
+(function(){
+  if(location.search.indexOf('archives=1')===-1)return;
+  var warn=document.getElementById('warnScreen');
+  if(warn){warn.style.display='none';warn.classList.add('hide');}
+  if(window.__hidePower)window.__hidePower();
+  if(window.__showRun)window.__showRun();
+  if(window.__boot)setTimeout(window.__boot,200);
+})();
+(function(){
+  var strip=document.getElementById('modeStrip');
+  if(!strip)return;
+  var countEl=document.getElementById('modeCount');
+  var srvEl=document.getElementById('modeServers');
+  var servers=[
+    {n:'SERVER-1',st:'peace',off:23},
+    {n:'SERVER-2',st:'war',off:41},
+    {n:'SERVER-3',st:'peace',off:12},
+    {n:'SERVER-4',st:'stand',off:7}
+  ];
+  var warOn=false;
+  function build(){
+    srvEl.innerHTML='';
+    warOn=false;
+    servers.forEach(function(s){
+      var c=document.createElement('span');
+      c.className='srv-chip '+(s.st==='war'?'war':s.st==='peace'?'peace':'stand');
+      var d=document.createElement('span');d.className='srv-st';
+      var t=document.createElement('span');t.textContent=s.n;
+      c.appendChild(d);c.appendChild(t);
+      srvEl.appendChild(c);
+      if(s.st==='war')warOn=true;
+    });
+    strip.classList.toggle('war-active',warOn);
+  }
+  var on=34+Math.floor(Math.random()*20);
+  function tick(){
+    on+=(Math.round(Math.random()*6)-3);
+    if(on<8)on=8;if(on>120)on=120;
+    if(countEl)countEl.textContent=on;
+    if(Math.random()<0.5){
+      var s=servers[Math.floor(Math.random()*servers.length)];
+      var r=Math.random();
+      if(s.st==='war'){if(r<0.5)s.st='stand';else s.st='peace';}
+      else if(s.st==='stand'){s.st=Math.random()<0.5?'war':'peace';}
+      else{s.st=Math.random()<0.34?'war':'peace';}
+      build();
+    }
+  }
+  build();tick();
+  setInterval(tick,2600);
+})();
+(function(){
+  var qw=document.getElementById('qWrap');
+  if(!qw)return;
+  var quotes=[
+    'Время не ждёт. Оно уходит, забирая с собой тех, с кем мы делили всё.',
+    'Большая часть друзей больше не встретится. И от этого сердце сжимается чуть сильнее.',
+    'Раньше было тепло на душе — когда мы были вместе и верили, что так будет всегда.',
+    'Мы разошлись по разным мирам, но те вечера в клане остались навсегда.',
+    'Юность кончается, а память о ней — нет.',
+    'Мы не вернёмся в прошлое. Но оно всегда будет возвращаться к нам.'
+  ];
+  var dd=document.getElementById('qDots');
+  var idx=0;
+  function show(i,instant){
+    var items=qw.children;
+    for(var k=0;k<items.length;k++)items[k].classList.remove('show');
+    var el=items[i];
+    el.classList.add('show');
+    var dots=dd.children;
+    for(var k=0;k<dots.length;k++)dots[k].classList.remove('act');
+    dots[i].classList.add('act');
+  }
+  quotes.forEach(function(t,i){
+    var d=document.createElement('div');
+    d.className='q-item';
+    var m=document.createElement('span');m.className='q-mark';m.textContent='❝';
+    var s=document.createElement('span');s.textContent=t;
+    d.appendChild(m);d.appendChild(s);
+    qw.appendChild(d);
+    var dot=document.createElement('i');dd.appendChild(dot);
+  });
+  // final iridescent quote
+  var fin=document.createElement('div');
+  fin.className='q-item q-final';
+  var m2=document.createElement('span');m2.className='q-mark';m2.innerHTML='&#9733;';
+  fin.appendChild(m2);
+  fin.appendChild(document.createTextNode('БЫТЬ ДЕДСТВУ!'));
+  qw.appendChild(fin);
+  var fdot=document.createElement('i');dd.appendChild(fdot);
+  var total=quotes.length+1;
+  function step(){
+    idx=(idx+1)%total;
+    show(idx);
+  }
+  setTimeout(function(){show(0);},200);
+  setInterval(step,5200);
+})();
+(function(){
+  var pet=document.getElementById('petals');
+  if(!pet)return;
+  var colors=['#d9b8ff','#e6ccff','#cfa8ff','#f0dfff','#b98aff'];
+  var n=Math.min(22,Math.floor(window.innerWidth/70));
+  for(var i=0;i<n;i++){
+    var s=document.createElement('i');
+    s.className='petal';
+    s.style.left=(Math.random()*100)+'vw';
+    var sz=10+Math.random()*16;
+    s.style.fontSize=sz+'px';
+    s.style.color=colors[i%colors.length];
+    s.style.animationDuration=(9+Math.random()*10)+'s';
+    s.style.animationDelay=(Math.random()*12)+'s';
+    s.style.setProperty('--sway',(Math.random()*120-60)+'px');
+    pet.appendChild(s);
+  }
+})();
+(function(){
+  var mx=document.getElementById('maxwell');
+  var meow=document.getElementById('maxSnd');
+  if(!mx)return;
+  mx.addEventListener('click',function(e){
+    e.stopPropagation();
+    mx.classList.remove('max-jump');
+    void mx.offsetWidth;
+    mx.classList.add('max-jump');
+    if(meow){
+      meow.currentTime=0;
+      var p=meow.play();if(p&&p.catch)p.catch(function(){});
+    }
+  });
+  var mTimer=null;
+  function hideMx(){mx.classList.add('toggle-hide');}
+  window.__hideMaxwell=function(){mx.style.pointerEvents='none';hideMx();};
+})();
+</script>
+</body>
+</html>
