@@ -6,17 +6,20 @@
 <title>†Nova† — Too skilled to be sane</title>
 <style>
 :root{
-  --bg:#14161a;
-  --bg2:#0e1013;
-  --panel:rgba(30,33,38,.78);
-  --panel-border:rgba(255,255,255,.08);
-  --text:#d9dde3;
-  --muted:#8b919b;
-  --neon:#8ea3bd;
-  --neon2:#cfd6e0;
-  --accent:#b9c4d4;
-  --bone:#e8ecf1;
-  --rose:#3a3f46;
+  --bg:#0e0c08;
+  --bg2:#0a0806;
+  --panel:rgba(28,24,16,.82);
+  --panel-border:rgba(212,175,55,.22);
+  --text:#e8e0cc;
+  --muted:#a6987a;
+  --neon:#d4af37;
+  --neon2:#e9c65a;
+  --accent:#d9bc6a;
+  --bone:#f0e4c0;
+  --rose:#4a3f24;
+  --gold:#d4af37;
+  --gold-bright:#f0d878;
+  --dark:#1a160f;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -24,26 +27,38 @@ body{
   font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   color:var(--text);background:var(--bg2);line-height:1.65;overflow-x:hidden;
   background-image:
-    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.05), transparent 55%),
-    radial-gradient(ellipse at 0% 100%, rgba(255,255,255,.03), transparent 50%);
+    radial-gradient(ellipse at 50% -10%, rgba(212,175,55,.07), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, rgba(212,175,55,.04), transparent 50%);
 }
-#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;opacity:.14;z-index:-2;filter:grayscale(.8) contrast(1.1)}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;opacity:.16;z-index:-2;filter:grayscale(.6) sepia(.35) contrast(1.15) brightness(.7)}
 #vg{position:fixed;inset:0;z-index:-1;background:
-  radial-gradient(ellipse at 50% 0%, rgba(220,230,240,.06), transparent 55%),
-  linear-gradient(180deg,rgba(20,22,26,.35),rgba(14,16,19,.97))}
+  radial-gradient(ellipse at 50% 0%, rgba(212,175,55,.08), transparent 55%),
+  linear-gradient(180deg,rgba(14,11,7,.55),rgba(10,8,6,.97))}
 #vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.55) 100%)}
-.particle{position:fixed;z-index:-1;width:2px;height:2px;border-radius:50%;background:#e8ecf1;pointer-events:none;
-  opacity:0;animation:rise linear infinite;box-shadow:0 0 6px rgba(220,230,245,.7)}
+  background:radial-gradient(ellipse at 50% 45%, transparent 40%, rgba(0,0,0,.7) 100%)}
+.particle{position:fixed;z-index:-1;width:2px;height:2px;border-radius:50%;background:#f0d878;pointer-events:none;
+  opacity:0;animation:rise linear infinite;box-shadow:0 0 6px rgba(212,175,55,.7)}
+/* slow drifting golden light blobs, very subtle */
+.glow-blob{position:fixed;z-index:-2;border-radius:50%;filter:blur(70px);pointer-events:none;
+  background:radial-gradient(circle,rgba(212,175,55,.14),rgba(212,175,55,0) 70%);
+  animation:blobFloat 26s ease-in-out infinite;opacity:.55}
+.glow-blob.b1{width:420px;height:420px;top:-120px;left:-80px;animation-duration:30s}
+.glow-blob.b2{width:360px;height:360px;bottom:-100px;right:-60px;animation-duration:34s;animation-delay:3s}
+.glow-blob.b3{width:300px;height:300px;top:40%;left:78%;animation-duration:40s;animation-delay:6s;opacity:.35}
+@keyframes blobFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,30px) scale(1.1)}
+  66%{transform:translate(-25px,50px) scale(.95)}
+}
 @keyframes rise{
   0%{transform:translateY(0);opacity:0}
   10%{opacity:.5}
   50%{opacity:.25}
   100%{transform:translateY(-100vh);opacity:0}
 }
-/* drifting gothic wisp-snakes, monochrome like the avatar */
-.wisp{position:fixed;z-index:-1;pointer-events:none;color:#d5dbe3;font-size:28px;opacity:0;
-  animation:wispa float linear infinite;text-shadow:0 0 14px rgba(220,230,245,.5)}
+/* drifting gothic wisp-snakes */
+.wisp{position:fixed;z-index:-1;pointer-events:none;color:#e0c66a;font-size:28px;opacity:0;
+  animation:wispa float linear infinite;text-shadow:0 0 14px rgba(212,175,55,.5)}
 @keyframes wispa{
   0%{transform:translateX(-4vw) translateY(0) rotate(0deg);opacity:0}
   12%{opacity:.35}
@@ -58,6 +73,61 @@ body{
   100%{transform:translateX(-4vw) translateY(-14vh) rotate(-45deg);opacity:0}
 }
 
+/* gilded snake-scale grate along the sides */
+.scale-grate{position:fixed;top:0;bottom:0;width:46px;z-index:6;pointer-events:none;user-select:none;overflow:visible;
+  background:linear-gradient(180deg,#1d1810,#140f08 40%,#1a1407);}
+.grate-left{left:0}
+.grate-right{right:0}
+/* lattice: thin crossing bars forming diamond mesh */
+.scale-grate .g-back{
+  position:absolute;left:0;right:0;top:0;bottom:0;
+  background-color:transparent;
+  background-image:
+    linear-gradient(45deg, transparent 46%, rgba(212,175,55,.55) 47% 49%, transparent 50%),
+    linear-gradient(-45deg, transparent 46%, rgba(212,175,55,.55) 47% 49%, transparent 50%),
+    linear-gradient(90deg, transparent 40%, rgba(0,0,0,.35) 46%, transparent 50%);
+  background-size:30px 30px;
+  overflow:hidden;
+}
+/* moving sheen sweeping down the bars */
+.scale-grate::before{
+  content:'';position:absolute;left:0;right:auto;width:46px;top:0;bottom:0;pointer-events:none;
+  background:linear-gradient(180deg, transparent 0%, rgba(255,252,235,.0) 30%,
+    rgba(255,252,235,.75) 45%, rgba(255,252,235,0) 60%);
+  background-size:100% 220%;
+  animation:grateSheen 6s linear infinite;
+  mix-blend-mode:screen;
+}
+@keyframes grateSheen{
+  0%{transform:translateY(-70%)}
+  100%{transform:translateY(70%)}
+}
+/* subtle falloff at inner edge */
+.scale-grate::after{content:'';position:absolute;left:0;right:auto;width:46px;top:0;bottom:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),transparent 55%,rgba(255,255,255,.05));pointer-events:none}
+.grate-right::after{transform:scaleX(-1)}
+/* rotating revolver barrel with social icons */
+.revolver-card{margin:26px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:40}
+.rv-label{color:#f0d878;font-size:10px;letter-spacing:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(212,175,55,.6);opacity:.95}
+.revolver{position:relative;width:150px;height:150px;pointer-events:auto;cursor:pointer}
+.rv-cyl{position:absolute;inset:0;animation:rvSpin 9s linear infinite}
+.revolver:hover .rv-cyl{animation-play-state:paused}
+.rv-chamber{
+  position:absolute;left:50%;top:16px;width:48px;height:48px;margin-left:-24px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:700;color:#fff5dd;text-decoration:none;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#ffe98a,#e8bf3d 45%,#8a6d26 92%);
+  border:2px solid #1c1607;box-shadow:0 4px 8px rgba(0,0,0,.75),inset 0 0 6px rgba(255,255,255,.35),0 0 14px rgba(212,175,55,.45);
+  text-shadow:0 0 8px rgba(40,30,5,.9),0 0 14px rgba(255,240,180,.6);
+  transform-origin:24px 59px;
+}
+.rv-chamber:nth-child(1){transform:rotate(0deg)}
+.rv-chamber:nth-child(2){transform:rotate(120deg)}
+.rv-chamber:nth-child(3){transform:rotate(240deg)}
+.rv-chamber:hover{filter:brightness(1.4);box-shadow:0 0 24px rgba(240,216,120,.85)}
+.rv-hub{position:absolute;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#ffedb0,#8a6d26 70%);border:2px solid #1c1607;box-shadow:0 3px 6px rgba(0,0,0,.75)}
+@keyframes rvSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 .wrap{max-width:920px;margin:0 auto;padding:40px 22px 80px}
 
 /* gothic side columns */
@@ -118,6 +188,27 @@ header.hero{margin-bottom:40px}
 .st-top{color:var(--rose);font-size:13px;letter-spacing:6px}
 .st-bottom{color:var(--muted);font-size:12px;letter-spacing:3px;font-style:italic;margin-top:4px;text-transform:lowercase}
 .hero-center h1.name,.hero-center .serpent,.hero-center .status{text-align:center}
+/* gold nick label + name frame */
+.nickplate{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  margin:14px auto 12px;
+  color:#b39b52;font-size:11px;letter-spacing:5px;
+  text-transform:uppercase;text-shadow:0 0 8px rgba(212,175,55,.5);
+}
+.nickplate .np-line{color:#7a642a;opacity:.8;letter-spacing:0}
+.nickplate .np-txt{color:#f0d878;letter-spacing:5px;padding:3px 12px;border:1px solid rgba(212,175,55,.4);border-radius:20px;background:rgba(212,175,55,.08);box-shadow:0 0 12px rgba(212,175,55,.2)}
+.name-wrap{
+  display:inline-block;position:relative;margin:0 auto;
+  padding:8px 26px 10px;
+}
+.name-wrap::before,.name-wrap::after{
+  content:'';position:absolute;left:50%;transform:translateX(-50%);
+  right:auto;width:90%;height:1px;background:linear-gradient(90deg,transparent,#d4af37,transparent);
+  opacity:.7;
+}
+.name-wrap::before{top:0}
+.name-wrap::after{bottom:0}
+.hero-center{text-align:center}
 .avatar{
   width:180px;height:180px;margin:0 auto 26px;position:relative;display:block;
 }
@@ -149,18 +240,51 @@ header.hero{margin-bottom:40px}
   55%{stroke-dashoffset:0}
   100%{stroke-dashoffset:-520}
 }
+/* hanging dark roses garland from top */
+.rose-garland{position:fixed;top:0;left:0;right:0;z-index:5;pointer-events:none;user-select:none;display:flex;justify-content:space-around;height:64px}
+.rose-hang{position:relative;display:flex;flex-direction:column;align-items:center;transform-origin:top center;animation:roseSwing 6s ease-in-out infinite}
+.rose-hang .vine{width:1px;height:30px;background:linear-gradient(180deg,transparent,#6b5526);opacity:.8}
+.rose-hang .rose{line-height:1;display:flex;filter:drop-shadow(0 0 6px rgba(212,175,55,.25)) drop-shadow(0 4px 8px rgba(0,0,0,.5));animation:roseBreathe 5s ease-in-out infinite}
+.rose-hang .leaf{width:8px;height:20px;background:radial-gradient(ellipse at top,#5a4a1e,#3a3010);border-radius:100% 0 100% 0;margin-top:2px;transform:rotate(-20deg);opacity:.65}
+.rose-hang.r1{animation-delay:0s}.rose-hang.r1 .rose{animation-delay:0s}
+.rose-hang.r2{animation-delay:.5s}.rose-hang.r2 .rose{animation-delay:.4s}
+.rose-hang.r3{animation-delay:1.1s}.rose-hang.r3 .rose{animation-delay:1s}
+.rose-hang.r4{animation-delay:.3s}.rose-hang.r4 .rose{animation-delay:.7s}
+.rose-hang.r5{animation-delay:.8s}.rose-hang.r5 .rose{animation-delay:.2s}
+.rose-hang.r6{animation-delay:1.4s}.rose-hang.r6 .rose{animation-delay:.9s}
+.rose-hang.r7{animation-delay:.65s}.rose-hang.r7 .rose{animation-delay:1.2s}
+.rose-hang.r8{animation-delay:1.8s}.rose-hang.r8 .rose{animation-delay:.5s}
+@keyframes roseSwing{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes roseBreathe{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
 .snake .ring.turn{transform-origin:50% 50%;animation:spin 24s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.serpent{text-align:center;font-size:20px;color:var(--bone);letter-spacing:3px;margin:6px 0;user-select:none}
+.serpent{text-align:center;font-size:13px;color:#a6904e;letter-spacing:6px;margin:14px 0 0;user-select:none;text-transform:uppercase;opacity:.8;text-shadow:0 0 10px rgba(212,175,55,.3)}
+/* background music toggle button */
+.music-btn{
+  display:inline-flex;align-items:center;gap:8px;margin:16px auto 0;
+  padding:8px 18px 8px 12px;cursor:pointer;user-select:none;
+  font-family:inherit;color:#e0cd8d;background:rgba(212,175,55,.08);
+  border:1px solid rgba(212,175,55,.4);border-radius:24px;
+  transition:.2s;box-shadow:0 0 10px rgba(212,175,55,.15),inset 0 1px 0 rgba(240,216,120,.15);
+}
+.music-btn:hover{border-color:#f0d878;box-shadow:0 0 16px rgba(212,175,55,.4);background:rgba(212,175,55,.14)}
+.music-btn .mb-icon{font-size:16px;color:#f0d878;text-shadow:0 0 8px rgba(240,216,120,.7)}
+.music-btn .mb-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#e0cd8d}
+.music-btn .mb-ico{font-size:12px;color:#f0d878;line-height:1;transition:.15s}
+.music-btn .pause{display:none}
+.music-btn.playing .play{display:none}
+.music-btn.playing .pause{display:inline-block}
+.music-btn.playing{animation:mbPulse 2.4s ease-in-out infinite}
+@keyframes mbPulse{0%,100%{box-shadow:0 0 10px rgba(212,175,55,.15)}50%{box-shadow:0 0 20px rgba(240,216,120,.5)}}
 /* ethereal crown above the name */
-.crown{display:flex;align-items:flex-end;justify-content:center;gap:2px;margin-bottom:10px;user-select:none;position:relative}
-.crown .cn{color:#d5dbe3;font-size:22px;opacity:.5;text-shadow:0 0 12px rgba(220,230,245,.5);animation:crownFloat 4s ease-in-out infinite}
-.crown .cn.mid{font-size:32px;opacity:.85;animation-delay:.2s}
-.crown .cn.tip{font-size:18px;animation-delay:.5s}
+.crown{display:flex;align-items:flex-end;justify-content:center;gap:2px;margin:-6px 0 4px;user-select:none;position:relative;z-index:3}
+.crown .cn{color:#f0d878;font-size:26px;opacity:.9;text-shadow:0 0 14px rgba(240,216,120,.8),0 0 26px rgba(212,175,55,.5);animation:crownFloat 4s ease-in-out infinite}
+.crown .cn.mid{font-size:40px;opacity:1;animation-delay:.2s;filter:drop-shadow(0 2px 6px rgba(212,175,55,.6))}
+.crown .cn.tip{font-size:20px;animation-delay:.5s}
 @keyframes crownFloat{
-  0%,100%{transform:translateY(0) rotate(0deg);opacity:.5}
-  50%{transform:translateY(-5px) rotate(3deg);opacity:.95}
+  0%,100%{transform:translateY(0) rotate(0deg);opacity:.7}
+  50%{transform:translateY(-6px) rotate(3deg);opacity:1}
 }
 .head{transform-origin:50% 50%;position:absolute;animation:headflick 4s ease-in-out infinite}
 @keyframes headflick{
@@ -176,11 +300,41 @@ header.hero{margin-bottom:40px}
 }
 
 h1.name{
-  font-size:clamp(30px,7vw,50px);font-weight:800;letter-spacing:2px;color:#fff;
-  text-shadow:0 0 20px rgba(200,210,225,.25);text-transform:none;
+  font-family:'Trajan Pro','Palatino',Georgia,serif;
+  font-size:clamp(32px,7vw,52px);font-weight:700;letter-spacing:3px;color:#f0d878;
+  display:inline-block;
+  animation:royalSheen 5s ease-in-out infinite, royalFloat 6s ease-in-out infinite;
 }
-h1.name .cross{color:var(--neon2);font-weight:400}
-h1.name .thin{color:var(--muted);font-weight:400}
+h1.name .grad{
+  background:linear-gradient(180deg,#fff6d8 0%,#f0d878 32%,#d4af37 58%,#8a743a 100%);
+  background-size:200% 200%;
+  background-position:50% 0%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:royalShift 5s ease-in-out infinite;
+}
+h1.name .cross{
+  display:inline-block;color:#d4af37;-webkit-text-fill-color:#d4af37;
+  animation:royalCross 3s ease-in-out infinite;
+}
+h1.name .cross:first-child{animation-delay:.2s}
+h1.name .thin{color:#a6904e;-webkit-text-fill-color:#a6904e}
+/* royal animations */
+@keyframes royalShift{
+  0%,100%{background-position:50% 0%}
+  50%{background-position:50% 70%}
+}
+@keyframes royalSheen{
+  0%,100%{filter:drop-shadow(0 0 16px rgba(212,175,55,.28))}
+  50%{filter:drop-shadow(0 0 30px rgba(240,216,120,.6))}
+}
+@keyframes royalFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+}
+@keyframes royalCross{
+  0%,100%{opacity:.65;text-shadow:0 0 10px rgba(212,175,55,.5)}
+  50%{opacity:1;text-shadow:0 0 20px rgba(240,216,120,.95)}
+}
 .status{
   margin:10px auto 4px;max-width:680px;
   font-size:clamp(15px,3vw,20px);color:var(--neon);
@@ -232,7 +386,64 @@ h1.name .thin{color:var(--muted);font-weight:400}
 .chip:hover{border-color:var(--acc);color:#fff;box-shadow:0 0 14px var(--chip-glow,rgba(142,163,189,.4));background:rgba(255,255,255,.09)}
 
 .card-lex{--acc:#9fbaff;--acc-soft:rgba(120,160,255,.45);--acc-glow:rgba(90,130,255,.08);--chip-bd:rgba(130,165,255,.3);--chip-tx:#a9c4ff;--chip-glow:rgba(110,150,255,.45)}
+
+/* gothic tombstone for LEX MEA */
+.stained-card{text-align:center;margin-bottom:22px}
+.stained-frame{position:relative;width:min(500px,100%);margin:0 auto;background:
+  linear-gradient(180deg,#2e2714 0%,#2a230f 18%,#191407 40%,#120e05 100%);
+  border:1px solid #7a642a;border-radius:14px 14px 8px 8px;padding:44px 30px 26px;
+  box-shadow:0 12px 36px rgba(0,0,0,.7),inset 0 1px 0 rgba(240,216,120,.08),inset 0 0 40px rgba(212,175,55,.04);
+  }
+/* stone texture */
+.stained-frame::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.5;background:
+  radial-gradient(circle at 20% 30%, rgba(245,220,150,.05) 1px, transparent 1.5px),
+  radial-gradient(circle at 70% 60%, rgba(0,0,0,.25) 1.5px, transparent 2px),
+  radial-gradient(circle at 45% 85%, rgba(240,216,120,.03) 1px, transparent 1.5px),
+  radial-gradient(circle at 85% 20%, rgba(0,0,0,.2) 1px, transparent 2px);
+  background-size:70px 70px,90px 90px,100px 100px,80px 80px;}
+/* weathered marks */
+.stained-frame::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.35;background:
+  repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 18px, transparent 18px 34px),
+  linear-gradient(90deg, transparent, rgba(212,175,55,.05) 50%, transparent);}
+/* cross finial */
+.stained-cross{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:34px;height:46px;pointer-events:none}
+.stained-cross .cv{position:absolute;left:50%;top:0;transform:translateX(-50%);width:4px;height:46px;background:linear-gradient(180deg,#d4af37,#7a642a);box-shadow:0 0 8px rgba(212,175,55,.6)}
+.stained-cross .ch{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:22px;height:4px;background:linear-gradient(180deg,#d4af37,#7a642a);box-shadow:0 0 8px rgba(212,175,55,.5)}
+.stained-cross .cnob{position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#b8942e;box-shadow:0 0 8px rgba(212,175,55,.6)}
+.stained-inlay{position:absolute;inset:8px;border:1px solid rgba(212,175,55,.3);border-radius:9px;pointer-events:none}
+.stained-inlay::before{content:'';position:absolute;top:-3px;left:20px;right:20px;height:1px;background:rgba(212,175,55,.25)}
+.stained-top{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:20px;letter-spacing:4px;display:flex;justify-content:center;gap:12px;align-items:center;text-shadow:0 0 18px rgba(212,175,55,.6);margin-bottom:20px;padding-top:6px}
+.stained-top span{color:#8a743a;font-size:13px;text-shadow:0 0 8px rgba(212,175,55,.4)}
+.stained-quote{font-family:'Palatino',Georgia,serif;color:#e9dcb4;font-size:17px;font-style:italic;line-height:1.5;letter-spacing:.3px;text-shadow:0 0 10px rgba(212,175,55,.2)}
+.stained-sub{color:#a6904e;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.stained-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+.stained-chip{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:600;color:#e0cd8d;border:1px solid rgba(212,175,55,.35);background:rgba(212,175,55,.06);letter-spacing:.5px;transition:.2s}
+.stained-chip:hover{border-color:#f0d878;color:#fff3cf;box-shadow:0 0 14px rgba(212,175,55,.4);background:rgba(212,175,55,.12)}
+.stained-divider{display:flex;align-items:center;gap:12px;margin:18px 0 2px;color:#8a743a}
+.stained-divider i{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.5),transparent)}
+.stained-divider span{color:#f0d878;font-size:12px;text-shadow:0 0 8px rgba(212,175,55,.6)}
+.stained-games-label{display:flex;align-items:center;justify-content:center;gap:10px;margin:20px 0 6px;color:#f0d878;font-size:12px;letter-spacing:4px;text-transform:uppercase;text-shadow:0 0 10px rgba(212,175,55,.55)}
+.stained-games-label .sgl-star{font-size:12px;color:#f0d878;opacity:.9;text-shadow:0 0 8px rgba(240,216,120,.8)}
+.stained-tag{margin-top:16px;color:#8a743a;font-size:11px;letter-spacing:2px;text-transform:uppercase}
 .card-nihil{--acc:#ff9f9f;--acc-soft:rgba(255,120,120,.45);--acc-glow:rgba(255,80,80,.08);--chip-bd:rgba(255,140,140,.3);--chip-tx:#ffb3b3;--chip-glow:rgba(255,110,110,.45)}
+
+/* gothic scroll for NIHIL EXTRA ME */
+.scroll-card{text-align:center;margin-bottom:22px}
+.scroll-roll{position:relative;width:min(480px,100%);height:230px;margin:0 auto;perspective:1400px;cursor:pointer}
+.scroll-panel{position:absolute;inset:0;background:linear-gradient(180deg,#241c0c,#151105 30%,#1a1407);border:1px solid rgba(212,175,55,.3);border-radius:6px;padding:34px 30px 20px;transform:scaleY(.18);transform-origin:top center;opacity:.2;transition:transform .7s cubic-bezier(.4,.1,.2,1),opacity .5s;box-shadow:inset 0 0 30px rgba(0,0,0,.7)}
+.scroll-panel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(212,175,55,.06) 2px 4px);pointer-events:none}
+.scroll-panel::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#d4af37,transparent);opacity:.6}
+.scroll-head{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:16px;letter-spacing:3px;margin-bottom:18px;display:flex;justify-content:center;gap:12px;align-items:center}
+.scroll-head span{color:#a6904e;font-size:13px}
+.scroll-quote{font-family:'Palatino',Georgia,serif;color:#fdf3d0;font-size:19px;font-style:italic;letter-spacing:.5px}
+.scroll-sub{color:#b39b52;font-size:13px;letter-spacing:1px;margin-top:4px}
+.scroll-motto{margin-top:16px;color:#e0cd8d;font-size:14px;line-height:1.6;letter-spacing:.5px}
+.scroll-pole{position:absolute;top:0;bottom:0;width:14px;background:linear-gradient(90deg,#241c0c,#5a4a1e 50%,#1a1407);box-shadow:0 0 10px rgba(0,0,0,.6)}
+.pole-left{left:0}
+.pole-right{right:0}
+.polenob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#a08030,#241c0c);box-shadow:inset 0 0 6px rgba(0,0,0,.7),0 0 8px rgba(212,175,55,.3)}
+.scroll-roll:hover .scroll-panel{transform:scaleY(1);opacity:1}
+.scroll-hint{color:var(--muted);font-size:11px;letter-spacing:2px;margin-top:12px;font-style:italic}
 .card-links{--acc:#c9a6ff;--acc-soft:rgba(180,130,255,.45);--acc-glow:rgba(150,100,255,.08);--chip-bd:rgba(170,130,255,.3);--chip-tx:#c9b0ff;--chip-glow:rgba(160,120,255,.45)}
 .card-sound{--acc:#ffd28a;--acc-soft:rgba(255,200,110,.45);--acc-glow:rgba(255,190,80,.08);--chip-bd:rgba(255,200,120,.3);--chip-tx:#ffd59a;--chip-glow:rgba(255,200,110,.45)}
 
@@ -256,26 +467,199 @@ h1.name .thin{color:var(--muted);font-weight:400}
 .track b{color:var(--neon2);font-weight:700}
 
 .card-achv{--acc:#b9ffd0;--acc-soft:rgba(120,255,180,.4);--acc-glow:rgba(80,255,160,.06);overflow:visible}
-.achv-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:4px}
-.achv{position:relative;text-align:center;padding:6px;cursor:pointer}
-.achv-ico{
-  width:64px;height:64px;border-radius:16px;margin:0 auto;display:flex;align-items:center;justify-content:center;
-  font-size:30px;color:#b9ffd0;background:rgba(185,255,208,.07);
-  border:1px solid rgba(185,255,208,.28);transition:.2s;box-shadow:0 0 12px rgba(120,255,180,.08);
+.eyes-fixed{position:fixed;inset:0;pointer-events:none;z-index:50}
+.eye{position:absolute;width:52px;height:32px;background:radial-gradient(ellipse at center, #ced5dc 0%, #6a717a 55%, #25272b 100%);border-radius:50% 50% 46% 46% / 62% 62% 38% 38%;box-shadow:inset 0 2px 5px rgba(255,255,255,.28),inset 0 -4px 7px rgba(0,0,0,.55),0 5px 10px rgba(0,0,0,.5);overflow:hidden;opacity:.95}
+.eye.e-tl{top:16px;left:20px}
+.eye.e-tr{top:16px;right:20px}
+.eye.e-bl{bottom:20px;left:20px}
+.eye.e-br{bottom:20px;right:20px}
+/* brow */
+.eye .brow{position:absolute;left:-9px;right:-9px;top:-10px;height:9px;border-top:3px solid rgba(10,10,12,.85);border-radius:50% 50% 0 0;z-index:3}
+/* iris + pupil + rings + glints, moved together by JS via .pupil? no—move wrapper */
+.eye .iris{position:absolute;left:50%;top:50%;width:17px;height:17px;margin:-8.5px 0 0 -8.5px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #84888f 0%, #4a4e55 45%, #2b2e33 78%, #14161a 100%);box-shadow:0 0 5px rgba(0,0,0,.55);transform:translate(0,0);transition:transform .12s ease-out}
+.eye .ring{position:absolute;inset:2px;border-radius:50%;border:1px solid rgba(20,22,26,.55)}
+.eye .pupil{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:radial-gradient(circle at 40% 34%, #0e0f12, #050607 75%);box-shadow:0 0 3px rgba(0,0,0,.7)}
+/* specular glints on the cornea */
+.eye .glint{position:absolute;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(.5px)}
+.eye .gl-a{width:3.5px;height:3.5px;top:2px;left:7px}
+.eye .gl-b{width:1.8px;height:1.8px;top:9px;right:4px;background:rgba(255,255,255,.45)}
+/* partial shading top & bottom of eyeball */
+.eye .veil{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(0,0,0,.28),transparent 30% 68%,rgba(0,0,0,.3));pointer-events:none;z-index:1}
+/* lashes */
+.eye .lash{position:absolute;z-index:2}
+.eye .lash.l-t{top:-11px;left:28%;width:26%;height:3px;background:#0b0c0e;transform:rotate(0deg)}
+.eye .lash.l-r{top:38%;right:-8px;width:3px;height:22%;background:#0b0c0e;border-radius:2px}
+.eye .lash.l-l{top:38%;left:-8px;width:3px;height:22%;background:#0b0c0e;border-radius:2px}
+/* eyelids (blink) */
+.eye .lid{position:absolute;left:-2px;right:-2px;height:0;background:#0c0d10;z-index:4;box-shadow:0 0 6px rgba(0,0,0,.5);transition:height .08s ease}
+.eye .lid-t{top:-2px;border-radius:0 0 50% 50%}
+.eye .lid-b{bottom:-2px;border-radius:50% 50% 0 0}
+.eye .lid.half{height:34%}
+/* === level panel (side achievements) === */
+.level-panel{
+  position:fixed;left:14px;top:50%;z-index:60;
+  width:172px;
+  display:flex;flex-direction:column;align-items:stretch;gap:8px;
+  background:linear-gradient(180deg,#241f14,#120e07);
+  border:1px solid #6b5726;
+  border-radius:12px;padding:10px 9px;
+  box-shadow:0 14px 40px rgba(0,0,0,.7),inset 0 1px 0 rgba(240,216,120,.1),inset 0 0 30px rgba(212,175,55,.05);
+  cursor:default;user-select:none;
+  transform:translateY(-50%) translateX(calc(-100% + 46px));
+  transition:transform .35s cubic-bezier(.4,.1,.2,1);
 }
-.achv:hover .achv-ico{transform:translateY(-3px);border-color:#b9ffd0;box-shadow:0 0 20px rgba(120,255,180,.4);background:rgba(185,255,208,.12)}
-.achv-name{margin-top:8px;font-size:10px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase}
+.level-panel:hover{transform:translateY(-50%) translateX(0)}
+@media(hover:none){.level-panel{transform:translateY(-50%) translateX(0)}}
+.level-panel::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:#1d1810;border:1px solid #6b5726;border-bottom:none;border-right:none}
+.level-panel::after{content:'';position:absolute;inset:5px;border:1px solid rgba(212,175,55,.12);border-radius:8px;pointer-events:none}
+.lvl-grip{text-align:center;color:#8a743a;font-size:15px;letter-spacing:1px;flex:none;text-shadow:0 0 8px rgba(212,175,55,.5)}
+.lvl-head{text-align:center;white-space:nowrap}
+.lvl-label{display:block;font-size:8px;letter-spacing:2px;color:#b39b52;text-transform:uppercase}
+.lvl-badge{display:block;margin-top:10px;font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:16px;color:#f0d878;letter-spacing:1px;text-shadow:0 0 12px rgba(212,175,55,.6);border-top:1px dashed rgba(212,175,55,.3);border-bottom:1px dashed rgba(212,175,55,.3);padding:9px 0;white-space:nowrap}
+.lvl-bar{position:relative;height:9px;border-radius:6px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.25);overflow:hidden}
+.lvl-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#7a642a,#d4af37,#f0d878);border-radius:6px;box-shadow:0 0 10px rgba(212,175,55,.6)}
+.lvl-tex{position:absolute;left:0;right:0;top:0;line-height:9px;text-align:center;font-size:6.5px;letter-spacing:1px;color:#fff3cf;text-shadow:0 0 4px rgba(0,0,0,.8);white-space:nowrap}
+.lvl-track{display:flex;flex-direction:column;gap:7px;margin-top:3px}
+.achv{position:relative;display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:8px;cursor:pointer;transition:.18s;border:1px solid transparent;white-space:nowrap}
+.achv:hover{background:rgba(212,175,55,.08);border-color:rgba(212,175,55,.3)}
+.achv-spot{
+  width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:#e6c869;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3);
+  box-shadow:inset 0 1px 0 rgba(240,216,120,.08);transition:.2s;
+}
+.achv:hover .achv-spot{transform:translateX(3px);border-color:#f0d878;box-shadow:0 0 14px rgba(212,175,55,.45)}
+.achv-tx{display:flex;flex-direction:column;min-width:0}
+.achv-name{font-size:9px;letter-spacing:1.5px;color:#e9dcb4;text-transform:uppercase;white-space:nowrap}
+/* the wild violet X */
+.xb{
+  display:inline-block;margin-left:2px;font-size:15px;line-height:1;font-weight:700;
+  color:#d56cff;text-shadow:0 0 6px rgba(213,108,255,.95),0 0 14px rgba(213,108,255,.7),0 0 26px rgba(160,60,255,.5);
+  animation:xWild 1.1s ease-in-out infinite;
+  transform-origin:50% 50%;
+}
+.xb.x-b{margin-left:1px}
+@keyframes xWild{
+  0%,100%{transform:translate(0,0) rotate(0deg) scale(1)}
+  20%{transform:translate(1.5px,-1.5px) rotate(-9deg) scale(1.12)}
+  45%{transform:translate(-1px,1.5px) rotate(7deg) scale(1.05);text-shadow:0 0 12px rgba(213,108,255,1),0 0 26px rgba(160,60,255,.85)}
+  70%{transform:translate(1px,-1px) rotate(-5deg) scale(1.15);text-shadow:0 0 8px rgba(213,108,255,1),0 0 20px rgba(190,120,255,.9)}
+}
+.achv-hint{font-size:7.5px;letter-spacing:1.5px;color:#8a743a;text-transform:uppercase}
+.lvl-foot{text-align:center;font-size:8px;letter-spacing:2px;color:#8a743a;text-transform:uppercase;padding-top:6px;border-top:1px dashed rgba(212,175,55,.25);display:flex;justify-content:center;gap:8px;align-items:center;white-space:nowrap}
+
+/* in-panel description, expands under the achv row on hover */
+.achv{flex-wrap:wrap}
+.achv-desc{
+  display:none;width:100%;margin-top:4px;padding:6px 7px;
+  font-size:8.5px;line-height:1.4;color:#cbbd95;letter-spacing:.3px;
+  background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.18);
+  border-left:2px solid rgba(212,175,55,.5);border-radius:4px;
+  white-space:normal;text-align:left;
+}
+.achv:hover .achv-desc{display:block}
+.achv:hover .achv-spot{transform:translateX(0)}
 
 .tooltip{
   position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%) translateY(6px);
-  width:206px;padding:12px 14px;background:rgba(12,14,18,.96);border:1px solid rgba(185,255,208,.3);
+  width:206px;padding:12px 14px;background:rgba(12,14,18,.96);border:1px solid rgba(190,205,225,.28);
   border-radius:10px;box-shadow:0 8px 26px rgba(0,0,0,.6);
   opacity:0;visibility:hidden;transition:.18s ease;z-index:20;pointer-events:none;text-align:left;
 }
-.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(185,255,208,.4)}
-.tooltip .tp-title{color:#b9ffd0;font-size:13px;font-weight:700;margin-bottom:5px;letter-spacing:.5px}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(190,205,225,.35)}
+.tooltip .tp-title{color:#e6eaf0;font-size:13px;font-weight:700;margin-bottom:5px;letter-spacing:.5px}
 .tooltip .tp-text{color:var(--text);font-size:12.5px;line-height:1.5}
+/* side panel tooltip: arrow on the left side */
+.level-panel .tooltip::after{content:'';position:absolute;top:50%;left:-6px;transform:translateY(-50%);border:6px solid transparent;border-right-color:rgba(190,205,225,.35)}
 .achv:hover .tooltip,.achv:focus .tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+.novaq-card{text-align:center;margin-bottom:22px}
+.novaq-frame{position:relative;width:min(500px,100%);margin:0 auto;background:linear-gradient(180deg,#2a2414,#191407 40%,#120e05);border:1px solid #7a642a;border-radius:10px;padding:38px 30px 26px;box-shadow:0 12px 36px rgba(0,0,0,.7),inset 0 1px 0 rgba(240,216,120,.08),inset 0 -10px 26px rgba(0,0,0,.4)}
+.novaq-frame::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.4;background:
+  radial-gradient(circle at 30% 25%, rgba(245,220,150,.04) 1px, transparent 1.5px),
+  radial-gradient(circle at 75% 70%, rgba(0,0,0,.25) 1.5px, transparent 2px),
+  radial-gradient(circle at 55% 40%, rgba(240,216,120,.03) 1px, transparent 1.5px);
+  background-size:80px 80px,100px 100px,90px 90px;}
+.novaq-frame::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(0deg, rgba(0,0,0,.1) 0 16px, transparent 16px 30px);opacity:.4}
+/* corner screws bolting the quote plate to the wall */
+.nov-screw{position:absolute;width:15px;height:15px;z-index:9;pointer-events:none;
+  border-radius:50%;background:radial-gradient(circle at 35% 30%, #f5e8a8, #d4af37 40%, #6b5526 85%);
+  border:1px solid #3a3010;
+  box-shadow:0 2px 3px rgba(0,0,0,.6),inset 0 0 3px rgba(0,0,0,.4);
+}
+.nov-screw::after{content:'';position:absolute;left:50%;top:50%;width:12px;height:1.5px;
+  transform:translate(-50%,-50%) rotate(0deg);background:rgba(40,32,12,.7);box-shadow:0 0 1px #000}
+.nov-screw.s1{top:7px;left:7px}
+.nov-screw.s2{top:7px;right:7px}
+.nov-screw.s3{bottom:7px;left:7px}
+.nov-screw.s4{bottom:7px;right:7px}
+.novaq-cross{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:26px;height:38px;pointer-events:none}
+.novaq-cross .cv{position:absolute;left:50%;top:0;transform:translateX(-50%);width:3px;height:38px;background:linear-gradient(180deg,#d4af37,#7a642a);box-shadow:0 0 8px rgba(212,175,55,.6)}
+.novaq-cross .ch{position:absolute;left:50%;top:13px;transform:translateX(-50%);width:17px;height:3px;background:linear-gradient(180deg,#d4af37,#7a642a);box-shadow:0 0 8px rgba(212,175,55,.5)}
+.novaq-top{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:19px;letter-spacing:5px;text-shadow:0 0 16px rgba(212,175,55,.55);margin-bottom:20px}
+.nova-carousel{position:relative;min-height:84px}
+.nq-item{position:absolute;left:0;right:0;top:0;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease;pointer-events:none}
+.nq-item.active{opacity:1;transform:translateY(0)}
+.nq-q{display:block;font-family:'Trajan Pro','Palatino',Georgia,serif;color:#e9dcb4;font-size:16.5px;font-style:italic;line-height:1.55;letter-spacing:.3px;text-shadow:0 0 12px rgba(212,175,55,.28)}
+.nq-src{display:block;margin-top:10px;color:#a6904e;font-size:11px;letter-spacing:3px;text-transform:uppercase}
+
+/* my works showcase — hanging under the quote card, swinging */
+.works-card{text-align:center;margin:-4px 0 26px;position:relative;width:min(560px,100%);margin-left:auto;margin-right:auto;
+  transform-origin:top center;animation:worksSwing 5.5s ease-in-out infinite}
+.works-card:hover{animation-play-state:paused}
+/* side signboards in the free space beside the card */
+.works-card{position:relative}
+.works-banner{
+  position:absolute;top:50%;transform:translateY(-50%);
+  color:#f0d878;font-size:14px;letter-spacing:2px;line-height:1.4;
+  text-transform:uppercase;white-space:nowrap;
+  padding:11px 20px;border:1px solid rgba(212,175,55,.5);border-radius:11px;
+  background:linear-gradient(180deg,rgba(212,175,55,.12),rgba(20,15,7,.6));
+  box-shadow:0 0 14px rgba(212,175,55,.25),inset 0 0 8px rgba(212,175,55,.1);
+  text-shadow:0 0 8px rgba(240,216,120,.7);opacity:1;pointer-events:none;z-index:30;
+}
+.works-banner::before,.works-banner::after{content:'';position:absolute;top:50%;width:8px;height:8px;transform:translateY(-50%);border-radius:50%;background:#d4af37;box-shadow:0 0 6px rgba(240,216,120,.8)}
+.works-banner::before{left:6px}
+.works-banner::after{right:6px}
+.works-banner{display:inline-block;text-align:center}
+.works-banner br{display:none}
+.works-left{right:calc(100% + 16px)}
+.works-right{left:calc(100% + 16px)}
+/* pyramid text (left sign) */
+.works-left .wb-l1{display:block;font-size:12px;letter-spacing:3px;width:100%}
+.works-left .wb-l2{display:block;font-size:13px;letter-spacing:2px;width:auto;margin:3px auto}
+.works-left .wb-l3{display:block;font-size:11px;letter-spacing:1px;width:auto;margin:3px auto 0;text-align:center}
+/* broken-neon flicker */
+.works-banner{animation:wink 3.2s infinite}
+.works-left{animation-duration:2.6s}
+.works-right{animation-duration:3.6s}
+@keyframes wink{
+  0%,100%{opacity:1;text-shadow:0 0 8px rgba(240,216,120,.7);box-shadow:0 0 14px rgba(212,175,55,.25),inset 0 0 8px rgba(212,175,55,.1)}
+  92%{opacity:1}
+  93%{opacity:.45;text-shadow:none;box-shadow:none}
+  94%{opacity:1;text-shadow:0 0 8px rgba(240,216,120,.7);box-shadow:0 0 14px rgba(212,175,55,.25),inset 0 0 8px rgba(212,175,55,.1)}
+  96%{opacity:.25;text-shadow:none;box-shadow:none}
+  97%{opacity:1}
+}
+@media(max-width:1180px){.works-left,.works-right{display:none}}
+/* chain links from the quote card above */
+.works-card::before{content:'';position:absolute;left:50%;top:-30px;transform:translateX(-50%);width:2px;height:30px;
+  background:repeating-linear-gradient(180deg,#d4af37 0 5px,rgba(0,0,0,.5) 5px 7px);opacity:.85;box-shadow:0 2px 4px rgba(0,0,0,.4)}
+@keyframes worksSwing{
+  0%,100%{transform:rotate(-1.2deg)}
+  50%{transform:rotate(1.2deg)}
+}
+.works-frame{position:relative;width:100%;background:linear-gradient(180deg,#2a2414,#191407 45%,#120e05);border:1px solid #7a642a;border-radius:12px;padding:26px 26px 24px;box-shadow:0 16px 40px rgba(0,0,0,.75),inset 0 1px 0 rgba(240,216,120,.08),inset 0 0 30px rgba(212,175,55,.05);transition:.3s}
+.works-card:hover .works-frame{border-color:#f0d878;box-shadow:0 20px 50px rgba(0,0,0,.8),0 0 22px rgba(212,175,55,.35)}
+.works-frame::before{content:'';position:absolute;inset:6px;border:1px solid rgba(212,175,55,.18);border-radius:8px;pointer-events:none}
+.works-head{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:19px;letter-spacing:4px;text-shadow:0 0 16px rgba(212,175,55,.55);margin-bottom:22px;display:flex;justify-content:center;gap:12px;align-items:center}
+.works-head span{color:#8a743a;font-size:13px}
+.works-grid{display:flex;flex-direction:column;gap:12px}
+.work{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:10px;text-decoration:none;color:inherit;border:1px solid rgba(212,175,55,.28);background:rgba(212,175,55,.05);transition:.2s}
+.work:hover{border-color:#f0d878;box-shadow:0 0 18px rgba(212,175,55,.4);transform:translateY(-2px);background:rgba(212,175,55,.12)}
+.work-ico{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;font-size:22px;color:#f0d878;border:1px solid rgba(212,175,55,.4);border-radius:10px;background:rgba(212,175,55,.08);text-shadow:0 0 10px rgba(240,216,120,.7)}
+.work-txt{display:flex;flex-direction:column;text-align:left}
+.work-name{font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:15px;letter-spacing:2px;color:#f5e8c0;text-transform:uppercase}
+.work-link{font-size:11px;letter-spacing:1px;color:#a6904e;margin-top:2px}
 
 .card-comm{--acc:#c9a6ff;--acc-soft:rgba(180,130,255,.4);--acc-glow:rgba(150,100,255,.07)}
 .comm-games,.comm-youtubers{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
@@ -399,12 +783,19 @@ footer .sig{color:var(--neon);letter-spacing:2px}
   .st-word{font-size:24px;letter-spacing:5px}
   .st-bottom{display:none}
 }
+@media(max-width:760px){
+  .level-panel{left:8px;right:auto}
+  .scale-grate{display:none}
+}
 </style>
 </head>
 <body>
 <img id="bg" src="bg.jpg" alt="">
 <div id="vg"></div>
 <div id="vignette"></div>
+<div class="glow-blob b1"></div>
+<div class="glow-blob b2"></div>
+<div class="glow-blob b3"></div>
 <i class="particle" style="left:12%;bottom:-10px;animation-duration:16s"></i>
 <i class="particle" style="left:28%;bottom:-10px;animation-duration:22s;animation-delay:3s"></i>
 <i class="particle" style="left:47%;bottom:-10px;animation-duration:19s;animation-delay:7s"></i>
@@ -414,67 +805,18 @@ footer .sig{color:var(--neon);letter-spacing:2px}
 <i class="particle" style="left:7%;bottom:-10px;animation-duration:20s;animation-delay:11s"></i>
 <i class="particle" style="left:74%;bottom:-10px;animation-duration:21s;animation-delay:4s"></i>
 <i class="particle" style="left:55%;bottom:-10px;animation-duration:26s;animation-delay:8s"></i>
-<i class="wisp" style="top:30%;animation-duration:38s;animation-delay:0s">༄</i>
-<i class="wisp" style="top:55%;animation-duration:46s;animation-delay:-14s">∿</i>
-<i class="wisp wisp-blow" style="top:16%;animation-duration:42s;animation-delay:-22s">≈</i>
-<i class="wisp" style="top:70%;animation-duration:52s;animation-delay:-30s">⏝</i>
-<i class="wisp wisp-blow" style="top:44%;animation-duration:36s;animation-delay:-8s">⋘</i>
-<i class="wisp" style="top:84%;animation-duration:48s;animation-delay:-38s">༺</i>
-<i class="wisp wisp-blow" style="top:24%;animation-duration:44s;animation-delay:-18s">༻</i>
-
-<div class="bstrip top"><span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span> ✧ † ✧ <span class="fl">✦</span></div>
-<div class="bstrip bottom"><span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span> ✧ ✦ ✧ <span class="fl">†</span></div>
-
-<div class="corn tl">༄</div>
-<div class="corn tr">༄</div>
-<div class="corn bl">༄</div>
-<div class="corn br">༄</div>
-
-<div class="col col-left">
-  <div class="ct">† ✧</div>
-  <div>
-    <div class="cl hi">✧</div>
-    <div class="cl">†</div>
-    <div class="cl">✦</div>
-    <div class="cl">☠</div>
-    <div class="cl">🕸</div>
-    <div class="cl">†</div>
-    <div class="cl hi">✧</div>
-    <div class="cl">✦</div>
-    <div class="cl">❄️</div>
-    <div class="cl">†</div>
-    <div class="cl">✧</div>
-    <div class="cl">☠</div>
-    <div class="cl ">🕸</div>
-    <div class="cl hi">✦</div>
-  </div>
-  <div class="cb">✧ †</div>
+<div class="rose-garland">
+  <div class="rose-hang r1"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#6b5526" d="M12 2c1 2-1 4-2 3-3 1-4 4-3 6-2 2-2 5 0 7l4-1 2 3 3-1-1-4 4-2-3-4c2-3 0-7-4-7z"/></svg></span></div>
+  <div class="rose-hang r2"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#7a642a" d="M10 2c2 1 1 4 0 5h4c2 0 4 2 4 4v2c2 1 2 4 0 6l-3-1-1 2-2-2-2 1-1-5-3 1c-2-2-1-5 1-6v-2c0-3 2-5 5-5z"/></svg></span></div>
+  <div class="rose-hang r3"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="4" fill="#6b5526"/><path fill="#5a4a1e" d="M8 6c3-1 7 0 9 2l-2 1c-2-1-5 0-7 0z"/></svg></span></div>
+  <div class="rose-hang r4"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#7a642a" d="M9 3l1 2H8l1-2zm2 3c-3 0-6 3-5 8l4-1c2 2 5 2 7 0l4 1c1-5-2-8-5-8h-5z"/></svg></span></div>
+  <div class="rose-hang r5"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#8a743a" d="M12 2l2 8 8-4-4 8 6 4-8 2 2 4-6-6-6 6 2-4-8-2 6-4-4-8 8 4z"/></svg></span></div>
 </div>
-
-<div class="col col-right">
-  <div class="ct">✦ ✧</div>
-  <div>
-    <div class="cl hi">✦</div>
-    <div class="cl">✧</div>
-    <div class="cl">†</div>
-    <div class="cl">🕸</div>
-    <div class="cl">☠</div>
-    <div class="cl hi">✧</div>
-    <div class="cl">✦</div>
-    <div class="cl">❄️</div>
-    <div class="cl">†</div>
-    <div class="cl">✧</div>
-    <div class="cl">☠</div>
-    <div class="cl">🕸</div>
-    <div class="cl">†</div>
-    <div class="cl hi">✧</div>
-  </div>
-  <div class="cb">† ✧</div>
-</div>
+<audio id="bgMusic" src="bg_music.mp3" loop preload="auto"></audio>
+<div class="scale-grate grate-left"><span class="g-back"></span></div>
+<div class="scale-grate grate-right"><span class="g-back"></span></div>
 
 <div class="wrap">
-  <div class="roses-top">▒▒▒▒▒▒▒</div>
-
   <header class="hero">
     <div class="hero-grid">
       <div class="hero-side left-side">
@@ -500,13 +842,22 @@ footer .sig{color:var(--neon);letter-spacing:2px}
           </div>
           <img src="avatar.png" alt="Nova avatar">
         </div>
-        <div class="serpent">༄ U R O B O R O S ༄</div>
+        <div class="nickplate"><span class="np-line">━</span><span class="np-txt">NICKNAME</span><span class="np-line">━</span></div>
         <div class="crown"><span class="cn tip">✧</span><span class="cn">✦</span><span class="cn mid">♛</span><span class="cn">✦</span><span class="cn tip">✧</span></div>
-        <h1 class="name"><span class="cross">†</span>Nova<span class="cross">†</span></h1>
+        <div class="name-wrap">
+          <h1 class="name"><span class="cross">†</span><span class="grad">Nova</span><span class="cross">†</span></h1>
+        </div>
         <div class="status">༒࿇ Too skilled TO BE SAINE.࿇༒</div>
         <div class="sub"><span class="sub-l">┄</span><span class="sub-txt">for_your_employer.</span><span class="sub-r">┄</span></div>
         <div class="location">pronouns: me. And only me.</div>
         <div class="divider"></div>
+        <div class="serpent">༄ U R O B O R O S ༄</div>
+        <button id="musicBtn" class="music-btn" aria-label="Переключить музыку">
+          <span class="mb-icon">♫</span>
+          <span class="mb-ico play">▶</span>
+          <span class="mb-ico pause">❚❚</span>
+          <span class="mb-label">music</span>
+        </button>
       </div>
 
       <div class="hero-side right-side">
@@ -519,169 +870,217 @@ footer .sig{color:var(--neon);letter-spacing:2px}
           <span class="st-word l3">ME</span>
           <span class="st-bottom">† nihil extra me †</span>
         </div>
+        <div class="revolver-card">
+          <div class="rv-label">SOCIALS</div>
+          <div class="revolver">
+            <div class="rv-cyl">
+              <a class="rv-chamber" href="https://discord.com/users/1343271555362197608" target="_blank" rel="noopener" title="Discord">◈</a>
+              <a class="rv-chamber" href="https://t.me/Nova_Phanse" target="_blank" rel="noopener" title="Telegram">✈</a>
+              <a class="rv-chamber" href="https://steamcommunity.com/profiles/76561199116070653/" target="_blank" rel="noopener" title="Steam">▣</a>
+            </div>
+            <div class="rv-hub"></div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
-  <section class="card card-lex">
-    <h2><span class="g">✧༒</span> LEX MEA <span class="g">༒✧</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="quote">It's a game game, but I hate going out against German tanks.</div>
-    <div class="quote-sub">War Thunder.</div>
-    <div class="chip-row">
-      <span class="chip">🕸 Tactical gamer</span>
-      <span class="chip">🕸 Survivor</span>
+  <section class="stained-card">
+    <div class="stained-frame">
+      <div class="stained-cross"><span class="cv"></span><span class="ch"></span><span class="cnob"></span></div>
+      <div class="stained-inlay"></div>
+      <div class="stained-top"><span>✧</span> LEX MEA <span>✧</span></div>
+      <div class="stained-body">
+        <div class="stained-quote">It's a game game, but I hate going out against German tanks.</div>
+        <div class="stained-sub">War Thunder.</div>
+        <div class="stained-divider"><span>✧</span><i></i><span>✧</span></div>
+        <div class="stained-games-label"><span class="sgl-star">★</span> my favourite games <span class="sgl-star">★</span></div>
+        <div class="stained-chips">
+          <span class="stained-chip">War Thunder</span>
+          <span class="stained-chip">Arma 2</span>
+          <span class="stained-chip">RimWorld</span>
+          <span class="stained-chip">Project Zomboid</span>
+        </div>
+        <div class="stained-tag">🕸 Tactical gamer · 🕸 Survivor · 🕸 Hating German tanks since forever</div>
+      </div>
     </div>
-    <div class="chip-row">
-      <span class="chip">War Thunder</span>
-      <span class="chip">Arma 2</span>
-      <span class="chip">RimWorld</span>
-      <span class="chip">Project Zomboid</span>
-    </div>
-    <div class="chip-row"><span class="chip">🕸 Hating German tanks since forever</span></div>
   </section>
 
-  <section class="card card-nihil">
-    <h2><span class="g">✧༒</span> NIHIL EXTRA ME <span class="g">༒✧</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="quote">Nothing outside of me.</div>
-    <div class="quote-sub">(Nihil extra me)</div>
-    <p class="motto">🕷 I hate going out. Pronouns: me. And only me.</p>
+  <section class="scroll-card">
+    <div class="scroll-roll">
+      <div class="scroll-panel">
+        <div class="scroll-head"><span>✧</span> NIHIL EXSTRA ME <span>✧</span></div>
+        <div class="scroll-body">
+          <p class="scroll-quote">Nothing outside of me.</p>
+          <p class="scroll-sub">(Nihil extra me)</p>
+          <div class="scroll-motto">🕷 I hate going out.<br>Pronouns: me. And only me.</div>
+        </div>
+      </div>
+      <div class="scroll-pole pole-left"><div class="polenob"></div></div>
+      <div class="scroll-pole pole-right"><div class="polenob"></div></div>
+    </div>
+    <div class="scroll-hint">наведи, чтобы развернуть</div>
   </section>
 
-  <section class="card card-achv">
-    <h2><span class="g">☠</span> ACHIEVEMENTS <span class="g">☠</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="achv-grid">
+  <section class="novaq-card">
+    <div class="novaq-frame">
+      <span class="nov-screw s1"></span><span class="nov-screw s2"></span><span class="nov-screw s3"></span><span class="nov-screw s4"></span>
+      <div class="novaq-cross"><span class="cv"></span><span class="ch"></span></div>
+      <div class="novaq-top">† NOVA †</div>
+      <div class="nova-carousel">
+        <div class="nq-item active">
+          <span class="nq-q">"A nova doesn't ask permission — it simply burns brighter than everything around it."</span>
+          <span class="nq-src">✦ nova ✦</span>
+        </div>
+        <div class="nq-item">
+          <span class="nq-q">"Too sharp to be sane, too sane to break."</span>
+          <span class="nq-src">✦ nova ✦</span>
+        </div>
+        <div class="nq-item">
+          <span class="nq-q">"I don't orbit — I'm the one everything else fades into."</span>
+          <span class="nq-src">✦ nova ✦</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="works-card">
+    <div class="works-banner works-left"><span class="wb-l1">если хочешь так же</span><br><span class="wb-l2">обращайся</span><br><span class="wb-l3">в любую мою соцсеть</span></div>
+    <div class="works-frame">
+      <div class="works-head"><span>✧</span> MY WORKS <span>✧</span></div>
+      <div class="works-grid">
+        <a class="work" href="https://novaphanse.github.io/" target="_blank" rel="noopener">
+          <span class="work-ico">♛</span>
+          <span class="work-txt"><span class="work-name">NOVA</span><span class="work-link">novaphanse.github.io</span></span>
+        </a>
+        <a class="work" href="https://novaphanse.github.io/mat-tvoya/" target="_blank" rel="noopener">
+          <span class="work-ico">❖</span>
+          <span class="work-txt"><span class="work-name">MAT TVOYA</span><span class="work-link">/mat-tvoya</span></span>
+        </a>
+        <a class="work" href="https://novaphanse.github.io/geto/" target="_blank" rel="noopener">
+          <span class="work-ico">◈</span>
+          <span class="work-txt"><span class="work-name">GETO</span><span class="work-link">/geto</span></span>
+        </a>
+      </div>
+    </div>
+    <div class="works-banner works-right">добро пожаловать</div>
+  </section>
+
+  <section class="eyes-fixed" aria-hidden="true">
+    <div class="eye e-tl"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
+    <div class="eye e-tr"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
+    <div class="eye e-bl"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
+    <div class="eye e-br"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
+  </section>
+
+  <aside class="level-panel" aria-label="level">
+    <div class="lvl-grip">☠</div>
+    <div class="lvl-head">
+      <span class="lvl-label">ACHIEVEMENTS</span>
+      <span class="lvl-badge">Lv.7 · NOVA</span>
+    </div>
+    <div class="lvl-bar"><span class="lvl-fill" style="width:68%"></span><span class="lvl-tex">XP · 68%</span></div>
+    <div class="lvl-track">
 
       <div class="achv" tabindex="0">
-        <div class="achv-ico">🕹</div>
-        <div class="achv-name">GAMER</div>
-        <div class="tooltip">
-          <div class="tp-title">◈ Игрок со стажем</div>
-          <div class="tp-text">Полноценный задрот. Играю с 2018 года.</div>
-        </div>
+        <div class="achv-spot">🕹</div>
+        <div class="achv-tx"><span class="achv-name">GAMER</span><span class="achv-hint">с 2018</span></div>
+        <div class="achv-desc">Полноценный задрот. Играю с 2018 года.</div>
       </div>
 
       <div class="achv" tabindex="0">
-        <div class="achv-ico">🎓</div>
-        <div class="achv-name">GRADUATE</div>
-        <div class="tooltip">
-          <div class="tp-title">◈ Выпускник</div>
-          <div class="tp-text">Закончил школу в 2025 году. Дальше — больше.</div>
-        </div>
+        <div class="achv-spot">♛</div>
+        <div class="achv-tx"><span class="achv-name">LEADER <span class="xb x-a">X</span></span><span class="achv-hint">100 подписчиков</span></div>
+        <div class="achv-desc">Опыт в качестве лидера. Лидер X — 100 последователей.</div>
       </div>
 
       <div class="achv" tabindex="0">
-        <div class="achv-ico">💼</div>
-        <div class="achv-name">HIRED</div>
-        <div class="tooltip">
-          <div class="tp-title">◈ Первая работа</div>
-          <div class="tp-text">Первый рабочий опыт — 2026 год. Начало пути.</div>
-        </div>
+        <div class="achv-spot">❖</div>
+        <div class="achv-tx"><span class="achv-name">ZAM C<span class="xb x-b">X</span></span><span class="achv-hint">100+ последователей</span></div>
+        <div class="achv-desc">Опыт в качестве зама. Зам CX — 100+ последователей.</div>
       </div>
 
       <div class="achv" tabindex="0">
-        <div class="achv-ico">💻</div>
-        <div class="achv-name">DEV</div>
-        <div class="tooltip">
-          <div class="tp-title">◈ IT-студент</div>
-          <div class="tp-text">Учусь на информационные технологии и программирование.</div>
-        </div>
+        <div class="achv-spot">💻</div>
+        <div class="achv-tx"><span class="achv-name">DEV</span><span class="achv-hint">IT</span></div>
+        <div class="achv-desc">Учусь на информационные технологии и программирование.</div>
       </div>
 
       <div class="achv" tabindex="0">
-        <div class="achv-ico">☠</div>
-        <div class="achv-name">UNIQUE</div>
-        <div class="tooltip">
-          <div class="tp-title">◈ Неординарная личность</div>
-          <div class="tp-text">Ищешь стабильность? Тогда это не ко мне.</div>
-        </div>
+        <div class="achv-spot">☠</div>
+        <div class="achv-tx"><span class="achv-name">UNIQUE</span><span class="achv-hint">?</span></div>
+        <div class="achv-desc">Неординарная личность. Ищешь стабильность? Не ко мне.</div>
       </div>
 
     </div>
-  </section>
+    <div class="lvl-foot"><span>○</span> NOVA LV.7 <span>○</span></div>
+  </aside>
 
-  <section class="card card-comm">
-    <h2><span class="g">✧</span> COMMUNITIES <span class="g">✧</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="comm-games">
-      <span class="comm-chip">FNAF</span>
-      <span class="comm-chip">UNDERTALE</span>
-      <span class="comm-chip">DELTARUNE</span>
-      <span class="comm-chip">BENDY</span>
-      <span class="comm-chip">ROBLOX</span>
-      <span class="comm-chip">WAR THUNDER</span>
-      <span class="comm-chip">PROJECT ZOMBOID</span>
-    </div>
-    <div class="comm-divider"><span class="cd-fl">✦</span></div>
-    <div class="comm-youtubers">
-      <span class="comm-hl">Любимые ютюберы:</span>
-      <span class="comm-chip yt">Винди</span>
-      <span class="comm-chip yt">Юджин</span>
-    </div>
-  </section>
-
-  <section class="card card-links">
-    <h2><span class="g">✦</span> LINKS <span class="g">✦</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="links">
-      <a class="btn" href="https://discord.com/users/1343271555362197608" target="_blank" rel="noopener"><span class="ico">◈</span> Discord</a>
-      <a class="btn" href="https://t.me/Nova_Phanse" target="_blank" rel="noopener"><span class="ico">✈</span> Telegram</a>
-      <a class="btn" href="https://steamcommunity.com/id/76561199116070653/" target="_blank" rel="noopener"><span class="ico">▣</span> Steam</a>
-    </div>
-  </section>
-
-  <section class="card card-sound">
-    <h2><span class="g">♪</span> SOUNDTRACK <span class="g">♪</span><span class="hline">❖ ❖ ❖</span></h2>
-    <div class="player">
-      <button class="mbtn" id="playbtn">▶ Play</button>
-      <div class="track">Now playing: <b>Genocide</b> — Toby Fox</div>
-    </div>
-  </section>
-
-  <section class="book-card">
-    <h2 class="book-title"><span class="g">⚠</span> ПРЕДОСТЕРЕЖЕНИЯ <span class="g">⚠</span></h2>
-    <div class="book">
-      <div class="page page-left">
-        <div class="page-inner">
-          <div class="page-head">⚠️ ПРЕДОСТЕРЕЖЕНИЕ</div>
-          <p>При общении со мной ты можешь:</p>
-          <ul class="book-list">
-            <li>быть унижен(а)</li>
-            <li>терпеть мой хреновый интернет</li>
-            <li>узнать 100 причин, почему НЕ стоит играть в ROBLOX и WAR THUNDER</li>
-            <li>увидеть, как я переобуваюсь — моё мнение не всегда сходится с твоим</li>
-          </ul>
-        </div>
-      </div>
-      <div class="page page-right">
-        <div class="page-inner">
-          <div class="page-head">⚠️ ПРАВИЛА</div>
-          <ul class="book-list">
-            <li>я спокойно общаюсь с теми, кого ты не перевариваешь</li>
-            <li><b>я НЕ понимаю намёков — говори прямо</b></li>
-            <li>я следую своим принципам</li>
-            <li>есть кола? тогда я за тебя, друг мой</li>
-            <li>думаешь, я тебя ненавижу? нет, бро — мне плевать</li>
-            <li>хочешь — найди способ написать, но главное <b>САМ</b> — не люблю общаться через почтальонов</li>
-            <li><b>этот сайт — МОЙ!</b></li>
-          </ul>
-        </div>
-      </div>
-      <div class="book-cover"><div class="cover-label"><span class="cl-t">ПРЕДУПРЕЖДЕНИЕ</span>✦ NOVA ✦<span class="cl-sub">†††</span></div></div>
-    </div>
-    <div class="book-hint">← наведи, чтобы открыть →</div>
-  </section>
-
-  <div class="roses-bottom">▒▒▒▒▒▒▒</div>
-  <footer>Nova_Phanse <span class="sig">†</span> Too skilled to be sane</footer>
 </div>
-
-<audio id="track" src="music.mp3" loop></audio>
 <script>
 (function(){
-  var a=document.getElementById('track'),b=document.getElementById('playbtn');
-  function setP(p){b.textContent=p?'⏸ Pause':'▶ Play'}
-  b.addEventListener('click',function(){
-    if(a.paused){a.play();setP(true)}else{a.pause();setP(false)}
+  var items=document.querySelectorAll('.nq-item'),cur=0;
+  if(items.length>1){setInterval(function(){items[cur].classList.remove('active');cur=(cur+1)%items.length;items[cur].classList.add('active')},5000);}
+})();
+(function(){
+  var eyes=document.querySelectorAll('.eye');
+  if(!eyes.length)return;
+  var MAX=6;
+  document.addEventListener('mousemove',function(e){
+    var px=e.clientX,py=e.clientY;
+    for(var i=0;i<eyes.length;i++){
+      var iris=eyes[i].querySelector('.iris');
+      if(!iris)continue;
+      var r=iris.getBoundingClientRect();
+      var cx=r.left+r.width/2,cy=r.top+r.height/2;
+      var dx=px-cx,dy=py-cy;
+      var dist=Math.sqrt(dx*dx+dy*dy)||1;
+      var f=Math.min(1,dist/180);
+      iris.style.transform='translate('+(dx/dist)*MAX*f+'px,'+(dy/dist)*MAX*f+'px)';
+    }
+  },{passive:true});
+  function blink(){
+    for(var i=0;i<eyes.length;i++){
+      var lidT=eyes[i].querySelector('.lid-t'),lidB=eyes[i].querySelector('.lid-b');
+      if(lidT)lidT.classList.add('half');
+      if(lidB)lidB.classList.add('half');
+    }
+    setTimeout(function(){
+      for(var i=0;i<eyes.length;i++){
+        var lidT=eyes[i].querySelector('.lid-t'),lidB=eyes[i].querySelector('.lid-b');
+        if(lidT)lidT.classList.remove('half');
+        if(lidB)lidB.classList.remove('half');
+      }
+    },150);
+  }
+  function schedule(){
+    setTimeout(function(){blink();schedule();},800+Math.random()*4200);
+  }
+  schedule();
+})();
+(function(){
+  var audio=document.getElementById('bgMusic'),
+      btn=document.getElementById('musicBtn');
+  if(!audio||!btn)return;
+  audio.volume=0.3;
+  var state=sessionStorage.getItem('novaMusic');
+  function render(){
+    if(audio.paused){btn.classList.remove('playing');}
+    else{btn.classList.add('playing');}
+  }
+  if(state==='playing'){
+    var start=function(){audio.play().then(function(){btn.classList.add('playing')}).catch(function(){});};
+    start();
+  }
+  btn.addEventListener('click',function(){
+    if(audio.paused){
+      audio.play().then(function(){
+        btn.classList.add('playing');sessionStorage.setItem('novaMusic','playing');
+      }).catch(function(){});
+    }else{
+      audio.pause();btn.classList.remove('playing');sessionStorage.setItem('novaMusic','paused');
+    }
   });
-  a.addEventListener('ended',function(){setP(false)});
 })();
 </script>
 </body>
