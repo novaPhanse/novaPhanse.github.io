@@ -317,6 +317,12 @@ h1.name .cross{
   animation:royalCross 3s ease-in-out infinite;
 }
 h1.name .cross:first-child{animation-delay:.2s}
+.clickable-cross{cursor:pointer;transition:transform .2s,text-shadow .2s;display:inline-block}
+.clickable-cross:hover{transform:scale(1.4);text-shadow:0 0 26px rgba(240,216,120,1)}
+/* fallen cross clone (separate fixed layer) */
+.fall-cross{position:absolute;left:0;top:0;margin:0;z-index:90;font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:44px;font-weight:700;pointer-events:auto;cursor:pointer;color:#d4af37;text-shadow:0 0 18px rgba(240,216,120,.9);will-change:top,left;line-height:1}
+.fall-cross.fx-faded{opacity:0}
+.fall-cross.hidden{display:none}
 h1.name .thin{color:#a6904e;-webkit-text-fill-color:#a6904e}
 /* royal animations */
 @keyframes royalShift{
@@ -467,12 +473,13 @@ h1.name .thin{color:#a6904e;-webkit-text-fill-color:#a6904e}
 .track b{color:var(--neon2);font-weight:700}
 
 .card-achv{--acc:#b9ffd0;--acc-soft:rgba(120,255,180,.4);--acc-glow:rgba(80,255,160,.06);overflow:visible}
-.eyes-fixed{position:fixed;inset:0;pointer-events:none;z-index:50}
-.eye{position:absolute;width:52px;height:32px;background:radial-gradient(ellipse at center, #ced5dc 0%, #6a717a 55%, #25272b 100%);border-radius:50% 50% 46% 46% / 62% 62% 38% 38%;box-shadow:inset 0 2px 5px rgba(255,255,255,.28),inset 0 -4px 7px rgba(0,0,0,.55),0 5px 10px rgba(0,0,0,.5);overflow:hidden;opacity:.95}
-.eye.e-tl{top:16px;left:20px}
-.eye.e-tr{top:16px;right:20px}
-.eye.e-bl{bottom:20px;left:20px}
-.eye.e-br{bottom:20px;right:20px}
+/* eyes scattered across the VOID zone (not near the door/D or normal site) */
+.eye{position:absolute;width:52px;height:32px;background:radial-gradient(ellipse at center, #ced5dc 0%, #6a717a 55%, #25272b 100%);border-radius:50% 50% 46% 46% / 62% 62% 38% 38%;box-shadow:inset 0 2px 5px rgba(255,255,255,.28),inset 0 -4px 7px rgba(0,0,0,.55),0 5px 10px rgba(0,0,0,.5);overflow:hidden;opacity:.9;pointer-events:none}
+.v-eye{opacity:.75}
+.ve1{left:6%;top:14%}
+.ve2{right:9%;top:24%}
+.ve3{left:12%;top:44%}
+.ve4{right:12%;top:60%}
 /* brow */
 .eye .brow{position:absolute;left:-9px;right:-9px;top:-10px;height:9px;border-top:3px solid rgba(10,10,12,.85);border-radius:50% 50% 0 0;z-index:3}
 /* iris + pupil + rings + glints, moved together by JS via .pupil? no—move wrapper */
@@ -765,6 +772,264 @@ h1.name .thin{color:#a6904e;-webkit-text-fill-color:#a6904e}
 footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;letter-spacing:.5px}
 footer .sig{color:var(--neon);letter-spacing:2px}
 
+/* === VOID zone: deep section that darkens and shifts music === */
+body.in-void #vignette,body.in-void #vg{opacity:1}
+body.in-void #vignette{background:radial-gradient(ellipse at 50% 45%, transparent 8%, rgba(0,0,0,.97) 130%)}
+body.in-void .scale-grate,body.in-void .g-back{filter:brightness(.12)}
+body.in-void .glow-blob{opacity:.05}
+body.in-void .rose-garland,body.in-void .wisp,body.in-void .particle{opacity:.15}
+body.in-void #bg{opacity:.05;filter:grayscale(1) brightness(.4)}
+body.in-void{background:#000}
+.void-zone{
+  position:relative;min-height:480vh;width:100%;margin:80px -22px 0;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  color:#fff;user-select:none;overflow:hidden;
+  background:#000;background:linear-gradient(180deg,#040302,rgba(0,0,0,.95) 40%,#000 80%);
+  box-shadow:inset 0 0 260px 120px rgba(0,0,0,1);
+}
+.void-zone::after{content:'';position:absolute;left:0;right:0;bottom:0;height:60vh;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 130%,rgba(0,0,0,1),transparent 75%);z-index:7}
+.void-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 5%,rgba(0,0,0,.98) 100%);pointer-events:none}
+.void-fog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(255,255,255,.05),transparent 60%);pointer-events:none;animation:voidFog 8s ease-in-out infinite}
+@keyframes voidFog{0%,100%{opacity:.4}50%{opacity:.8}}
+.void-word{
+  position:absolute;left:0;right:0;bottom:62vh;text-align:center;
+  font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:clamp(60px,16vw,150px);
+  letter-spacing:.25em;font-weight:700;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.6),0 0 60px rgba(255,255,255,.3);
+  animation:voidFlicker 2.2s infinite;
+}
+@keyframes voidFlicker{
+  0%,100%{opacity:1;text-shadow:0 0 20px rgba(255,255,255,.6),0 0 60px rgba(255,255,255,.3)}
+  8%{opacity:.1;text-shadow:none}
+  10%{opacity:1}
+  12%{opacity:.3;text-shadow:none}
+  14%{opacity:1}
+  20%{opacity:.8}
+  60%{opacity:1}
+  68%{opacity:.2;text-shadow:none}
+  70%{opacity:1}
+  92%{opacity:.8}
+  94%{opacity:.15;text-shadow:none}
+  96%{opacity:1}
+}
+.void-scroll-hint{display:none}
+@keyframes voidHint{0%,100%{opacity:.4}50%{opacity:1}}
+/* VOID door */
+.void-door{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);text-align:center;cursor:pointer;z-index:5;user-select:none}
+.door-panel{
+  position:relative;width:180px;height:300px;margin:0 auto;
+  background:linear-gradient(180deg,#241a2e,#0d0912 60%,#06040a);
+  border:3px solid #3a2d52;border-radius:6px 6px 3px 3px;box-shadow:0 14px 40px rgba(0,0,0,.8),inset 0 0 30px rgba(0,0,0,.6);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.door-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:rgba(160,120,255,.3);box-shadow:0 -4px 12px rgba(140,90,255,.4)}
+.void-door:hover .door-panel{transform:translateY(-4px);box-shadow:0 18px 46px rgba(0,0,0,.85),0 0 26px rgba(120,70,255,.25),inset 0 0 30px rgba(0,0,0,.6)}
+.door-knob{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#e0d0ff,#6a4fb0 70%);box-shadow:0 2px 5px rgba(0,0,0,.7)}
+.door-light{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;pointer-events:none;background:radial-gradient(ellipse at 50% 100%,rgba(120,70,255,.9),rgba(120,70,255,0) 70%)}
+.door-msg{
+  position:absolute;left:50%;top:-42px;transform:translateX(-50%);
+  display:block;color:rgba(210,170,255,.8);letter-spacing:3px;font-size:16px;text-transform:uppercase;
+  text-shadow:0 0 12px rgba(180,120,255,.6),0 0 26px rgba(150,80,255,.4);white-space:nowrap;
+  opacity:0;transition:opacity .2s;
+}
+.void-door.clicked .door-msg{color:#e8ccff;opacity:1;text-shadow:0 0 14px rgba(200,150,255,.95),0 0 34px rgba(160,90,255,.6)}
+.door-bl{display:inline-block;animation:doorBlink .55s steps(1) infinite;color:#fff;text-shadow:0 0 12px #fff,0 0 26px rgba(190,140,255,1)}
+.door-bl.door-out{animation:none;color:rgba(160,150,190,.16);text-shadow:none;transition:color 1s,text-shadow 1s}
+@keyframes doorBlink{0%,100%{opacity:1}50%{opacity:.1}}
+.void-door.clicked .door-light{opacity:1}
+/* pasword: ХВАТИТ! easter-egg message */
+.hvatit-msg{
+  position:absolute;left:50%;bottom:38vh;transform:translateX(-50%);
+  font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:54px;letter-spacing:3px;
+  color:#ff4d4d;text-shadow:0 0 24px rgba(255,60,60,.9),0 0 60px rgba(200,0,0,.6);
+  opacity:0;visibility:hidden;white-space:nowrap;z-index:9;pointer-events:none;
+}
+.hvatit-msg.show{animation:hvatitPop 2.5s ease forwards}
+@keyframes hvatitPop{
+  0%{opacity:0;transform:translateX(-50%) scale(.6);visibility:visible}
+  12%{opacity:1;transform:translateX(-50%) scale(1.15)}
+  20%{transform:translateX(-50%) scale(1)}
+  45%{opacity:1}
+  80%{opacity:.9}
+  100%{opacity:0;transform:translateX(-50%) scale(1.1);visibility:hidden}
+}
+/* secret window opened by the falling cross — appears as a SAFE */
+.secret-window{
+  position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.5);
+  z-index:12;opacity:0;visibility:hidden;pointer-events:none;
+}
+.secret-window.show{animation:swOpen .9s cubic-bezier(.2,.9,.25,1.2) forwards;pointer-events:auto}
+@keyframes swOpen{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.4);visibility:visible}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1);visibility:visible}
+}
+.secret-window .sw-x{position:absolute;top:-30px;right:0;color:rgba(200,150,255,.6);font-size:18px;cursor:pointer;transition:.2s;z-index:3}
+.secret-window .sw-x:hover{color:#fff;text-shadow:0 0 12px rgba(255,255,255,.8);transform:scale(1.3)}
+/* safe housing */
+.safe-body{
+  position:relative;width:min(380px,84vw);height:220px;text-align:center;
+  background:linear-gradient(180deg,#3a3e44,#23262b 55%,#191b1f);border-radius:10px;
+  border:1px solid #565b62;box-shadow:0 26px 80px rgba(0,0,0,.95),inset 0 0 0 6px #101113,inset 0 0 0 7px #4a4f56,inset 0 0 30px rgba(0,0,0,.6);
+  overflow:hidden;cursor:pointer;
+}
+.safe-door{
+  position:absolute;left:0;top:0;width:100%;height:100%;
+  background:linear-gradient(90deg,#4a4f56,#6a7078 30%,#555a61 60%,#454a51);
+  border-right:2px solid #2a2d31;transform-origin:left center;z-index:2;
+  transition:transform .9s cubic-bezier(.6,.05,.5,.9);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.4);
+}
+.safe-door::after{content:'';position:absolute;inset:10px;border:1px solid rgba(220,225,230,.15);border-radius:4px}
+/* spindle + handle */
+.safe-spindle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;
+  background:radial-gradient(circle,#8b9097,#4a4f56 60%,#2e3136);border:2px solid #202327;
+  box-shadow:0 4px 10px rgba(0,0,0,.6),inset 0 2px 4px rgba(255,255,255,.25)}
+.safe-handle{position:absolute;left:50%;top:-14px;transform:translateX(-50%);width:8px;height:58px;border-radius:4px;
+  background:linear-gradient(180deg,#767c84,#3a3e44);box-shadow:0 2px 5px rgba(0,0,0,.4)}
+.safe-lock{position:absolute;right:22%;top:50%;transform:translateY(-50%);width:18px;height:14px;border-radius:3px;
+  background:radial-gradient(circle,#ff4d6d,#8a1f33 70%);border:1px solid #20050a;box-shadow:0 0 8px rgba(255,70,100,.5)}
+/* safe interior revealed when door opens */
+.safe-inner{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#0c0814,#05030a);opacity:0;transition:opacity .5s ease .4s;z-index:1}
+.secret-window.open .safe-door{transform:perspective(900px) rotateY(-72deg);opacity:.35}
+.secret-window.open .safe-inner{opacity:1;z-index:3}
+.secret-window .sw-title{display:block;font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:17px;letter-spacing:5px;color:#e0c8ff;text-shadow:0 0 18px rgba(160,90,255,.6);padding:0 20px}
+.secret-window .sw-line{display:block;height:1px;margin:14px 0;width:60%;background:linear-gradient(90deg,transparent,rgba(170,100,255,.7),transparent)}
+.secret-window .sw-code{display:block;font-family:'Courier New',monospace;font-size:15px;letter-spacing:1px;color:rgba(200,160,255,.4);text-shadow:0 0 10px rgba(150,80,255,.25)}
+.secret-window .sw-hint{display:block;margin-top:18px;font-size:10px;letter-spacing:2px;color:rgba(180,140,230,.5);text-transform:uppercase}
+/* door shaking from the screams behind it */
+.door-panel.door-shake{animation:doorShake .12s linear .18s 12}
+@keyframes doorShake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-3px)}
+  50%{transform:translateX(2px)}
+  75%{transform:translateX(-2px)}
+}
+@keyframes voidHint{0%,100%{opacity:.4}50%{opacity:1}}
+.void-trigger{position:absolute;inset:0;pointer-events:none}
+/* broken fragments of the site floating in the void */
+.ruin{position:absolute;display:flex;flex-direction:column;gap:7px;padding:14px;border:1px solid rgba(255,255,255,.06);border-radius:8px;background:rgba(10,8,6,.6);backdrop-filter:blur(2px);box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:.55;}
+.ruin .r-ico{font-size:18px;color:rgba(240,216,120,.4);margin-bottom:2px}
+.ruin .r-bar{width:110px;height:8px;border-radius:4px;background:rgba(255,255,255,.09)}
+.ruin .r-bar.w60{width:66px}.ruin .r-bar.w40{width:44px}.ruin .r-bar.w30{width:33px}.ruin .r-bar.w50{width:55px}.ruin .r-bar.w70{width:77px}.ruin .r-bar.w80{width:88px}
+.ruin-a{left:8%;top:24%;animation:ruinDrift 11s ease-in-out infinite}
+.ruin-b{right:10%;top:16%;animation:ruinDrift 13s ease-in-out infinite reverse}
+.ruin-c{left:14%;bottom:32%;animation:ruinDrift 15s ease-in-out infinite}
+.ruin-d{right:16%;bottom:26%;animation:ruinDrift 12s ease-in-out infinite reverse}
+.ruin-e{left:45%;top:4%;animation:ruinDrift 9s ease-in-out infinite}
+.ruin-a{transform:rotate(-8deg);--rot:-8deg}
+.ruin-b{transform:rotate(7deg);--rot:7deg}
+.ruin-c{transform:rotate(4deg);--rot:4deg}
+.ruin-d{transform:rotate(-5deg);--rot:-5deg}
+.ruin-e{transform:rotate(-3deg);--rot:-3deg}
+@keyframes ruinDrift{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-14px) rotate(var(--rot,0deg))}}
+/* corrupted glitch text lines */
+.glitch-line{position:absolute;display:block;font-family:monospace;letter-spacing:2px;font-size:16px;color:rgba(255,255,255,.18);pointer-events:none;animation:glitchShift 3s steps(1) infinite;white-space:nowrap}
+.gl-1{left:6%;top:42%;font-size:20px;animation-delay:0s}
+.gl-2{right:7%;top:38%;font-size:18px;animation-delay:.6s}
+.gl-3{left:50%;top:52%;transform:translateX(-50%);font-size:24px;animation-delay:1.2s}
+@keyframes glitchShift{
+  0%,92%,100%{opacity:.12;transform:translateX(0)}
+  93%{opacity:.8;transform:translateX(-3px) skewX(-6deg)}
+  95%{opacity:.3;transform:translateX(3px)}
+  97%{opacity:.7;transform:translateX(-2px)}
+  98%{opacity:.15;transform:translateX(0)}
+}
+/* piled-up rubble blocking the door at the very bottom */
+.rubble{position:absolute;left:0;right:0;bottom:0;height:30vh;pointer-events:none;z-index:6}
+.rubble::before{content:'';position:absolute;left:0;right:0;bottom:0;top:20%;
+  background:linear-gradient(180deg,rgba(8,6,12,0),#0a070d 70%,#05030a);
+  box-shadow:inset 0 -40px 80px rgba(0,0,0,.8)}
+.rubble-piece,.rubble-bar,.rubble-chip{position:absolute;display:block;background:linear-gradient(135deg,#1a1426,#0b0912);border:1px solid rgba(120,70,255,.18)}
+.rubble-piece{width:70px;height:26px;border-radius:5px;transform:rotate(var(--rot,0deg))}
+.rubble-bar{width:120px;height:12px;border-radius:3px;transform:rotate(var(--rot,0deg))}
+.rubble-chip{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(240,216,120,.3);font-size:16px;transform:rotate(var(--rot,0deg))}
+.rp1{bottom:6%;left:14%;--rot:-14deg}
+.rp2{bottom:10%;left:38%;--rot:8deg;width:90px}
+.rp3{bottom:8%;right:30%;--rot:-9deg}
+.rp4{bottom:5%;right:16%;--rot:12deg;width:60px}
+.rp5{bottom:15%;left:52%;--rot:16deg}
+.rp6{bottom:18%;right:44%;--rot:-12deg}
+.rp7{bottom:12%;left:70%;--rot:6deg}
+.rp8{bottom:20%;left:26%;--rot:-5deg}
+.rp9{bottom:16%;right:20%;--rot:10deg}
+.void-deep-x{
+  position:absolute;left:26%;bottom:3vh;transform:translate(-50%,0) rotate(-14deg) scale(.85);
+  font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:90px;font-weight:700;
+  color:rgba(200,140,255,.2);z-index:8;pointer-events:none;
+  filter:blur(1.5px) brightness(.95);
+  text-shadow:0 0 24px rgba(180,110,255,.4),0 12px 26px rgba(0,0,0,1);
+  animation:deepX 5s steps(1) infinite;
+}
+@keyframes deepX{
+  0%,100%{opacity:0;filter:blur(2.5px) brightness(.9)}
+  90%{opacity:0;filter:blur(2.5px) brightness(.9)}
+  91%{opacity:.8;filter:blur(1px) brightness(1.15);text-shadow:0 0 24px rgba(180,110,255,.7),0 12px 26px rgba(0,0,0,1)}
+  92%{opacity:.15;filter:blur(2.5px) brightness(.95)}
+  93.5%{opacity:.95;filter:blur(.5px) brightness(1.3);text-shadow:0 0 32px rgba(210,140,255,.9),0 12px 26px rgba(0,0,0,1)}
+  94%{opacity:.2;filter:blur(2.5px) brightness(.95)}
+  95.5%{opacity:.75;filter:blur(1px) brightness(1.1);text-shadow:0 0 24px rgba(180,110,255,.6),0 12px 26px rgba(0,0,0,1)}
+  96%{opacity:0;filter:blur(2.5px) brightness(.9)}
+}
+@media(max-width:1180px){.void-zone{margin:60px 0 0}}
+/* billboard fallen & caught on the VOID sign, swaying */
+.void-billboard{
+  position:absolute;right:calc(50% - 220px);bottom:64vh;/* top-right corner pinned on the D */
+  width:min(360px,70%);padding:14px 18px;text-align:center;z-index:4;
+  background:linear-gradient(180deg,rgba(28,14,44,.95),rgba(12,6,22,.97));
+  border:1px solid rgba(150,90,255,.35);border-radius:6px;
+  box-shadow:0 18px 50px rgba(0,0,0,.85),0 0 26px rgba(120,60,255,.25),inset 0 0 30px rgba(120,60,255,.08);
+  transform-origin:100% 0%;/* swings from its top-right corner — hooked on the letter D */
+  pointer-events:none;
+  opacity:0;visibility:hidden;
+  transform:translateY(-95vh) rotate(0deg);/* starts out of view, above */
+}
+.void-billboard.bb-fall{animation:billFall 2s cubic-bezier(.45,.05,.4,1) forwards;opacity:1;visibility:visible}
+.void-billboard.bb-sway{animation:billSway 3.5s ease-in-out infinite}
+.void-billboard .bb-log{display:block;font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:13px;letter-spacing:4px;color:rgba(200,150,255,.55);text-shadow:0 0 16px rgba(160,90,255,.4)}
+.void-billboard .bb-line{display:block;height:1px;margin:9px auto;width:70%;background:linear-gradient(90deg,transparent,rgba(150,90,255,.6),transparent)}
+.void-billboard .bb-txt{display:block;font-family:'Palatino',Georgia,serif;font-style:italic;font-size:15px;letter-spacing:.5px;line-height:1.5;color:rgba(200,160,255,.28);text-shadow:0 0 12px rgba(140,80,255,.25)}
+.bb-dust{position:absolute;left:8%;right:8%;bottom:6px;height:1px;background:linear-gradient(90deg,transparent,rgba(160,110,255,.15),transparent)}
+/* cracks spreading on impact, glitch of the text */
+.bb-cracks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0}
+.bb-cracks polyline{fill:none;stroke:rgba(200,150,255,.95);stroke-width:2.2;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(170,110,255,.9)) drop-shadow(0 0 8px rgba(140,80,255,.6));opacity:0}
+.void-billboard.bb-fall .bb-cracks{opacity:1}
+.void-billboard.bb-fall .bb-cracks polyline:nth-child(1){animation:crackIn .45s 1.15s forwards}
+.void-billboard.bb-fall .bb-cracks polyline:nth-child(2){animation:crackIn .45s 1.3s forwards}
+.void-billboard.bb-fall .bb-cracks polyline:nth-child(3){animation:crackIn .45s 1.45s forwards}
+.void-billboard.bb-fall .bb-cracks polyline:nth-child(4){animation:crackIn .45s 1.6s forwards}
+.void-billboard.bb-fall .bb-cracks polyline:nth-child(5){animation:crackIn .45s 1.75s forwards}
+@keyframes crackIn{from{opacity:0;stroke-dasharray:400;stroke-dashoffset:400}to{opacity:1;stroke-dasharray:400;stroke-dashoffset:0}}
+.bb-glitch{display:block;position:relative}
+.void-billboard.bb-fall .bb-glitch{animation:glitchJerk .9s steps(3) .3s infinite}
+@keyframes glitchJerk{
+  0%,44%,100%{transform:translate(0,0)}
+  48%{transform:translate(-2px,1px) skewX(-4deg)}
+  52%{transform:translate(2px,-1px)}
+  56%{transform:translate(-1px,0) skewX(3deg)}
+  60%{transform:translate(0,0)}
+}
+.void-billboard.bb-fall .bb-log,.void-billboard.bb-fall .bb-txt{animation:txtFlicker .5s steps(2) .2s infinite}
+@keyframes txtFlicker{
+  0%,100%{opacity:1}
+  45%{opacity:.35}
+  50%{opacity:1}
+  55%{opacity:.55}
+  60%{opacity:1}
+}
+@keyframes billFall{
+  0%{transform:translateY(-95vh) rotate(0deg)}
+  60%{transform:translateY(0) rotate(-12deg)}
+  80%{transform:translateY(0) rotate(-8deg)}
+  100%{transform:translateY(0) rotate(-90deg)}
+}
+@keyframes billSway{
+  0%,100%{transform:translateY(0) rotate(-90deg)}
+  50%{transform:translateY(0) rotate(-85deg)}
+}
+@media(max-width:760px){.ruin-a,.ruin-b,.ruin-c,.ruin-d,.ruin-e{transform:scale(.75)}.glitch-line{font-size:13px}}
+
 @media(max-width:480px){
   .card{padding:20px 18px}
   .avatar{width:140px;height:140px}
@@ -813,6 +1078,8 @@ footer .sig{color:var(--neon);letter-spacing:2px}
   <div class="rose-hang r5"><span class="vine"></span><span class="rose"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#8a743a" d="M12 2l2 8 8-4-4 8 6 4-8 2 2 4-6-6-6 6 2-4-8-2 6-4-4-8 8 4z"/></svg></span></div>
 </div>
 <audio id="bgMusic" src="bg_music.mp3" loop preload="auto"></audio>
+<audio id="screamAudio" src="scream.mp3" preload="auto"></audio>
+<audio id="knockAudio" src="knock.mp3" preload="auto"></audio>
 <div class="scale-grate grate-left"><span class="g-back"></span></div>
 <div class="scale-grate grate-right"><span class="g-back"></span></div>
 
@@ -845,7 +1112,7 @@ footer .sig{color:var(--neon);letter-spacing:2px}
         <div class="nickplate"><span class="np-line">━</span><span class="np-txt">NICKNAME</span><span class="np-line">━</span></div>
         <div class="crown"><span class="cn tip">✧</span><span class="cn">✦</span><span class="cn mid">♛</span><span class="cn">✦</span><span class="cn tip">✧</span></div>
         <div class="name-wrap">
-          <h1 class="name"><span class="cross">†</span><span class="grad">Nova</span><span class="cross">†</span></h1>
+          <h1 class="name"><span class="cross clickable-cross" id="secretCross">†</span><span class="grad">Nova</span><span class="cross">†</span></h1>
         </div>
         <div class="status">༒࿇ Too skilled TO BE SAINE.࿇༒</div>
         <div class="sub"><span class="sub-l">┄</span><span class="sub-txt">for_your_employer.</span><span class="sub-r">┄</span></div>
@@ -966,13 +1233,6 @@ footer .sig{color:var(--neon);letter-spacing:2px}
     <div class="works-banner works-right">добро пожаловать</div>
   </section>
 
-  <section class="eyes-fixed" aria-hidden="true">
-    <div class="eye e-tl"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
-    <div class="eye e-tr"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
-    <div class="eye e-bl"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
-    <div class="eye e-br"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></div>
-  </section>
-
   <aside class="level-panel" aria-label="level">
     <div class="lvl-grip">☠</div>
     <div class="lvl-head">
@@ -1015,6 +1275,73 @@ footer .sig{color:var(--neon);letter-spacing:2px}
     </div>
     <div class="lvl-foot"><span>○</span> NOVA LV.7 <span>○</span></div>
   </aside>
+
+  <section class="void-zone" id="voidzone">
+    <div class="void-trigger"></div>
+    <div class="void-fog"></div>
+    <div class="ruin ruin-a"><span class="r-ico">♛</span><span class="r-bar"></span><span class="r-bar w60"></span><span class="r-bar w40"></span></div>
+    <div class="ruin ruin-b"><span class="r-ico">🕸</span><span class="r-bar"></span><span class="r-bar w70"></span></div>
+    <div class="ruin ruin-c"><span class="r-ico">✧</span><span class="r-bar"></span><span class="r-bar w50"></span><span class="r-bar w30"></span></div>
+    <div class="ruin ruin-d"><span class="r-bar"></span><span class="r-bar w40"></span></div>
+    <div class="ruin ruin-e"><span class="r-ico">☠</span><span class="r-bar w80"></span></div>
+    <span class="glitch-line gl-1">N▙▝▀OVE▜ THIS W▫RKS</span>
+    <span class="glitch-line gl-2">LEX MEA ▞═══</span>
+    <span class="glitch-line gl-3">S▓▓C█ALS ▚</span>
+    <span class="eye v-eye ve1"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></span>
+    <span class="eye v-eye ve2"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></span>
+    <span class="eye v-eye ve3"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></span>
+    <span class="eye v-eye ve4"><span class="brow"></span><span class="lash l-t"></span><span class="lash l-r"></span><span class="lash l-l"></span><span class="iris"><span class="ring"></span><span class="pupil"></span><span class="glint gl-a"></span><span class="glint gl-b"></span></span><span class="veil"></span><span class="lid lid-t"></span><span class="lid lid-b"></span></span>
+    <span class="void-word">VOID</span>
+    <div class="void-billboard">
+      <svg class="bb-cracks" viewBox="0 0 360 120" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="30,10 58,38 50,70 70,96 64,118"/>
+        <polyline points="58,38 90,52 88,80"/>
+        <polyline points="180,8 200,34 240,40 260,70"/>
+        <polyline points="260,70 300,66 330,86"/>
+        <polyline points="200,34 180,60"/>
+      </svg>
+      <span class="bb-glitch">
+        <span class="bb-log">GHOST CLAN ARCHIVES</span>
+        <span class="bb-line"></span>
+        <span class="bb-txt">we were something.<br>before the fall…</span>
+      </span>
+      <span class="bb-dust"></span>
+    </div>
+    <div class="void-door" id="voidDoor" role="button" tabindex="0">
+      <div class="door-panel">
+        <div class="door-knob"></div>
+        <div class="door-light"></div>
+      </div>
+      <span class="door-msg"></span>
+    </div>
+    <span class="hvatit-msg">ХВАТИТ!</span>
+    <span class="void-deep-x">X</span>
+    <div class="secret-window" id="secretWindow">
+      <span class="sw-x">✕</span>
+      <div class="safe-body">
+        <div class="safe-door">
+          <div class="safe-spindle"><span class="safe-handle"></span></div>
+          <span class="safe-lock"></span>
+        </div>
+        <div class="safe-inner">
+          <span class="sw-title">ACCESS GRANTED</span>
+          <span class="sw-line"></span>
+          <span class="sw-code">[ код появится позже ]</span>
+        </div>
+      </div>
+    </div>
+    <div class="rubble">
+      <span class="rubble-piece rp1"></span>
+      <span class="rubble-piece rp2"></span>
+      <span class="rubble-piece rp3"></span>
+      <span class="rubble-piece rp4"></span>
+      <span class="rubble-chip rp5">♛</span>
+      <span class="rubble-chip rp6">✧</span>
+      <span class="rubble-chip rp7">☠</span>
+      <span class="rubble-bar rp8"></span>
+      <span class="rubble-bar rp9"></span>
+    </div>
+  </section>
 
 </div>
 <script>
@@ -1081,6 +1408,177 @@ footer .sig{color:var(--neon);letter-spacing:2px}
       audio.pause();btn.classList.remove('playing');sessionStorage.setItem('novaMusic','paused');
     }
   });
+})();
+(function(){
+  var zone=document.getElementById('voidzone');
+  if(!zone)return;
+  var audio=document.getElementById('bgMusic');
+  var darken=false,music=false;
+  function onScroll(){
+    var r=zone.getBoundingClientRect();
+    var zoneH=zone.offsetHeight||1;
+    var scrolled=Math.min(1,Math.max(0,(-r.top)/(zoneH-window.innerHeight)));
+    var entered=r.top<=window.innerHeight*0.3 && r.bottom>=0;
+    if(entered&&!darken){
+      darken=true;document.body.classList.add('in-void');
+    }
+    if(!entered&&darken){
+      darken=false;document.body.classList.remove('in-void');
+    }
+    if(scrolled>=0.25&&!music){
+      music=true;
+      if(audio&&audio.getAttribute('src')!=='void_music.mp3'){
+        var wasPlaying=!audio.paused;
+        audio.src='void_music.mp3';
+        audio.load();
+        audio.volume=0.5;
+        if(wasPlaying)audio.play().catch(function(){});
+        if(!wasPlaying){sessionStorage.setItem('novaMusic','paused');}
+      }
+    }
+    if(music&&scrolled<0.12&&audio&&audio.getAttribute('src')==='void_music.mp3'){
+      music=false;
+      var wasPlaying2=!audio.paused;
+      audio.src='bg_music.mp3';
+      audio.load();
+      if(wasPlaying2)audio.play().catch(function(){});
+    }
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+(function(){
+  var door=document.getElementById('voidDoor');
+  if(!door)return;
+  var msg=door.querySelector('.door-msg');
+  var fullText='пока, закрыто';
+  var blinkAt={0:true,3:true,8:true};
+  var started=false;
+  function openDoor(){
+    if(started)return;
+    started=true;
+    door.classList.add('clicked');
+    door.setAttribute('aria-pressed','true');
+    var bb=document.querySelector('.void-billboard');
+    if(bb)bb.classList.add('bb-fall');
+    setTimeout(function(){if(bb)bb.classList.add('bb-sway');},2050);
+    msg.innerHTML='';
+    var doneAt=0;
+    var i=0;
+    (function type(){
+      if(i<fullText.length){
+        var ch=fullText.charAt(i);
+        if(blinkAt[i]){
+          var idx=i;
+          msg.innerHTML+='<span class="door-bl" data-idx="'+idx+'">'+ch+'</span>';
+        }else{
+          msg.innerHTML+=ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+        i++;
+        doneAt=i*110;
+        setTimeout(type,110);
+      }else{
+        /* after all letters typed, stop each blink shortly after */
+setTimeout(function(){
+          var bl=msg.querySelectorAll('.door-bl');
+          for(var k=0;k<bl.length;k++){
+            (function(idx,span){
+              if(idx==='0'){
+                window.setTimeout(function(){span.classList.add('door-out');},1200);
+              }else{
+                window.setTimeout(function(){span.classList.remove('door-bl');},1500);
+              }
+            })(bl[k].getAttribute('data-idx'),bl[k]);
+          }
+        },350);
+      }
+    })();
+  }
+  door.addEventListener('click',function(e){
+    openDoor();
+    clicks++;
+    var kn=document.getElementById('knockAudio');
+    if(kn){kn.currentTime=0;kn.volume=0.55;var kp=kn.play();if(kp&&kp.catch)kp.catch(function(){});}
+    if(clicks===10){
+      var hv=document.querySelector('.hvatit-msg');
+      if(hv){hv.classList.remove('show');void hv.offsetWidth;hv.classList.add('show');}
+    }
+    if(clicks===20){
+      var scr=document.getElementById('screamAudio');
+      if(scr){
+        scr.currentTime=0;scr.volume=0.6;
+        var pr=scr.play();
+        if(pr&&pr.catch){pr.catch(function(){});}
+        var fade=setInterval(function(){
+          if(scr.volume<=0.02){clearInterval(fade);}
+          else{scr.volume=Math.max(0,scr.volume-0.05);}
+        },320);
+      }
+      var dp=door.querySelector('.door-panel');
+      if(dp)dp.classList.add('door-shake');
+      setTimeout(function(){if(dp)dp.classList.remove('door-shake');},1800);
+    }
+  });
+  door.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDoor();clicks++;}});
+  var clicks=0;
+})();
+(function(){
+  var cross=document.getElementById('secretCross');
+  if(!cross)return;
+  var cnt=0,dropped=false,clone=null;
+  cross.addEventListener('click',function(e){
+    if(!dropped){
+      cnt++;
+      if(cnt>=6){
+        dropped=true;
+        /* snapshot current screen position of the cross */
+        var r=cross.getBoundingClientRect();
+        cross.style.visibility='hidden';
+        clone=document.createElement('span');
+        clone.textContent='†';
+        clone.className='fall-cross';
+        var docTop=r.top+window.pageYOffset;
+        clone.style.left=r.left+'px';
+        clone.style.top=docTop+'px';
+        document.body.appendChild(clone);
+        /* animate drop from the nick down toward the void zone, in document flow */
+        var zone=document.getElementById('voidzone');
+        var targetTop=zone?(document.body.scrollHeight+zone.offsetTop*0+ (window.innerHeight*0.6)):docTop+700;
+        var zoneTop=zone?zone.offsetTop:0;
+        targetTop=zoneTop+window.innerHeight*0.35;
+        var start=docTop,dur=2400,t0=null;
+        function step(ts){
+          if(!t0)t0=ts;
+          var p=Math.min(1,(ts-t0)/dur);
+          var e=1-Math.pow(1-p,3);
+          clone.style.top=(start+(targetTop-start)*e)+'px';
+          window.scrollTo(0,docTop+(targetTop-docTop)*e - window.innerHeight*0.35);
+          if(p<1)requestAnimationFrame(step);
+          else{clone.dataset.settled='1';}
+        }
+        requestAnimationFrame(step);
+        clone.addEventListener('click',onDroppedClick);
+      }
+    }
+  });
+  function onDroppedClick(){
+    if(!clone)return;
+    clone.classList.add('fx-faded');
+    clone.style.pointerEvents='none';
+    setTimeout(function(){
+      var sw=document.getElementById('secretWindow');
+      if(sw){
+        sw.classList.add('show');
+        /* clicking the safe opens the door */
+        var opened=false;
+        var openSafe=function(){
+          if(opened)return;opened=true;
+          sw.classList.add('open');
+        };
+        sw.addEventListener('click',openSafe);
+      }
+    },1500);
+  }
 })();
 </script>
 </body>
