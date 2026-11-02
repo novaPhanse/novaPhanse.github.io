@@ -283,8 +283,6 @@ body{
       status:'заместитель лидера',roles:'вторая правая рука лидера',vet:'старый член клана',acc:'X-2',foot:'зам · всегда на связи'},
     {id:'psych', n:'ПСИХ',  nick:'Psyh/псих',  heart:'❤️',  cls:'',            color:'красный',     seal:'КОМИТЕТ',
       status:'участник клана X',roles:'член 3 высших ролей · судья',vet:'ветеран клана (олд)',acc:'X-3',foot:'запись защищена · доступ по допуску'},
-    {id:'dast',  n:'ДАСТ',  nick:'Dast/даст',  heart:'💛',  cls:'orb-gold',    color:'золотой',     seal:'КПА',
-      status:'лидер КПА',roles:'глава клана правительственных агентов',vet:'ярый член клана',acc:'X-2',foot:'КПА · рука правосудия'},
     {id:'samurai',n:'САМУРАЙ',nick:'Samurai/самурай',heart:'🩶',cls:'orb-gray',color:'серый',      seal:'СКАУТЫ',
       status:'лидер скаутов',roles:'глава разведки и дозора',vet:'ветеран',acc:'X-2',foot:'скауты · глаза клана'},
     {id:'hiro',  n:'ХИРО',  nick:'Hiro/хиро',  heart:'🤍',  cls:'orb-white',   color:'белый',      seal:'УЧ·ВОЕН',
@@ -306,12 +304,12 @@ body{
   ];
   function apply(d){
     var pal={epic:['#b06aff','#d9a6ff'],troy:['#9a9ab0','#c9c9dd'],oyho:['#ff3fd0','#ff9aec'],psych:['#ff4d5e','#ff8f9b'],
-             dast:['#e8c04a','#ffe08a'],samurai:['#8f8fa8','#b9b9ce'],hiro:['#e8e8f2','#ffffff'],nikolya:['#1fd6b4','#7ff0db'],
+             samurai:['#8f8fa8','#b9b9ce'],hiro:['#e8e8f2','#ffffff'],nikolya:['#1fd6b4','#7ff0db'],
              heyt:['#39d96a','#8beea4'],joi:['#3b82f6','#8db8fb'],dobr:['#5ec6f7','#a5e3fb'],misivava:['#a97c4f','#d0ae8c'],jin:['#ff6fa8','#ffb2d0'],sam:['#9fb2c9','#cfdbe8']}[d.id];
     if(pal){panel.style.setProperty('--acc',pal[0]);panel.style.setProperty('--acc2',pal[1]);}
     orb.classList.add('switching');
     setTimeout(function(){
-      orb.classList.remove('orb-purple','orb-dark','orb-magenta','orb-gold','orb-orange','orb-gray','orb-white','orb-teal','orb-green','orb-blue','orb-sky','orb-brown','orb-pink','orb-steel');
+      orb.classList.remove('orb-purple','orb-dark','orb-magenta','orb-orange','orb-gray','orb-white','orb-teal','orb-green','orb-blue','orb-sky','orb-brown','orb-pink','orb-steel');
       if(d.cls)orb.classList.add(d.cls);
       heart.textContent=d.heart;seal.textContent='ЗАПЕЧАТАНО · '+d.seal;
       el.name.textContent=d.n;el.status.textContent=d.status;el.roles.textContent=d.roles;
