@@ -300,12 +300,14 @@ body{
     {id:'misivava',n:'МИСИВАВА',nick:'Misivava/мисивава',heart:'🤎',cls:'orb-brown',color:'коричневый',seal:'СКАУТ',
       status:'скаут',roles:'разведка и дозор',vet:'член клана',acc:'X-1',foot:'скауты · на посту'},
     {id:'jin',   n:'JIN',  nick:'Jin/джин',    heart:'💗',  cls:'orb-pink',    color:'розовый',     seal:'ЗАМ КПА',
-      status:'зам лидера КПА',roles:'вторая рука КПА',vet:'член клана',acc:'X-2',foot:'КПА · исполнительный'}
+      status:'зам лидера КПА',roles:'вторая рука КПА',vet:'член клана',acc:'X-2',foot:'КПА · исполнительный'},
+    {id:'sky',   n:'SKY',  nick:'Sky/скай',   heart:'🩵',  cls:'orb-sky',     color:'небесный',     seal:'МЛ·АДМИН',
+      status:'младший администратор',roles:'помогает администратору',vet:'член клана',acc:'X-2',foot:'мл. админ · на подстраховке'}
   ];
   function apply(d){
     var pal={epic:['#b06aff','#d9a6ff'],troy:['#9a9ab0','#c9c9dd'],oyho:['#ff3fd0','#ff9aec'],psych:['#ff4d5e','#ff8f9b'],
              samurai:['#8f8fa8','#b9b9ce'],hiro:['#e8e8f2','#ffffff'],nikolya:['#1fd6b4','#7ff0db'],
-             heyt:['#39d96a','#8beea4'],joi:['#3b82f6','#8db8fb'],dobr:['#5ec6f7','#a5e3fb'],misivava:['#a97c4f','#d0ae8c'],jin:['#ff6fa8','#ffb2d0'],sam:['#9fb2c9','#cfdbe8']}[d.id];
+             heyt:['#39d96a','#8beea4'],joi:['#3b82f6','#8db8fb'],dobr:['#5ec6f7','#a5e3fb'],misivava:['#a97c4f','#d0ae8c'],jin:['#ff6fa8','#ffb2d0'],sam:['#9fb2c9','#cfdbe8'],sky:['#4fc3f7','#9adcfb']}[d.id];
     if(pal){panel.style.setProperty('--acc',pal[0]);panel.style.setProperty('--acc2',pal[1]);}
     orb.classList.add('switching');
     setTimeout(function(){

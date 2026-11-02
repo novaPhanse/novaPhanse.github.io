@@ -76,12 +76,14 @@ body.power-zone::after{content:'';position:fixed;inset:0;z-index:55;pointer-even
   80%{transform:translate(1px,0)}
 }
 /* clickable Maxwell easter egg — animated, meows on click */
-#maxwell{position:fixed;right:18px;bottom:18px;z-index:85;cursor:pointer;width:96px;pointer-events:auto;
-  filter:drop-shadow(0 0 12px rgba(150,110,255,.45));transition:transform .2s ease,filter .2s ease;
-  opacity:0;transform:translateY(30px) scale(.5);animation:maxIn 1s ease .6s forwards}
-#maxwell:hover{transform:scale(1.12) rotate(-3deg);filter:drop-shadow(0 0 22px rgba(190,140,255,.7))}
+#maxwell{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:85;cursor:pointer;width:88px;pointer-events:auto;
+  filter:drop-shadow(0 0 12px rgba(150,110,255,.45));transition:transform .2s ease,filter .2s ease,opacity .8s ease;
+  opacity:0;pointer-events:none;transform:translateX(-50%) translateY(30px) scale(.5)}
+#maxwell:hover{transform:translateX(-50%) scale(1.12) rotate(-3deg);filter:drop-shadow(0 0 22px rgba(190,140,255,.7))}
 #maxwell img{width:100%;display:block;animation:maxBreathe 3.4s ease-in-out infinite}
-@keyframes maxIn{to{opacity:1;transform:translateY(0) scale(1)}}
+/* show Maxwell only on the main clan screen (after boot final) */
+body.quotes-on #maxwell{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0) scale(1)}
+body:not(.quotes-on) #maxwell{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(30px) scale(.5)}
 @keyframes maxBreathe{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.03) translateY(-4px)}}
 #maxwell.max-jump img{animation:maxBounce .7s ease}
 @keyframes maxBounce{
@@ -92,7 +94,7 @@ body.power-zone::after{content:'';position:fixed;inset:0;z-index:55;pointer-even
   100%{transform:scale(1) translateY(0)}
 }
 #maxwell.toggle-hide{animation:maxHide .5s ease forwards}
-@keyframes maxHide{to{opacity:0;transform:translateY(30px) scale(.4)}}
+@keyframes maxHide{to{opacity:0;transform:translateX(-50%) translateY(30px) scale(.4)}}
 #maxwell .max-tag{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);white-space:nowrap;
   font-family:'Consolas',monospace;font-size:10px;letter-spacing:2px;color:#b9a0e8;text-transform:uppercase;
   text-shadow:0 0 8px rgba(0,0,0,.8);opacity:.7}
@@ -452,7 +454,7 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 .mx-volbar .mx-volfill{width:80%;height:100%;border-radius:3px;background:rgba(180,120,255,.7)}
 /* live clan chat panel */
 .clan-chat{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);z-index:60;
+  position:fixed;left:50%;top:58%;transform:translate(-50%,-50%) ;z-index:60;
   width:min(460px,90vw);height:300px;display:none;flex-direction:column;
   background:linear-gradient(180deg,rgba(14,8,28,.96),rgba(8,4,16,.98));
   border:1px solid rgba(150,90,255,.45);border-radius:10px;overflow:hidden;
@@ -460,6 +462,8 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
   opacity:0;transition:opacity .6s ease,transform .4s cubic-bezier(.2,.9,.3,1.2);
 }
 .clan-chat.on{display:flex;opacity:1;transform:translate(-50%,-50%) scale(1)}
+.clan-chat.dragging{transition:none;cursor:grabbing}
+.clan-chat .cc-head{cursor:move;user-select:none;touch-action:none}
 .clan-chat::before{content:'';position:absolute;inset:4px;border:1px solid rgba(180,130,255,.16);border-radius:8px;pointer-events:none;z-index:5}
 .cc-head{display:flex;align-items:center;gap:9px;padding:9px 14px;
   background:linear-gradient(180deg,#281743,#180c30);border-bottom:1px solid rgba(150,90,255,.35)}
@@ -491,6 +495,42 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 #clanScene.final .clan-datetime{opacity:1}
 /* roles info button, appears when letters settle */
 .clan-btns{position:absolute;left:0;top:calc(100% + 30px);display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+/* animated banner gif on the main clan screen */
+/* overlay layer for welcome + banners (fixed to viewport, not the transformed scene) */
+.clan-overlay{position:fixed;inset:0;z-index:8;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+body.quotes-on .clan-overlay{opacity:1}
+.clan-banner{position:fixed;pointer-events:none;width:min(200px,22vw);
+  opacity:0;transition:opacity 1s ease,transform 1s ease;transform:translateY(20px) scale(.95)}
+body.quotes-on .clan-banner{opacity:1;transform:translateY(0) scale(1)}
+.clan-banner.banner-power{right:22px;bottom:60px;left:auto;top:auto;width:min(230px,25vw)}
+.clan-banner.banner-cross{left:12px;bottom:8px;right:auto;top:auto;width:min(110px,12vw);transform:translateX(0)}
+body.quotes-on .clan-banner.banner-cross{transform:translateX(0)}
+.clan-banner .ban-frame{position:relative;border-radius:14px;overflow:hidden;
+  border:1px solid rgba(160,110,255,.5);box-shadow:0 16px 44px rgba(0,0,0,.6),0 0 26px rgba(140,90,255,.25)}
+.clan-banner .ban-frame::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,rgba(20,8,40,.35),transparent 70%)}
+.clan-banner img{width:100%;display:block}
+.clan-banner .ban-cap{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;text-align:center;
+  font-family:'Cinzel',serif;font-size:11px;font-weight:900;letter-spacing:3px;color:#e8d8ff;text-transform:uppercase;
+  background:linear-gradient(180deg,rgba(20,8,40,.3),rgba(10,4,20,.85));text-shadow:0 0 10px rgba(170,120,255,.6)}
+/* central welcome header on the main screen */
+.clan-welcome{position:fixed;left:50%;top:24px;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;width:min(520px,92vw);
+  opacity:0;transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+body.quotes-on .clan-welcome{opacity:1;transform:translateX(-50%) translateY(0)}
+.clan-welcome .cw-tag{display:block;font-family:'Consolas',monospace;font-size:11px;letter-spacing:4px;color:#d8c8e8;text-transform:uppercase;margin-bottom:6px;
+  text-shadow:0 0 12px rgba(0,0,0,.9),0 0 20px rgba(160,110,255,.5)}
+.clan-welcome .cw-title{display:block;font-family:'Cinzel',serif;font-weight:900;font-size:clamp(28px,5.5vw,46px);letter-spacing:6px;
+  color:#fdf6ff;text-shadow:0 0 26px rgba(160,110,255,.9),0 0 60px rgba(120,70,220,.5),0 2px 6px rgba(0,0,0,.9);line-height:1.1}
+.clan-welcome .cw-sub{display:block;margin-top:10px;font-family:'Cormorant Garamond','Georgia',serif;font-style:italic;
+  font-size:17px;color:#f0e4ff;text-shadow:0 0 10px rgba(0,0,0,.85),0 0 18px rgba(160,110,255,.5)}
+.clan-welcome .cw-line{display:block;width:min(300px,60vw);height:1px;margin:12px auto 0;background:linear-gradient(90deg,transparent,#f0d8ff,transparent)}
+/* wide decorative banner behind the welcome text */
+.clan-banner.banner-floor{left:50%;top:10px;right:auto;bottom:auto;pointer-events:none;width:min(560px,80vw);transform:translateX(-50%);z-index:5}
+body.quotes-on .clan-banner.banner-floor{transform:translateX(-50%)}
+.clan-banner.banner-floor .ban-frame{border:1px solid rgba(160,110,255,.35);border-radius:18px;box-shadow:0 10px 34px rgba(0,0,0,.4),0 0 22px rgba(140,90,255,.18)}
+.clan-banner.banner-floor .ban-frame::after{background:radial-gradient(ellipse at 50% 40%,rgba(20,8,40,.1),rgba(20,8,40,.55) 100%)}
+.clan-banner.banner-floor img{opacity:.8}
+.clan-banner.banner-floor .ban-cap{opacity:.85}
 /* proud member counter badge */
 .member-badge{display:flex;align-items:baseline;gap:8px;padding:12px 22px;margin-bottom:4px;position:relative;
   background:linear-gradient(180deg,rgba(120,70,255,.2),rgba(60,30,130,.15));
@@ -554,6 +594,539 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 .roles-btn:hover{background:linear-gradient(180deg,rgba(150,90,255,.35),rgba(80,40,180,.25));
   box-shadow:0 0 30px rgba(150,90,255,.6),inset 0 0 18px rgba(150,90,255,.15);transform:translateX(4px)}
 #clanScene.final .roles-btn{opacity:1;pointer-events:auto}
+/* personal cabinets — stylish separate entry below main sections */
+.cab-btn{display:flex;align-items:center;gap:12px;padding:11px 18px;margin-top:4px;cursor:pointer;position:relative;
+  font-family:'Cinzel',serif;background:linear-gradient(180deg,rgba(120,70,255,.22),rgba(60,30,130,.2));
+  border:1px solid rgba(180,130,255,.6);border-radius:12px;
+  box-shadow:0 0 20px rgba(130,90,255,.35),inset 0 0 18px rgba(150,100,255,.12);
+  color:#e8d8ff;text-shadow:0 0 10px rgba(170,120,255,.5);
+  opacity:0;pointer-events:none;transition:opacity 1s ease,transform .2s,box-shadow .2s;user-select:none}
+.cab-btn::before{content:'';position:absolute;left:-1px;top:18%;bottom:18%;width:3px;background:linear-gradient(180deg,#c89bff,#7c4dff);border-radius:2px}
+.cab-btn:hover{transform:translateX(4px);box-shadow:0 0 30px rgba(180,120,255,.6),inset 0 0 18px rgba(160,110,255,.2);border-color:rgba(210,170,255,.85)}
+#clanScene.final .cab-btn{opacity:1;pointer-events:auto}
+.cab-ico{font-size:24px;line-height:1;filter:drop-shadow(0 0 8px rgba(180,120,255,.7))}
+.cab-txt{display:flex;flex-direction:column;gap:2px;text-align:left}
+.cab-name{font-size:14px;font-weight:900;letter-spacing:2px;color:#f0e2ff}
+.cab-desc{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase}
+/* cabinets window entry rows */
+.cab-row{display:flex;align-items:center;gap:12px;padding:11px 12px;cursor:pointer;position:relative;
+  background:linear-gradient(180deg,rgba(120,70,255,.12),rgba(60,30,130,.08));border:1px solid rgba(150,90,255,.25);
+  border-left:3px solid #c89bff;border-radius:8px;transition:.25s;font-family:'Cinzel',serif}
+.cab-row:hover{background:rgba(150,100,255,.16);border-color:rgba(190,150,255,.5);transform:translateX(3px);box-shadow:0 0 18px rgba(150,100,255,.3)}
+.cab-row .cr-ava{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  font-family:'Cinzel',serif;font-weight:900;font-size:16px;color:#f0e2ff;text-shadow:0 0 10px rgba(200,150,255,.7);
+  background:radial-gradient(circle at 35% 30%,rgba(150,100,255,.35),rgba(70,40,150,.4));border:1px solid rgba(180,130,255,.5);box-shadow:0 0 14px rgba(150,100,255,.4)}
+.cab-row .cr-txt{display:flex;flex-direction:column;gap:2px;text-align:left}
+.cab-row .cr-name{font-size:13px;font-weight:900;letter-spacing:2px;color:#f0e2ff}
+.cab-row .cr-role{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase}
+.cab-row .cr-open{margin-left:auto;color:#a98ad0;font-size:14px}
+/* cabinet password prompt */
+.cab-pass{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);z-index:120;
+  width:min(340px,90vw);background:linear-gradient(180deg,#150a2c,#0a0516);border:1px solid rgba(180,130,255,.55);
+  border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.9),0 0 40px rgba(140,90,255,.3);
+  padding:22px 22px 26px;text-align:center;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+.cab-pass.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.cab-pass .cp-title{font-family:'Cinzel',serif;font-weight:900;font-size:15px;letter-spacing:3px;color:#e8d8ff;
+  text-shadow:0 0 12px rgba(170,120,255,.6);margin-bottom:4px}
+.cab-pass .cp-sub{font-family:'Consolas',monospace;font-size:10px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase;margin-bottom:16px}
+.cab-pass input{width:110px;padding:9px 0;text-align:center;font-family:'Consolas',monospace;font-size:24px;letter-spacing:8px;
+  color:#f0e2ff;background:rgba(30,16,60,.7);border:1px solid rgba(180,130,255,.45);border-radius:8px;outline:none;
+  box-shadow:0 0 16px rgba(140,90,255,.2),inset 0 0 12px rgba(0,0,0,.5)}
+.cab-pass input::placeholder{color:rgba(180,150,230,.3);letter-spacing:4px}
+.cab-pass input:focus{border-color:rgba(210,170,255,.9);box-shadow:0 0 22px rgba(170,120,255,.5),inset 0 0 12px rgba(0,0,0,.5)}
+.cab-pass .cp-err{min-height:16px;margin-top:10px;font-family:'Consolas',monospace;font-size:11px;letter-spacing:2px;color:#ff7a8a;text-transform:uppercase}
+.cab-pass .cp-err.ok{color:#8dffb0;text-shadow:0 0 10px rgba(80,255,150,.5)}
+.cab-pass .cp-actions{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.cab-pass .cp-btn{padding:8px 18px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;
+  color:#e8d8ff;background:linear-gradient(180deg,rgba(140,90,255,.3),rgba(90,50,200,.2));border:1px solid rgba(180,130,255,.5);border-radius:6px;transition:.2s}
+.cab-pass .cp-btn:hover{background:rgba(170,120,255,.35);box-shadow:0 0 16px rgba(170,120,255,.4)}
+.cab-pass .cp-close{position:absolute;top:8px;right:10px;cursor:pointer;color:#8a6cb5;font-size:15px;transition:.2s}
+.cab-pass .cp-close:hover{color:#fff}
+/* Epic leader cabinet — full overlay */
+#epicCab{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;
+  background:rgba(4,2,8,.96);opacity:0;transition:opacity 1s ease}
+#epicCab.on{display:flex;opacity:1}
+#epicCab .ec-head{position:absolute;left:24px;right:auto;top:26px;text-align:left;
+  color:#f5d97a;font-family:'Cinzel',serif;font-weight:900;font-size:30px;letter-spacing:3px;line-height:1;
+  text-shadow:0 0 18px rgba(245,200,90,.85),0 0 46px rgba(240,180,60,.4);
+  opacity:0;transform:translateY(0);transition:opacity .6s ease,top 1.4s cubic-bezier(.6,.1,.5,.9),left 1.4s cubic-bezier(.6,.1,.5,.9),font-size 1.4s cubic-bezier(.6,.1,.5,.9);z-index:7}
+#epicCab .ec-head .ec-word{display:inline-block;opacity:0;animation:ecIn .5s ease forwards}
+#epicCab .ec-head .ec-x{color:#d4af37;padding-left:6px;animation:ecXpulse 3s ease-in-out infinite}
+#epicCab .ec-ring{position:absolute;right:-18px;top:50%;width:56px;height:56px;opacity:0;pointer-events:none;
+  transform:translateY(-50%)}
+#epicCab .ec-head .ec-ring{z-index:6}
+#epicCab .ec-ring i{position:absolute;left:50%;top:50%;border:1px solid rgba(245,200,90,.5);border-radius:50%;
+  transform:translate(-50%,-50%);animation:ecSpin 2.8s linear infinite}
+#epicCab .ec-ring .r1{width:44px;height:44px}
+#epicCab .ec-ring .r2{width:56px;height:56px;border-style:dashed;animation:ecSpin 4s linear infinite reverse;border-color:rgba(212,175,55,.35)}
+@keyframes ecIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+@keyframes ecXpulse{0%,100%{opacity:1;text-shadow:0 0 14px rgba(245,200,90,.8)}50%{opacity:.4;text-shadow:0 0 6px rgba(245,200,90,.3)}}
+@keyframes ecSpin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+/* ephemeral center title then glides top-left */
+#epicCab .ec-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
+  font-family:'Cinzel',serif;font-weight:900;color:#f5d97a;font-size:clamp(26px,6vw,52px);letter-spacing:4px;line-height:1.3;
+  text-shadow:0 0 20px rgba(245,200,90,.95),0 0 60px rgba(240,180,60,.6),0 0 110px rgba(255,200,80,.4);
+  opacity:0;transition:opacity .4s ease}
+#epicCab .ec-center .ec-csub{display:block;margin-top:14px;font-family:'Consolas',monospace;font-size:12px;letter-spacing:4px;color:rgba(212,175,55,.7);text-transform:uppercase}
+/* cabinet body menu */
+.ec-close{position:fixed;right:20px;top:16px;cursor:pointer;color:#a08a4a;font-size:30px;z-index:601;transition:.2s;display:none;
+  width:44px;height:44px;line-height:40px;text-align:center;border-radius:50%;background:rgba(10,6,2,.4)}
+#epicCab.entered .ec-close{display:block}
+.ec-close:hover{color:#f5d97a;text-shadow:0 0 12px rgba(245,200,90,.6)}
+/* Epic cabinet decorations — gold ambient, particles, wisps, garland, side grates */
+/* Epic cabinet decoration appears only after the head settles into place */
+#epicCab .ec-decor{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.8s ease}
+#epicCab.entered .ec-decor{opacity:1}
+#epicCab .ec-blob{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(212,175,55,.16),rgba(212,175,55,0) 70%);animation:ecBlobFloat 26s ease-in-out infinite;opacity:.55}
+#epicCab .ec-blob.b1{width:420px;height:420px;top:-120px;left:-80px;animation-duration:30s}
+#epicCab .ec-blob.b2{width:360px;height:360px;bottom:-100px;right:-60px;animation-duration:34s;animation-delay:3s}
+#epicCab .ec-blob.b3{width:300px;height:300px;top:40%;left:78%;animation-duration:40s;animation-delay:6s;opacity:.35}
+@keyframes ecBlobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,30px) scale(1.1)}66%{transform:translate(-25px,50px) scale(.95)}}
+#epicCab .ec-p{position:fixed;z-index:2;width:2px;height:2px;border-radius:50%;background:#f0d878;pointer-events:none;
+  opacity:0;animation:ecRise linear infinite;box-shadow:0 0 6px rgba(212,175,55,.7)}
+@keyframes ecRise{0%{transform:translateY(0);opacity:0}10%{opacity:.6}50%{opacity:.3}100%{transform:translateY(-100vh);opacity:0}}
+#epicCab .ec-wisp{position:fixed;z-index:2;pointer-events:none;color:#e0c66a;font-size:24px;opacity:0;
+  animation:ecWisp float linear infinite;text-shadow:0 0 14px rgba(212,175,55,.5)}
+@keyframes ecWisp{0%{transform:translateX(-4vw) translateY(0) rotate(0);opacity:0}12%{opacity:.4}88%{opacity:.3}100%{transform:translateX(104vw) translateY(-18vh) rotate(40deg);opacity:0}}
+#epicCab .ec-garland{position:absolute;top:0;left:0;right:0;height:56px;z-index:3;pointer-events:none;
+  display:flex;justify-content:space-around;opacity:.55}
+#epicCab .ec-hang{display:flex;flex-direction:column;align-items:center;transform-origin:top center;animation:ecSwing 6s ease-in-out infinite}
+#epicCab .ec-hang .ev{width:1px;height:24px;background:linear-gradient(180deg,transparent,#6b5526);opacity:.6}
+#epicCab .ec-hang .er{line-height:1;display:flex;filter:drop-shadow(0 0 6px rgba(170,120,220,.3)) drop-shadow(0 4px 8px rgba(0,0,0,.4));animation:ecBreathe 5s ease-in-out infinite}
+#epicCab .ec-hang:nth-child(2n){animation-delay:.6s}
+#epicCab .ec-hang:nth-child(2n) .er{animation-delay:.4s}
+@keyframes ecSwing{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes ecBreathe{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+#epicCab .ec-grate{position:fixed;top:0;bottom:0;width:40px;z-index:3;pointer-events:none;background:linear-gradient(180deg,#1d1810,#140f08 40%,#1a1407)}
+#epicCab .ec-grate.gl{left:0}#epicCab .ec-grate.gr{right:0}
+#epicCab .ec-grate::before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;
+  background-image:linear-gradient(45deg,transparent 46%,rgba(212,175,55,.5) 47% 49%,transparent 50%),
+    linear-gradient(-45deg,transparent 46%,rgba(212,175,55,.5) 47% 49%,transparent 50%);
+  background-size:28px 28px}
+#epicCab .ec-grate::after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,.95) 45%,rgba(255,252,235,0) 60%);
+  background-size:100% 220%;animation:ecSheen 6s linear infinite;mix-blend-mode:screen}
+@keyframes ecSheen{0%{transform:translateY(-70%)}100%{transform:translateY(70%)}}
+/* circular grate ring — the lattice itself shimmers gold→white around */
+#epicCab .ec-ouro{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:440px;height:440px;z-index:2;pointer-events:none;opacity:.5;
+  border-radius:50%;background:#0c0906;
+  -webkit-mask:radial-gradient(closest-side,transparent 66%,#000 66.5% 100%);mask:radial-gradient(closest-side,transparent 66%,#000 66.5% 100%)}
+#epicCab .ec-ouro::before{content:'';position:absolute;inset:0;border-radius:50%;
+  background-image:
+    linear-gradient(45deg,transparent 46%,rgba(212,175,55,.55) 47% 49%,transparent 50%),
+    linear-gradient(-45deg,transparent 46%,rgba(212,175,55,.55) 47% 49%,transparent 50%);
+  background-size:26px 26px;}
+#epicCab .ec-ouro::after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,252,235,.85) 60deg, rgba(255,252,235,0) 150deg,
+    rgba(212,175,55,.5) 220deg, rgba(255,252,235,0) 320deg);
+  mix-blend-mode:screen;animation:ecRingSweep 4.5s linear infinite}
+@keyframes ecRingSweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* epic emblem: rotating ring of latin on the circle edge + static avatar core */
+#epicCab .ec-emblem{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;height:400px;z-index:2;pointer-events:none}
+#epicCab .ec-emblem svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#epicCab .ec-ringtxt{position:absolute;inset:0;border-radius:50%;animation:ecSlowSpin 40s linear infinite}
+#epicCab .ec-ringtxt path{fill:none;stroke:none}
+#epicCab .ec-ringtxt text{font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:5px;
+  fill:#cdb6ef;text-shadow:0 0 10px rgba(150,100,220,.7),0 0 26px rgba(120,70,200,.4)}
+#epicCab .ec-ringtxt .r-spark{font-size:13px;fill:#8a5cd8;letter-spacing:0}
+@keyframes ecSlowSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* decorated ring: orbital dots + rotating sparkle layer */
+#epicCab .ec-orbits{position:absolute;inset:0;border-radius:50%;animation:ecSlowSpin 22s linear infinite reverse}
+#epicCab .ec-orbits i{position:absolute;width:6px;height:6px;border-radius:50%;background:#cdb6ef;
+  box-shadow:0 0 10px rgba(180,150,255,.9);opacity:.85;animation:ecTwinkle 3s ease-in-out infinite}
+#epicCab .ec-orbits .o1{left:50%;top:3px;margin-left:-3px}
+#epicCab .ec-orbits .o2{right:6px;top:50%;margin-top:-3px;animation-delay:.6s}
+#epicCab .ec-orbits .o3{left:50%;bottom:3px;margin-left:-3px;animation-delay:1.2s}
+#epicCab .ec-orbits .o4{left:6px;top:50%;margin-top:-3px;animation-delay:1.8s}
+#epicCab .ec-ringdots{position:absolute;inset:10px;border-radius:50%;border:1px dashed rgba(170,130,230,.28)}
+#epicCab .ec-rune{position:absolute;font-family:'Cinzel',serif;font-weight:900;color:#8a5cd8;font-size:13px;
+  text-shadow:0 0 8px rgba(140,100,220,.6);opacity:.7}
+@keyframes ecTwinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+/* 4 small diamonds on the ring as compass marks */
+#epicCab .ec-cardinal{position:absolute;width:8px;height:8px;transform:rotate(45deg);background:rgba(170,130,230,.5);
+  border-radius:2px;box-shadow:0 0 8px rgba(160,120,230,.7)}
+#epicCab .ec-cardinal.c1{left:50%;top:16px;margin-left:-4px}
+#epicCab .ec-cardinal.c2{right:16px;top:50%;margin-top:-4px}
+#epicCab .ec-cardinal.c3{left:50%;bottom:16px;margin-left:-4px}
+#epicCab .ec-cardinal.c4{left:16px;top:50%;margin-top:-4px}
+#epicCab .ec-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(150,100,220,.5);box-shadow:0 0 40px rgba(120,70,200,.4),inset 0 0 30px rgba(120,70,200,.25)}
+#epicCab .ec-core img{width:158px;height:158px;border-radius:50%;object-fit:cover;
+  border:2px solid rgba(190,150,255,.6);box-shadow:0 0 26px rgba(150,100,255,.5)}
+#epicCab .ec-core .ec-shadow{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(20,10,40,.1) 40%,rgba(10,5,20,.65) 100%)}
+/* cabinet music player */
+.ec-player{position:fixed;left:24px;bottom:24px;z-index:8;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;font-family:'Cinzel',serif;border-radius:10px;
+  background:linear-gradient(180deg,rgba(120,90,30,.16),rgba(70,50,15,.12));border:1px solid rgba(212,175,55,.45);
+  box-shadow:0 0 18px rgba(212,175,55,.2),inset 0 0 14px rgba(0,0,0,.3);opacity:0;transition:opacity .8s ease}
+#epicCab.entered .ec-player{opacity:1}
+.ec-player .ep-btn{width:36px;height:36px;border-radius:50%;cursor:pointer;border:1px solid rgba(212,175,55,.6);
+  background:radial-gradient(circle,rgba(212,175,55,.35),rgba(120,90,30,.2));color:#f5d97a;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.2s;text-shadow:0 0 8px rgba(245,200,90,.6)}
+.ec-player .ep-btn:hover{box-shadow:0 0 16px rgba(212,175,55,.5);transform:scale(1.08)}
+.ec-player .ep-track{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ec-player .ep-name{font-size:13px;font-weight:900;letter-spacing:1px;color:#f5d97a;text-shadow:0 0 10px rgba(245,200,90,.5)}
+.ec-player .ep-desc{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a08a4a;text-transform:uppercase}
+.ec-player .ep-eq{display:flex;gap:3px;align-items:flex-end;height:16px}
+.ec-player .ep-eq i{width:3px;background:#f0d878;border-radius:2px;height:4px;transition:height .2s;box-shadow:0 0 6px rgba(240,216,120,.7)}
+#epicCab.entered .ec-player.playing .ep-eq i{animation:ecEq 1s ease-in-out infinite}
+.ec-player .ep-eq i:nth-child(1){animation-delay:0s}
+.ec-player .ep-eq i:nth-child(2){animation-delay:.2s}
+.ec-player .ep-eq i:nth-child(3){animation-delay:.4s}
+@keyframes ecEq{0%,100%{height:4px}50%{height:16px}}
+/* hide head/close while the docs archive is open */
+#epicCab.docs-open .ec-head,#epicCab.docs-open .ec-close{opacity:0!important;pointer-events:none!important;transition:opacity .3s ease!important}
+#epicCab.docs-open .ec-decor{pointer-events:none!important}
+/* animated gaster diaries grid inside the docs archive */
+.ec-docgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px;padding:16px;align-content:start}
+.ec-dbook{position:relative;width:84px;height:112px;margin:6px auto;cursor:pointer;transform:rotate(-5deg) skewY(-3deg);
+  transform-origin:left center;transition:transform .25s}
+.ec-dbook:hover{transform:rotate(-5deg) skewY(-3deg) scale(1.15)}
+.ec-dcover{position:absolute;inset:0;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--bc,rgba(150,90,255,.6));
+  background:linear-gradient(160deg,var(--b1,rgba(120,70,255,.4)),var(--b2,rgba(70,40,150,.55)));
+  box-shadow:0 0 18px var(--bs,rgba(120,70,255,.5)),0 0 40px var(--bs2,rgba(120,70,255,.25)),inset 0 0 14px var(--bi,rgba(150,100,255,.25));
+  transition:box-shadow .3s}
+.ec-dcover::before{content:'';position:absolute;left:6px;top:8%;bottom:8%;width:7px;background:rgba(0,0,0,.28);
+  border-right:1px solid rgba(255,255,255,.18)}
+.ec-dcover .dg{font-size:26px;color:#f0e4ff;text-shadow:0 0 10px rgba(210,180,255,.9)}
+.ec-dbook .dr{position:absolute;border-radius:50%;border:1px solid var(--bc,rgba(150,90,255,.5));pointer-events:none}
+.ec-dbook .dr1{left:-12px;top:-14px;width:110px;height:110px;animation:ecSlowSpin 6s linear infinite}
+.ec-dbook .dr2{left:-18px;top:-20px;width:122px;height:122px;border-style:dashed;animation:ecSlowSpin 8s linear infinite reverse}
+.ec-dbook .ec-dscan{position:absolute;left:-4px;right:-4px;height:2px;background:linear-gradient(90deg,transparent,var(--sc,rgba(200,160,255,.8)),transparent);
+  box-shadow:0 0 10px var(--sc,rgba(170,120,255,.8));animation:ecScan 3s ease-in-out infinite;pointer-events:none}
+@keyframes ecScan{0%,100%{top:10%}50%{top:86%}}
+.ec-dbook .dlabel{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Cinzel',serif;font-weight:700;font-size:10px;letter-spacing:2px;color:#c7b0e8;text-transform:uppercase}
+.ec-dbook .dmeta{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Consolas',monospace;font-size:9px;letter-spacing:1px;color:#8a6cb5;text-transform:uppercase}
+/* cabinet menu cards */
+.ec-menu{position:fixed;left:24px;bottom:110px;z-index:8;display:flex;flex-direction:column;gap:10px;align-items:flex-start;
+  opacity:0;transition:opacity 1s ease;pointer-events:none}
+#epicCab.entered .ec-menu{opacity:1;pointer-events:auto;transition:opacity 1s ease 2.2s}
+.ec-card{display:flex;align-items:center;gap:12px;padding:12px 18px;min-width:250px;cursor:pointer;
+  font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:2px;color:#e8dcff;
+  background:linear-gradient(180deg,rgba(110,70,200,.2),rgba(70,40,140,.14));border:1px solid rgba(150,100,220,.45);border-radius:10px;
+  box-shadow:0 0 16px rgba(120,70,200,.2),inset 0 0 14px rgba(0,0,0,.3);transition:.25s}
+.ec-card:hover{transform:translateX(4px);border-color:rgba(200,160,255,.75);box-shadow:0 0 26px rgba(150,100,255,.4),inset 0 0 14px rgba(0,0,0,.3)}
+.ec-card .cc-ico{font-size:20px;filter:drop-shadow(0 0 8px rgba(170,120,255,.7))}
+.ec-card .cc-tx{display:flex;flex-direction:column;gap:2px;text-align:left}
+.ec-card .cc-name{color:#e8dcff;text-shadow:0 0 10px rgba(160,110,255,.5)}
+.ec-card .cc-desc{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase}
+/* secret notice overlay inside cabinet */
+.ec-secret{position:absolute;inset:0;z-index:900;display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(6,2,12,.98);text-align:center;padding:24px;opacity:0;transition:opacity .6s ease}
+#epicCab .ec-secret.show{display:flex;opacity:1}
+#epicCab .ec-secret .es-banner{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,5vw,36px);letter-spacing:6px;
+  color:#ff3b4a;text-shadow:0 0 20px rgba(255,40,60,.9),0 0 50px rgba(255,20,40,.5);animation:esBlink 1.4s steps(1) infinite;margin-bottom:18px}
+#epicCab .ec-secret .es-txt{max-width:520px;font-family:'Cormorant Garamond','Georgia',serif;font-size:18px;line-height:1.7;color:#e6d8ff;
+  text-shadow:0 0 10px rgba(150,100,255,.3)}
+#epicCab .ec-secret .es-warn{margin-top:14px;font-family:'Consolas',monospace;font-size:11px;letter-spacing:3px;color:#9a6cb5;text-transform:uppercase}
+@keyframes esBlink{0%,49%{opacity:1}50%,100%{opacity:.35}}
+#epicCab .ec-secret .es-actions{display:flex;gap:14px;margin-top:26px}
+#epicCab .ec-secret .es-btn{padding:11px 26px;cursor:pointer;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2px;
+  border-radius:7px;transition:.25s;pointer-events:auto;position:relative}
+#epicCab.docs-open .ec-menu{pointer-events:none;opacity:0}
+#epicCab.docs-open .ec-player{pointer-events:none}
+#epicCab .ec-secret .es-go{color:#f5e6ff;background:linear-gradient(180deg,rgba(150,90,255,.4),rgba(90,50,200,.25));border:1px solid rgba(180,130,255,.7)}
+#epicCab .ec-secret .es-go:hover{box-shadow:0 0 24px rgba(160,110,255,.6)}
+#epicCab .ec-secret .es-back{color:#b9a0d8;background:rgba(70,40,140,.15);border:1px solid rgba(150,100,220,.4)}
+#epicCab .ec-secret .es-back:hover{color:#e8dcff}
+/* secret documents archive (scrolling) */
+.ec-docs{position:absolute;inset:0;z-index:900;display:none;flex-direction:column;background:rgba(5,2,10,.98);opacity:0;transition:opacity .6s ease;
+  pointer-events:none}
+#epicCab .ec-docs.show{display:flex;opacity:1;pointer-events:auto;isolation:isolate}
+.ec-docs-head{display:flex;align-items:center;gap:12px;padding:14px 18px;justify-content:space-between;
+  font-family:'Cinzel',serif;font-weight:900;font-size:14px;letter-spacing:3px;color:#e8dcff;border-bottom:1px solid rgba(150,100,220,.3);
+  background:linear-gradient(180deg,#1a0f30,#0d0718)}
+.ec-docs-head .dh-back{cursor:pointer;color:#a98ad0;font-size:13px;letter-spacing:2px;transition:.2s;background:none;border:none;padding:0;font-family:'Cinzel',serif;pointer-events:auto;position:relative;z-index:5}
+.ec-docs-head .dh-back:hover{color:#f5e6ff}
+.ec-docs-head .dh-tools{display:flex;align-items:center;gap:12px}
+.ec-docs-head .dh-count{font-family:'Consolas',monospace;font-size:11px;letter-spacing:2px;color:#a98ad0}
+.ec-docs-head .dh-music{width:30px;height:30px;border-radius:50%;cursor:pointer;border:1px solid rgba(160,110,255,.6);
+  background:radial-gradient(circle,rgba(150,100,255,.35),rgba(90,50,200,.2));color:#e8dcff;font-size:14px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.2s;text-shadow:0 0 8px rgba(170,120,255,.6);pointer-events:auto;position:relative;z-index:5}
+.ec-docs-head .dh-music:hover{box-shadow:0 0 14px rgba(160,110,255,.5);transform:scale(1.1)}
+.ec-docs-head .dh-music.playing{animation:ecEq 1s ease-in-out infinite}
+.ec-doc-tabs{display:flex;gap:6px;padding:12px 18px 4px;flex-wrap:wrap}
+.ec-doc-tabs .dt-btn{padding:7px 16px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;
+  color:#a98ad0;background:rgba(80,50,160,.15);border:1px solid rgba(150,100,220,.35);border-radius:7px;transition:.25s}
+.ec-doc-tabs .dt-btn:hover{color:#f5e6ff;border-color:rgba(190,150,255,.6)}
+.ec-doc-tabs .dt-btn.active{color:#f5e6ff;background:rgba(150,100,255,.25);border-color:rgba(190,150,255,.7);box-shadow:0 0 14px rgba(150,100,255,.35)}
+/* archive background ambience */
+#epicCab .ec-docs::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(120,70,255,.12),transparent 55%),
+    radial-gradient(ellipse at 100% 100%,rgba(90,40,180,.1),transparent 50%)}
+.ec-docs .ec-docgrid{position:relative;z-index:1}
+/* title with separate timeline label */
+.ec-docs-head .dh-title{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:5}
+.ec-docs-head .dh-tl{font-family:'Cinzel',serif;font-weight:900;font-size:11px;letter-spacing:5px;
+  color:#d4af37;text-transform:uppercase;text-shadow:0 0 12px rgba(212,175,55,.5);background:rgba(212,175,55,.08);
+  border:1px solid rgba(212,175,55,.4);border-radius:4px;padding:1px 10px}
+/* X GASTER quotes card — staff diary style */
+.ec-gquote{position:relative;z-index:3;margin:20px auto 16px;width:min(600px,90%);pointer-events:none;
+  padding:22px 24px 20px;text-align:center;border-radius:14px;
+  background:linear-gradient(160deg,rgba(80,45,150,.2),rgba(40,20,90,.28));
+  border:1px solid rgba(160,110,255,.55);box-shadow:0 0 30px rgba(120,70,200,.25),inset 0 0 26px rgba(120,70,200,.08)}
+.ec-gquote::before,.ec-gquote::after{content:'';position:absolute;border-radius:50%;pointer-events:none;border:1px solid rgba(180,130,255,.35)}
+.ec-gquote::before{inset:-18px;border-style:dashed;animation:ecSlowSpin 30s linear infinite}
+.ec-gquote::after{inset:-9px;border-color:rgba(150,100,220,.25);animation:ecSlowSpin 20s linear infinite reverse}
+.ec-gquote .gq-ava{position:absolute;left:-26px;top:50%;transform:translateY(-50%);width:78px;height:78px;border-radius:50%;
+  background:linear-gradient(160deg,rgba(150,90,255,.5),rgba(90,50,200,.6));border:2px solid rgba(190,150,255,.6);
+  box-shadow:0 0 22px rgba(150,100,255,.45);display:flex;align-items:center;justify-content:center;z-index:2}
+.ec-gquote .gq-ava span{font-size:30px;color:#f0e4ff;text-shadow:0 0 14px rgba(210,180,255,.9)}
+.ec-gquote .gq-ring{position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:102px;height:102px;border-radius:50%;
+  border:1px dashed rgba(180,130,255,.4);animation:ecSlowSpin 16s linear infinite;pointer-events:none}
+.ec-gquote .gq-label{display:block;font-family:'Cinzel',serif;font-weight:900;font-size:13px;letter-spacing:5px;
+  color:#d8c2ff;text-transform:uppercase;margin-bottom:10px;text-shadow:0 0 12px rgba(170,120,255,.6)}
+.ec-gquote .gq-label em{color:#d4af37;font-style:normal;text-shadow:0 0 10px rgba(212,175,55,.5)}
+.gq-scan{position:absolute;left:6%;right:6%;height:2px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(180,130,255,.7),transparent);
+  box-shadow:0 0 10px rgba(160,110,255,.6);animation:ecScan 6s ease-in-out infinite}
+.ec-gquote .gq-text{display:block;min-height:56px;font-family:'Cormorant Garamond','Georgia',serif;font-style:italic;
+  font-size:18px;line-height:1.6;color:#ece0ff;text-shadow:0 0 10px rgba(150,100,255,.35);
+  padding:0 8px;opacity:0;transition:opacity .7s ease,transform .7s ease}
+.ec-gquote .gq-text.show{opacity:1;transform:translateY(0)}
+.ec-gquote .gq-text.hide{opacity:0;transform:translateY(6px)}
+/* archive ambient decor */
+.ec-docgrid::before,.ec-docgrid::after{content:'';position:absolute;border-radius:50%;pointer-events:none;z-index:-1}
+.ec-docgrid::before{width:420px;height:420px;left:-120px;top:-40px;
+  background:radial-gradient(circle,rgba(150,90,255,.12),transparent 70%);filter:blur(50px);
+  animation:ecDocBlob 26s ease-in-out infinite}
+.ec-docgrid::after{width:360px;height:360px;right:-110px;bottom:-30px;
+  background:radial-gradient(circle,rgba(180,120,255,.1),transparent 70%);filter:blur(46px);
+  animation:ecDocBlob 30s ease-in-out infinite reverse}
+@keyframes ecDocBlob{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.1)}}
+.ec-doc-sheen{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(180,130,255,.05) 45%,transparent 60%);
+  background-size:250% 100%;animation:ecDocSheen 11s linear infinite}
+@keyframes ecDocSheen{0%{background-position:120% 0}100%{background-position:-120% 0}}
+.ec-doc-wisp{position:absolute;pointer-events:none;z-index:0;color:rgba(180,130,255,.35);font-size:22px;
+  text-shadow:0 0 12px rgba(140,90,255,.5);animation:ecDocWisp 18s linear infinite;opacity:0}
+@keyframes ecDocWisp{0%{transform:translateX(-6vw) translateY(0) rotate(0);opacity:0}10%{opacity:.4}
+  80%{opacity:.3}100%{transform:translateX(104vw) translateY(-18vh) rotate(45deg);opacity:0}}
+.ec-doc-ouro{position:absolute;left:50%;top:12px;transform:translateX(-50%);width:300px;height:300px;pointer-events:none;z-index:0;opacity:.14}
+.ec-doc-ouro::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(180,130,255,.5);animation:ecSlowSpin 40s linear infinite}
+.ec-doc-ouro::after{content:'';position:absolute;inset:36px;border-radius:50%;border:1px solid rgba(150,100,220,.3);animation:ecSlowSpin 26s linear infinite reverse}
+.ec-doc-star{position:absolute;pointer-events:none;z-index:0;color:rgba(220,180,255,.35);font-size:12px;
+  text-shadow:0 0 8px rgba(160,110,255,.6);animation:ecTwinkle 3s ease-in-out infinite}
+.ec-dots{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.4;
+  background-image:radial-gradient(rgba(180,130,255,.4) 1px,transparent 1px);background-size:26px 26px}
+.ec-rune{position:absolute;pointer-events:none;z-index:0;font-family:'Cinzel',serif;font-weight:900;color:rgba(150,100,220,.22);
+  font-size:26px;text-shadow:0 0 10px rgba(150,100,255,.3);animation:ecTwinkle 5s ease-in-out infinite}
+.ec-book-row{position:absolute;bottom:6px;left:0;right:0;pointer-events:none;z-index:1;display:flex;justify-content:center;gap:26px;opacity:.35}
+.ec-book-row i{width:34px;height:44px;border-radius:5px;transform:rotate(8deg);
+  background:linear-gradient(160deg,rgba(150,90,255,.5),rgba(90,50,200,.55));border:1px solid rgba(180,130,255,.5);
+  box-shadow:0 0 12px rgba(140,90,255,.4)}
+.ec-book-row i:nth-child(2n){transform:rotate(-6deg);animation-delay:.6s}
+.ec-corner-sig{position:absolute;right:16px;bottom:6px;pointer-events:none;z-index:2;font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:16px;color:rgba(212,175,55,.3);text-shadow:0 0 8px rgba(212,175,55,.2);
+  writing-mode:horizontal-tb;transform:rotate(-90deg) translateY(60px)}
+/* extra cabinet ambience */
+#epicCab .ec-dots{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.28;
+  background-image:radial-gradient(rgba(180,130,255,.4) 1px,transparent 1px);background-size:30px 30px}
+#epicCab .ec-sheen{position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(115deg,transparent 35%,rgba(180,130,255,.06) 47%,transparent 58%);
+  background-size:250% 100%;animation:ecSheenSweep 13s linear infinite}
+@keyframes ecSheenSweep{0%{background-position:130% 0}100%{background-position:-130% 0}}
+#epicCab .ec-runes{font-family:'Cinzel',serif;font-weight:900;position:fixed;pointer-events:none;z-index:1;
+  color:rgba(150,100,220,.14);font-size:30px;text-shadow:0 0 12px rgba(150,100,255,.18);animation:ecTwinkle 6s ease-in-out infinite}
+#epicCab .ec-stars{position:fixed;pointer-events:none;z-index:1;color:rgba(200,170,255,.28);font-size:13px;
+  text-shadow:0 0 8px rgba(160,110,255,.4);animation:ecTwinkle 4s ease-in-out infinite}
+#epicCab .ec-corner{position:fixed;width:38px;height:38px;pointer-events:none;z-index:4;border:2px solid rgba(180,130,255,.35);opacity:.5}
+#epicCab .ec-corner.tl{top:40px;left:40px;border-right:none;border-bottom:none}
+#epicCab .ec-corner.tr{top:40px;right:40px;border-left:none;border-bottom:none}
+#epicCab .ec-corner.bl{bottom:60px;left:40px;border-right:none;border-top:none}
+#epicCab .ec-corner.br{bottom:60px;right:40px;border-left:none;border-top:none}
+#epicCab .ec-torch{position:fixed;bottom:0;left:50%;transform:translateX(-50%);pointer-events:none;z-index:1;text-align:center;opacity:.5}
+#epicCab .ec-torch .tf{display:inline-block;font-size:30px;color:rgba(255,200,120,.5);text-shadow:0 0 18px rgba(255,180,80,.6);animation:ecFlicker 1.8s ease-in-out infinite}
+@keyframes ecFlicker{0%,100%{transform:scale(1);opacity:.4}25%{transform:scale(1.15);opacity:.9}50%{transform:scale(.95);opacity:.5}75%{transform:scale(1.1);opacity:.8}}
+/* cabinet interactive panels hidden & non-interactive until the cabinet opens */
+.ec-monitor,.ec-cmd-bank,.ec-code,.ec-epic-quote{pointer-events:none}
+#epicCab.entered .ec-monitor{pointer-events:auto}
+#epicCab.entered .ec-cmd-bank{pointer-events:auto}
+/* epic interactive decorations */
+.ec-ticker{position:fixed;left:0;right:0;top:0;z-index:9;pointer-events:none;overflow:hidden;height:34px;
+  background:linear-gradient(180deg,#1d1810,#140f08 50%,#1a1407);
+  border-bottom:1px solid rgba(212,175,55,.35);
+  display:flex;align-items:center;box-shadow:0 2px 18px rgba(0,0,0,.5)}
+.ec-ticker::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;
+  background:linear-gradient(90deg,transparent,#d4af37,transparent);opacity:.7;pointer-events:none}
+.ec-ticker .tk-track{display:flex;gap:70px;white-space:nowrap;padding-left:100%;animation:ecTicker 30s linear infinite;will-change:transform}
+.ec-ticker span{font-family:'Consolas',monospace;font-size:11px;letter-spacing:2px;color:#e8d8a0;text-transform:uppercase;text-shadow:0 0 8px rgba(212,175,55,.4)}
+@keyframes ecTicker{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+/* leader monitor — multi-tab screen (terminal / status / cams) */
+.ec-monitor{position:fixed;right:20px;bottom:70px;z-index:99;width:min(340px,36vw);
+  background:linear-gradient(180deg,rgba(28,22,10,.94),rgba(18,14,6,.97));
+  border:1px solid rgba(212,175,55,.4);border-radius:12px;
+  box-shadow:0 18px 48px rgba(0,0,0,.65),0 0 26px rgba(180,120,40,.12),
+  inset 0 1px 0 rgba(255,255,255,.05);overflow:hidden;opacity:0;transition:opacity 1.2s ease;pointer-events:auto}
+#epicCab.entered .ec-monitor{opacity:1;transition-delay:2.4s}
+.ec-monitor::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#d4af37,transparent);opacity:.7;z-index:2}
+.ec-monitor .mn-head{display:flex;align-items:center;gap:6px;padding:7px 10px;background:rgba(40,32,10,.95);
+  border-bottom:1px solid rgba(212,175,55,.3)}
+.ec-monitor .mn-dot{width:8px;height:8px;border-radius:50%;background:rgba(212,175,55,.5)}
+.ec-monitor .mn-title{flex:1;text-align:center;font-family:'Consolas',monospace;font-size:10px;letter-spacing:1px;color:#e8d79b}
+.ec-monitor .mn-tabs{display:flex;gap:4px;padding:6px 8px;background:rgba(22,17,6,.6);border-bottom:1px solid rgba(212,175,55,.18)}
+.ec-monitor .mn-tab{flex:1;padding:5px 0;cursor:pointer;text-align:center;font-family:'Cinzel',serif;font-size:10px;font-weight:700;
+  letter-spacing:1px;color:#8a7a4a;border:1px solid transparent;border-radius:6px;transition:.2s;background:none;pointer-events:auto;position:relative;z-index:3}
+.ec-monitor .mn-tab:hover{color:#e8d79b}
+.ec-monitor .mn-tab.active{color:#f0e2b0;border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.12);box-shadow:0 0 12px rgba(212,175,55,.15)}
+.ec-monitor .mn-body{padding:10px 12px;font-family:'Consolas',monospace;font-size:11px;line-height:1.7;min-height:150px;
+  color:#e6d8a0;text-shadow:0 0 8px rgba(212,175,55,.25);white-space:pre-wrap;position:relative}
+.ec-monitor .mn-pane{display:none}
+.ec-monitor .mn-pane.active{display:block}
+/* terminal pane */
+.ec-monitor .cd-cursor{display:inline-block;width:7px;height:13px;background:rgba(230,216,160,.85);animation:ecBlink 1s steps(1) infinite;vertical-align:middle}
+@keyframes ecBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+/* status pane */
+.mn-status .st-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed rgba(212,175,55,.15)}
+.mn-status .st-k{color:#8a7a4a;letter-spacing:1px}
+.mn-status .st-v{color:#e6d8a0}
+.mn-status .st-bar{height:6px;border-radius:3px;background:rgba(212,175,55,.15);overflow:hidden;margin-top:2px}
+.mn-status .st-bar i{display:block;height:100%;background:linear-gradient(90deg,#a8871f,#d4af37);box-shadow:0 0 8px rgba(212,175,55,.5)}
+/* cams pane */
+.mn-cams .cam-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,175,55,.12);cursor:pointer;transition:.2s}
+.mn-cams .cam-row:hover{background:rgba(212,175,55,.08)}
+.mn-cams .cam-ico{width:26px;height:20px;border-radius:3px;background:rgba(212,175,55,.2);border:1px solid rgba(212,175,55,.4);
+  display:flex;align-items:center;justify-content:center;color:#d4af37;font-size:9px;position:relative;overflow:hidden}
+.mn-cams .cam-ico::after{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.2);top:3px;left:3px}
+.mn-cams .cam-ico.rec{background:rgba(255,80,90,.25);border-color:rgba(255,90,100,.5);color:#ff8090}
+.mn-cams .cam-name{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:1px;color:#e0d0a0}
+.mn-cams .cam-sub{display:block;font-family:'Consolas',monospace;font-size:9px;letter-spacing:1px;color:#8a7a4a}
+.mn-cams .cam-live{margin-left:auto;font-size:9px;letter-spacing:1px;color:#7ad98a}
+/* camera live view overlay */
+.ec-camview{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(3,1,8,.96);opacity:0;transition:opacity .5s ease;padding:20px}
+.ec-camview.show{display:flex;opacity:1}
+.ec-camview .cv-window{width:min(640px,94vw);background:linear-gradient(180deg,#1a1408,#0f0b03);
+  border:1px solid rgba(212,175,55,.45);border-radius:12px;box-shadow:0 26px 70px rgba(0,0,0,.8),0 0 30px rgba(180,120,40,.12);overflow:hidden}
+.ec-camview .cv-head{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(40,32,10,.95);
+  border-bottom:1px solid rgba(212,175,55,.3)}
+.ec-camview .cv-dot{width:9px;height:9px;border-radius:50%}
+.ec-camview .cv-dot.cr{background:#ff5c6a}.ec-camview .cv-dot.cy{background:#ffcf5c}.ec-camview .cv-dot.cg{background:#5cff8a}
+.ec-camview .cv-title{flex:1;text-align:center;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#e8d79b}
+.ec-camview .cv-rec{color:#ff8090;font-size:10px;letter-spacing:1px;display:flex;align-items:center;gap:5px}
+.ec-camview .cv-rec::before{content:'';width:8px;height:8px;border-radius:50%;background:#ff4d5e;animation:ecBlink 1.2s steps(1) infinite}
+.ec-camview .cv-screen{position:relative;height:400px;overflow:hidden;background:#0a0f14;display:flex;align-items:center;justify-content:center}
+.ec-camview .cv-screen .cv-preview{position:relative;width:100%;height:100%;font-family:'Consolas',monospace;color:#e6d8a0;
+  font-size:12px;line-height:1.6;padding:18px;overflow:hidden;text-align:center}
+.ec-camview .cv-screen .cv-preview .pv-title{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:3px;
+  color:#d4af37;text-shadow:0 0 14px rgba(212,175,55,.5);margin-bottom:8px}
+.ec-camview .cv-screen .cv-preview .pv-sub{color:#8a7a4a;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.ec-camview .cv-screen .cv-preview .pv-body{text-align:left;color:#c9b992}
+.ec-camview .cv-screen::after{content:'';position:absolute;left:0;right:0;height:34px;
+  background:linear-gradient(180deg,transparent,rgba(212,175,55,.25));
+  animation:cvScan 4s ease-in-out infinite}
+@keyframes cvScan{0%,100%{top:0}50%{top:85%}}
+.ec-camview .cv-noise{position:absolute;inset:0;pointer-events:none;opacity:.06;z-index:2;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.4) 2px,transparent 3px)}
+.ec-camview .cv-foot{font-family:'Consolas',monospace;font-size:10px;letter-spacing:2px;color:#8a7a4a;text-align:center;padding:9px}
+.ec-camview .cv-close{position:absolute;right:22px;top:18px;cursor:pointer;color:#8a7a4a;font-size:28px;z-index:5;transition:.2s}
+.ec-camview .cv-close:hover{color:#f0e2a0;text-shadow:0 0 12px rgba(212,175,55,.5)}
+/* command buttons — styled panel card like Nova profile */
+.ec-cmd-bank{position:fixed;left:26px;bottom:190px;z-index:9;width:min(270px,30vw);
+  background:linear-gradient(180deg,rgba(28,28,34,.85),rgba(16,16,20,.9));
+  border:1px solid rgba(201,166,255,.35);border-radius:14px;padding:16px 16px 14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);backdrop-filter:blur(6px);
+  opacity:0;transition:opacity 1.2s ease}
+#epicCab.entered .ec-cmd-bank{opacity:1;transition-delay:2.2s}
+.ec-cmd-bank::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#c9a6ff,transparent);opacity:.75;pointer-events:none}
+.ec-cmd-bank::after{content:'';position:absolute;inset:0;border-radius:13px;pointer-events:none;
+  background:radial-gradient(ellipse at 100% 100%,rgba(150,100,255,.06),transparent 55%)}
+.ec-cmd-bank .cb-title{display:flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:12px;font-weight:900;
+  letter-spacing:3px;color:#f0e6ff;margin-bottom:12px;position:relative}
+.ec-cmd-bank .cb-title .g{color:#d4af37;text-shadow:0 0 10px rgba(212,175,55,.4)}
+.ec-cmd{display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;margin-bottom:8px;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.5px;color:#fff;
+  border:1px solid rgba(255,255,255,.14);background:rgba(20,18,28,.75);border-radius:10px;transition:.2s;position:relative}
+.ec-cmd:last-child{margin-bottom:0}
+.ec-cmd:hover{transform:translateY(-2px);border-color:#c9a6ff;box-shadow:0 0 18px rgba(180,130,255,.3)}
+.ec-cmd:active{transform:translateY(0) scale(.98)}
+.ec-cmd .cm-ico{color:#d4af37;font-size:17px;text-shadow:0 0 8px rgba(212,175,55,.5)}
+.ec-cmd .cm-tag{display:block;font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase;margin-left:auto}
+/* epic quote card */
+.ec-epic-quote{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9;pointer-events:none;width:min(520px,86vw);
+  padding:14px 26px 16px;text-align:center;border-radius:12px;
+  background:linear-gradient(160deg,rgba(200,150,60,.16),rgba(90,50,180,.2));
+  border:1px solid rgba(212,175,55,.4);box-shadow:0 0 26px rgba(180,120,40,.15),inset 0 0 20px rgba(120,70,200,.06);
+  opacity:0;transition:opacity 1.4s ease}
+#epicCab.entered .ec-epic-quote{opacity:1;transition-delay:2.6s}
+.ec-epic-quote .eq-label{display:block;font-family:'Cinzel',serif;font-weight:900;font-size:11px;letter-spacing:4px;
+  color:#d4af37;text-transform:uppercase;margin-bottom:6px;text-shadow:0 0 10px rgba(212,175,55,.5)}
+.ec-epic-quote .eq-text{display:block;min-height:26px;font-family:'Cormorant Garamond','Georgia',serif;font-style:italic;
+  font-size:18px;line-height:1.5;color:#f0e4ff;text-shadow:0 0 12px rgba(170,120,255,.4);
+  opacity:0;transition:opacity .8s ease,transform .8s ease}
+.ec-epic-quote .eq-text.show{opacity:1;transform:translateY(0)}
+.ec-epic-quote .eq-text.hide{opacity:0;transform:translateY(8px)}
+.ec-docs-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.ec-docs-body::-webkit-scrollbar{width:6px}
+.ec-docs-body::-webkit-scrollbar-thumb{background:rgba(150,100,220,.4);border-radius:3px}
+.ec-doc{display:flex;align-items:center;gap:14px;padding:12px 14px;cursor:pointer;position:relative;
+  background:linear-gradient(180deg,rgba(110,70,200,.12),rgba(60,35,120,.08));border:1px solid rgba(150,100,220,.25);
+  border-left:3px solid #b06aff;border-radius:8px;transition:.25s}
+.ec-doc:hover{background:rgba(140,100,230,.16);border-color:rgba(190,150,255,.5);transform:translateX(3px)}
+.ec-doc .doc-ico{width:42px;height:46px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;position:relative;
+  background:linear-gradient(160deg,rgba(150,90,255,.35),rgba(90,50,200,.4));border-radius:6px;
+  border:1px solid rgba(180,130,255,.5);box-shadow:0 0 14px rgba(140,90,255,.4)}
+.ec-doc .doc-ico .di-glyph{font-size:20px;color:#f0dcff;text-shadow:0 0 10px rgba(190,150,255,.9)}
+.ec-doc .doc-tx{display:flex;flex-direction:column;gap:3px;text-align:left}
+.ec-doc .doc-name{font-family:'Cinzel',serif;font-weight:900;font-size:14px;letter-spacing:1px;color:#f0e2ff}
+.ec-doc .doc-meta{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#a98ad0;text-transform:uppercase}
+.ec-doc .doc-arrow{margin-left:auto;color:#a98ad0;font-size:14px}
+/* document viewer (paper style + red stamp) */
+.ec-viewer{position:absolute;inset:0;z-index:3000;display:none;flex-direction:column;background:rgba(3,1,8,.99);opacity:0;transition:opacity .5s ease;pointer-events:auto}
+#epicCab .ec-viewer.show{display:flex;opacity:1}
+.ec-view-head{display:flex;align-items:center;gap:12px;padding:12px 18px;justify-content:space-between;
+  font-family:'Cinzel',serif;font-weight:900;font-size:14px;letter-spacing:3px;color:#e8dcff;border-bottom:1px solid rgba(150,100,220,.3);
+  background:linear-gradient(180deg,#1a0f30,#0d0718)}
+.ec-view-head .vh-back{cursor:pointer;color:#a98ad0;font-size:13px;letter-spacing:2px;transition:.2s;background:none;border:none;padding:8px 12px;font-family:'Cinzel',serif;position:relative;z-index:3100}
+.ec-view-head .vh-back:hover{color:#f5e6ff}
+.ec-view-body{flex:1;overflow-y:auto;padding:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.ec-docpage{position:relative;width:min(560px,92%);background:linear-gradient(180deg,#f7f3e6,#efe9d6);
+  color:#3a3226;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.7),inset 0 0 40px rgba(120,90,30,.06);
+  padding:40px 38px 46px;font-family:'Georgia',serif;line-height:1.8;
+  border:2px solid #8a6d1f;outline:2px solid rgba(138,109,31,.5);outline-offset:5px}
+.ec-docpage .pg-title{font-family:'Cinzel',serif;font-size:20px;font-weight:900;letter-spacing:3px;text-align:center;text-transform:uppercase;
+  color:#2c2618;margin-bottom:6px}
+.ec-docpage .pg-num{text-align:center;font-style:italic;color:#8a7f63;font-size:14px;margin-bottom:24px}
+.ec-docpage .pg-body{font-size:17px;text-align:left}
+.ec-docpage .pg-body p{margin-bottom:14px}
+.ec-docpage .pg-sign{margin-top:34px;text-align:right;font-style:italic;color:#6b5f45;font-size:15px}
+.ec-docpage .pg-line{width:min(280px,70%);margin:6px 0 0 auto;border-top:1px solid #8a7f63;opacity:.5}
+/* document pagination */
+.ec-docpage .pg-both{display:none;flex-direction:column}
+.ec-docpage.pg-2 .pg-both{display:flex}
+.ec-docpage.pg-2 .pg-first{display:none}
+.ec-docpage .pg-page-num{position:absolute;bottom:14px;right:20px;font-size:11px;color:#8a7f63;font-style:italic}
+.ec-pagenav{display:flex;align-items:center;gap:16px}
+.ec-pagenav button{width:38px;height:38px;border-radius:50%;cursor:pointer;border:1px solid rgba(160,110,255,.6);
+  background:radial-gradient(circle,rgba(150,100,255,.3),rgba(90,50,200,.2));color:#e8dcff;font-size:16px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.2s}
+.ec-pagenav button:hover{box-shadow:0 0 14px rgba(160,110,255,.5);transform:scale(1.08)}
+.ec-pagenav button:disabled{opacity:.25;cursor:default;transform:none}
+.ec-pagenav .pg-ind{font-family:'Consolas',monospace;font-size:13px;letter-spacing:2px;color:#a98ad0}
+/* red uneven stamp overlay */
+.ec-stamp{position:absolute;right:36px;bottom:40px;transform:rotate(-8deg);pointer-events:none;
+  font-family:'Cinzel',serif;font-weight:900;font-size:30px;letter-spacing:4px;color:rgba(200,40,45,.82);
+  border:3px solid rgba(200,40,45,.85);border-radius:8px;padding:4px 16px;text-transform:uppercase;
+  box-shadow:0 0 4px rgba(200,40,45,.2);mix-blend-mode:multiply;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")}
+.ec-docpage .pg-stamp{display:inline-block;transform:rotate(-9deg) translateY(2px);margin-top:6px;
+  font-family:'Cinzel',serif;font-weight:900;font-size:28px;letter-spacing:5px;color:rgba(198,38,44,.9);
+  border:3px solid rgba(198,38,44,.9);border-radius:9px;padding:3px 18px;text-transform:uppercase;
+  filter:url(#stampRough);position:relative}
+.ec-docpage .pg-stamp.small{font-size:19px;letter-spacing:3px;padding:3px 12px}
+.ec-docpage .pg-stamps{display:flex;gap:26px;justify-content:center;margin-top:16px}
+.ec-docpage .pg-action{margin-top:16px;text-align:center;font-family:'Cinzel',serif;font-weight:900;
+  font-size:20px;letter-spacing:3px;color:rgba(45,80,120,.85);text-transform:uppercase;
+  border:2px solid rgba(45,80,120,.6);border-radius:8px;padding:5px 14px;display:inline-block;transform:rotate(-3deg)}
 /* roles info window */
 .roles-window{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);z-index:100;
@@ -635,6 +1208,121 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 .sw-group.neutral .sw-chip{background:linear-gradient(180deg,rgba(160,130,60,.5),rgba(90,70,35,.5));border-color:rgba(255,210,110,.5);box-shadow:0 0 12px rgba(255,200,90,.25)}
 .sw-note{margin-top:12px;font-family:'Playfair Display',serif;font-size:13px;line-height:1.6;color:#f2e8ff;text-shadow:0 0 8px rgba(160,120,255,.3)}
 .sw-note b{color:#fff;text-shadow:0 0 10px rgba(255,255,255,.6)}
+/* clan mail → protective lockdown prank */
+.mail-link{cursor:pointer;transition:.25s;position:relative;border-radius:6px}
+.mail-link:hover{background:rgba(140,90,255,.14);border-left:3px solid #ff4d5e}
+.mail-link .rw-ico{transition:.25s}
+.mail-link:hover .rw-ico{color:#ff8090;text-shadow:0 0 12px rgba(255,60,90,.7);transform:scale(1.15)}
+.mail-lock{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:#ff5c6a;letter-spacing:2px;
+  font-family:'Consolas',monospace;opacity:.7;text-shadow:0 0 8px rgba(255,60,90,.5)}
+#lockdown{position:fixed;inset:0;z-index:400;display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 40%,rgba(60,10,20,.4),rgba(5,0,0,.97) 75%);
+  opacity:0;transition:opacity .4s ease;text-align:center;padding:20px}
+#lockdown.on{display:flex;opacity:1}
+#lockdown .ld-title{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(24px,6vw,44px);letter-spacing:6px;
+  color:#ff3040;text-shadow:0 0 24px rgba(255,40,60,.9),0 0 60px rgba(255,20,40,.5);animation:ldBlink 1.1s steps(1) infinite}
+#lockdown .ld-scan{width:100%;max-width:560px;height:2px;margin:0 auto;position:relative;
+  background:linear-gradient(90deg,transparent,rgba(255,60,80,.7),transparent);
+  animation:ldSweep 2.2s ease-in-out infinite}
+#lockdown .ld-log{font-family:'Consolas',monospace;font-size:12px;letter-spacing:1px;color:#ffb0b8;min-height:16px;margin-top:8px;text-shadow:0 0 8px rgba(255,60,80,.5)}
+#lockdown .ld-bar{width:min(480px,80vw);height:16px;border:1px solid rgba(255,60,80,.5);border-radius:8px;margin-top:16px;overflow:hidden;background:rgba(30,2,6,.6)}
+#lockdown .ld-fill{height:100%;width:0%;background:linear-gradient(90deg,#8a1020,#ff3040);box-shadow:0 0 16px rgba(255,40,60,.7);transition:width .15s linear}
+#lockdown .ld-hint{margin-top:16px;font-family:'Consolas',monospace;font-size:11px;letter-spacing:2px;color:#8a6cb5;text-transform:uppercase}
+#lockdown.erased{animation:eraseOut 1.6s ease forwards}
+@keyframes eraseOut{
+  0%{opacity:1}
+  100%{opacity:0;filter:blur(14px) contrast(3)}
+}
+/* full site wipe — only the sealed security screen remains */
+#lockdown.sealed-final{background:#000;transition:none}
+#lockdown.sealed-final .ld-title{display:none}
+#lockdown.sealed-final .ld-scan,#lockdown.sealed-final .ld-bar,#lockdown.sealed-final .ld-log{display:none}
+#lockdown.sealed-final .seal-screen{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
+  opacity:0;animation:sealIn 2s ease forwards}
+/* sealed diary appears only on the dark final screen, bottom-right corner, small */
+#rdiary{opacity:0;pointer-events:none}
+#lockdown.sealed-final #rdiary{opacity:1;pointer-events:auto;animation:sealIn 2s ease .6s forwards;
+  position:absolute;left:auto;right:30px;bottom:30px;transform:none;width:170px;height:170px;margin:0}
+#lockdown.sealed-final .rd-book{width:96px;height:128px;transform:rotate(-6deg) skewY(-4deg);transform-origin:left center}
+#lockdown.sealed-final .rd-glyph{font-size:34px}
+#lockdown.sealed-final .rd-scan{display:none}
+#lockdown.sealed-final .rd-r1{left:-20px;top:-24px;width:130px;height:130px}
+#lockdown.sealed-final .rd-r2{left:-29px;top:-33px;width:148px;height:148px}
+#lockdown.sealed-final .rd-r3{left:-11px;top:-15px;width:112px;height:112px}
+.seal-screen .seal-ico{font-size:52px;color:#ff3040;text-shadow:0 0 30px rgba(255,40,60,.9);animation:ldBlink 2.6s ease-in-out infinite}
+.seal-screen .seal-main{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(20px,5vw,34px);letter-spacing:6px;
+  color:#ff4d5e;text-shadow:0 0 22px rgba(255,40,60,.7),0 0 55px rgba(255,20,40,.4)}
+.seal-screen .seal-sub{margin-top:6px;font-family:'Consolas',monospace;font-size:11px;letter-spacing:3px;color:#8a6cb5;text-transform:uppercase}
+.seal-screen .seal-line{width:min(300px,60vw);height:1px;background:linear-gradient(90deg,transparent,rgba(255,60,80,.6),transparent)}
+/* wipe list pad (tablet) */
+.wipe-pad{width:min(460px,88vw);max-height:min(60vh,380px);overflow:hidden;display:flex;flex-direction:column;text-align:left;
+  background:linear-gradient(180deg,rgba(24,6,10,.92),rgba(8,1,3,.96));border:1px solid rgba(120,20,30,.6);border-radius:14px;
+  box-shadow:0 20px 70px rgba(0,0,0,.9),inset 0 0 40px rgba(0,0,0,.6);
+  opacity:0;animation:padeIn 1.6s ease .4s forwards}
+@keyframes padeIn{0%{opacity:0;transform:translateY(20px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.wp-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;
+  border-bottom:1px solid rgba(160,30,45,.4);background:linear-gradient(180deg,rgba(90,10,18,.7),rgba(40,4,8,.5));
+  font-family:'Cinzel',serif;font-weight:900;letter-spacing:3px;font-size:13px;color:#ff7a89;text-shadow:0 0 12px rgba(255,40,60,.5)}
+.wp-stamp{font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#b05c66;padding:3px 8px;border:1px solid rgba(255,60,80,.4);border-radius:4px}
+.wp-scroll{overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:12px}
+.wp-scroll::-webkit-scrollbar{width:6px}
+.wp-scroll::-webkit-scrollbar-thumb{background:rgba(170,40,50,.5);border-radius:3px}
+.wp-entry{position:relative;padding:10px 12px;border:1px solid rgba(180,50,60,.32);border-left:3px solid #ff3b4a;border-radius:8px;
+  background:linear-gradient(180deg,rgba(60,10,16,.5),rgba(25,3,6,.5))}
+.wp-name{font-family:'Cinzel',serif;font-weight:900;font-size:16px;letter-spacing:2px;color:#ffd0d6;text-shadow:0 0 10px rgba(255,70,90,.4)}
+.wp-ban{float:right;font-family:'Consolas',monospace;font-size:9px;letter-spacing:2px;color:#ff3b4a;
+  border:1px solid rgba(255,60,80,.45);padding:2px 7px;border-radius:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,40,60,.7)}
+.wp-reasons{list-style:none;margin-top:8px;padding-left:2px}
+.wp-reasons li{font-family:'Cormorant Garamond',serif;font-size:14px;line-height:1.5;color:#e8b7c0;padding-left:16px;position:relative}
+.wp-reasons li::before{content:'✕';position:absolute;left:0;top:1px;color:#ff4d5e;font-size:11px}
+.wp-foot{padding:9px 16px;border-top:1px dashed rgba(150,30,40,.4);text-align:center;
+  font-family:'Consolas',monospace;font-size:10px;letter-spacing:3px;color:#8a4c54;text-transform:uppercase}
+/* red sealed diary-папka on the lockdown screen — clickable, opens wipe list */
+.rdiary{position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center;margin:6px auto 0}
+.rd-book{position:relative;width:104px;height:140px;transform:rotate(-6deg) skewY(-4deg);
+  transform-origin:left center;cursor:pointer;animation:holoFloat 4s ease-in-out infinite,holoGlitch 8s steps(1) infinite}
+.rd-cover{position:absolute;inset:0;border-radius:6px;
+  background:linear-gradient(160deg,rgba(200,40,50,.4),rgba(120,12,18,.6));
+  border:1px solid rgba(255,90,100,.6);
+  box-shadow:0 0 26px rgba(220,50,60,.55),0 0 70px rgba(160,20,30,.4),inset 0 0 22px rgba(255,90,100,.3);
+  backdrop-filter:blur(1px)}
+.rd-cover::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:10px;
+  background:rgba(200,40,50,.45);border-right:1px solid rgba(255,110,120,.45);transform:skewY(-6deg)}
+.rd-glyph{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-6deg);
+  color:rgba(255,200,205,.95);font-size:42px;font-weight:bold;text-shadow:0 0 18px rgba(255,70,90,.95),0 0 40px rgba(200,30,45,.6)}
+.rd-rings{position:absolute;border-radius:50%;border:1px solid rgba(255,80,95,.5)}
+.rd-r1{left:-20px;top:-26px;width:150px;height:150px;animation:ringOrb 5s linear infinite}
+.rd-r2{left:-30px;top:-36px;width:170px;height:170px;border-style:dashed;animation:ringOrb 8s linear infinite reverse}
+.rd-r3{left:-10px;top:-16px;width:130px;height:130px;border-color:rgba(255,100,115,.3);animation:ringOrb 3.4s linear infinite}
+.rd-r1::after,.rd-r2::after,.rd-r3::after{content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;
+  background:#ff9aa5;box-shadow:0 0 12px #ff7080,0 0 22px rgba(255,60,80,.9)}
+.rd-scan{position:absolute;left:-6px;right:-6px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,110,120,.75),transparent);
+  box-shadow:0 0 12px rgba(255,90,105,.85);animation:scanMove 3s ease-in-out infinite}
+.rd-label{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'Cinzel',serif;font-weight:900;font-size:11px;letter-spacing:2px;color:#8a6cb5;text-shadow:0 0 8px rgba(255,60,80,.3);text-transform:uppercase}
+/* hidden X easter egg on the dark final screen */
+#goldX{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);font-family:'Cinzel',serif;font-weight:900;
+  font-size:22px;line-height:1;color:rgba(255,255,255,.06);cursor:pointer;user-select:none;transition:.4s;letter-spacing:2px;
+  text-shadow:none}
+#goldX:hover{color:rgba(255,255,255,.16)}
+#goldX.on{color:#f5d97a;font-size:34px;text-shadow:0 0 18px rgba(245,200,90,.95),0 0 46px rgba(240,180,60,.6),0 0 80px rgba(255,200,80,.35);
+  animation:goldPulse 2.4s ease-in-out infinite}
+@keyframes goldPulse{0%,100%{text-shadow:0 0 18px rgba(245,200,90,.9),0 0 46px rgba(240,180,60,.6)}50%{text-shadow:0 0 28px rgba(255,220,120,1),0 0 70px rgba(255,190,60,.8)}}
+#goldQuote{position:absolute;left:50%;bottom:88px;transform:translateX(-50%);width:min(560px,82vw);text-align:center;
+  font-family:'Playfair Display',serif;font-style:italic;font-size:16px;line-height:1.6;letter-spacing:.5px;color:#ffe9b8;
+  text-shadow:0 0 14px rgba(245,200,90,.7),0 2px 3px rgba(0,0,0,.8);
+  opacity:0;pointer-events:none;transition:opacity .8s ease,transform .8s ease;
+  transform:translate(-50%,8px)}
+#goldQuote.on{opacity:1;transform:translate(-50%,0)}
+#goldQuote .gq-line{display:block;width:min(300px,60vw);height:1px;margin:10px auto 0;background:linear-gradient(90deg,transparent,rgba(245,200,90,.7),transparent)}
+@keyframes sealIn{0%{opacity:0;transform:scale(.8);filter:blur(8px)}100%{opacity:1;transform:scale(1);filter:blur(0)}}
+body.sealed #bgLayer,body.sealed #petals,body.sealed .glyph-grid,body.sealed #ambient,
+body.sealed .corner,body.sealed #boot,body.sealed #logo,body.sealed #cmdIcon,
+body.sealed #mxPlayer,body.sealed #cmdWindow,body.sealed #clanChat,body.sealed #maxwell,
+body.sealed #memorial,body.sealed #quotesBox{display:none!important}
+body.sealed #wipeWindow{z-index:600}
+@keyframes ldBlink{0%,49%{opacity:1}50%,100%{opacity:.35}}
+@keyframes ldSweep{0%{left:-60%;opacity:0}20%{opacity:1}80%{opacity:1}100%{left:110%;opacity:0}}
 </style>
 </head>
 <body>
@@ -648,6 +1336,8 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 <audio id="heartSnd" src="heart_sound.mp3" preload="auto"></audio>
 <audio id="clickSnd" src="click_sound.mp3" preload="auto"></audio>
 <audio id="maxSnd" src="maxwell_meow.mp3" preload="auto"></audio>
+<audio id="alarmSnd" src="alarm.mp3" preload="auto"></audio>
+<audio id="nightSnd" src="nightmares.mp3" preload="auto" loop></audio>
 <div id="cmdIcon" class="cmd-icon"><span class="ci-box"><span class="co">C:\&gt;</span></span></div>
 <div id="mxPlayer" class="mx-player">
   <div class="mx-head"><span class="mx-logo">♫</span><span class="mx-title">THE X SOUND</span><span class="mx-live">DIRECT</span></div>
@@ -668,7 +1358,7 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 </div>
 
 <div id="clanChat" class="clan-chat">
-  <div class="cc-head"><span class="cc-ico">💬</span><span class="cc-title">КЛАН X · ОБЩИЙ ЧАТ</span><span class="cc-live">● LIVE</span></div>
+  <div class="cc-head" id="ccHead"><span class="cc-ico">💬</span><span class="cc-title">КЛАН X · ОБЩИЙ ЧАТ</span><span class="cc-live">● LIVE</span></div>
   <div class="cc-body" id="ccBody"></div>
 </div>
 
@@ -684,7 +1374,7 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
     <div class="rw-role"><span class="rw-ico">🔭</span><div class="rw-txt"><span class="rw-name">ЛИДЕР СКАУТОВ</span><span class="rw-desc">Самурай</span></div></div>
     <div class="rw-role"><span class="rw-ico">🎖</span><div class="rw-txt"><span class="rw-name">УЧИТЕЛЯ И ВОЕННЫЕ</span><span class="rw-desc">Хиро · Николя</span></div></div>
     <div class="rw-role"><span class="rw-ico">⚙</span><div class="rw-txt"><span class="rw-name">АДМИНИСТРАТОР</span><span class="rw-desc">Хейт X</span></div></div>
-    <div class="rw-role"><span class="rw-ico">▫</span><div class="rw-txt"><span class="rw-name">МЛАДШИЙ АДМИНИСТРАТОР</span><span class="rw-desc">информации нету</span></div></div>
+    <div class="rw-role"><span class="rw-ico">▫</span><div class="rw-txt"><span class="rw-name">МЛАДШИЙ АДМИНИСТРАТОР</span><span class="rw-desc">Sky</span></div></div>
     <div class="rw-role"><span class="rw-ico">🛡</span><div class="rw-txt"><span class="rw-name">МОДЕРАТОР</span><span class="rw-desc">joi</span></div></div>
     <div class="rw-role"><span class="rw-ico">▫</span><div class="rw-txt"><span class="rw-name">МЛАДШИЙ МОДЕРАТОР</span><span class="rw-desc">Сэм</span></div></div>
     <div class="rw-role"><span class="rw-ico">👥</span><div class="rw-txt"><span class="rw-name">ЛИДЕРЫ КЛАНОВ</span><span class="rw-desc">Хейт · Роза · Тин Эпик · Хт Чара · Андр</span></div></div>
@@ -710,7 +1400,7 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
   <div class="rw-offline">⚠ СВЯЗИ НЕ ФУНКЦИОНИРУЮТ — ОШИБКА СЕТИ · ОФЛАЙН</div>
   <div class="rw-body">
     <div class="rw-link"><span class="rw-ico">◈</span><span class="rw-txt"><span class="rw-name">ЦЕНТРАЛЬНЫЙ УЗЕЛ</span><span class="rw-desc">Основной канал связи клана X — все сигналы сходятся здесь.</span></span></div>
-    <div class="rw-link"><span class="rw-ico">✉</span><span class="rw-txt"><span class="rw-name">ПОЧТА КЛАНА</span><span class="rw-desc">Зашифрованный канал для внутренней переписки высших ролей.</span></span></div>
+    <div class="rw-link mail-link" id="clanMailLink"><span class="rw-ico">✉</span><span class="rw-txt"><span class="rw-name">ПОЧТА КЛАНА</span><span class="rw-desc">Зашифрованный канал для внутренней переписки высших ролей.</span></span></div>
     <div class="rw-link"><span class="rw-ico">📡</span><span class="rw-txt"><span class="rw-name">СЛУЖБА ПЕРЕХВАТА</span><span class="rw-desc">Мониторит чужие каналы и следит за безопасностью границ клана.</span></span></div>
   </div>
 </div>
@@ -743,6 +1433,209 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
   </div>
 </div>
 
+<div id="cabWindow" class="roles-window">
+  <div class="rw-head"><span>👥 ЛИЧНЫЕ КАБИНЕТЫ</span><span class="rw-close" id="cabClose">✕</span></div>
+  <div class="rw-body">
+    <div class="cab-row" data-link="nova_phanse.html" data-pass="173" data-name="ЭПИК"><span class="cr-ava">Э</span><span class="cr-txt"><span class="cr-name">ЭПИК</span><span class="cr-role">лидер клана</span></span><span class="cr-open">→</span></div>
+    <div class="cab-row" data-link="the_x_archives.html" data-pass="455" data-name="ТРОЙ"><span class="cr-ava">Т</span><span class="cr-txt"><span class="cr-name">ТРОЙ</span><span class="cr-role">зам · судья</span></span><span class="cr-open">→</span></div>
+    <div class="cab-row" data-link="psih_card.html" data-pass="666" data-name="ПСИХ"><span class="cr-ava">П</span><span class="cr-txt"><span class="cr-name">ПСИХ</span><span class="cr-role">комитет · судья</span></span><span class="cr-open">→</span></div>
+  </div>
+</div>
+
+<div id="row" class="cab-pass">
+    <span class="cp-close" id="cpClose">✕</span>
+    <div class="cp-title" id="cpTitle">ЛИЧНЫЙ КАБИНЕТ</div>
+    <div class="cp-sub" id="cpSub">ВВЕДИ КОД ДОСТУПА</div>
+    <input id="cpInput" maxlength="3" autocomplete="off" placeholder="•••" inputmode="numeric">
+    <div class="cp-err" id="cpErr"></div>
+    <div class="cp-actions">
+      <button class="cp-btn" id="cpOk">вход</button>
+    </div>
+  </div>
+
+<div id="epicCab">
+  <div class="ec-center" id="ecCenter">
+    ЛИЧНЫЙ КАБИНЕТ ЛИДЕРА
+    <span class="ec-csub">THE X · ЭПИК</span>
+  </div>
+  <div class="ec-head" id="ecHead" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+    <span class="ec-word">ЛИДЕР</span><span class="ec-x">X</span>
+    <div class="ec-ring" id="ecRing"><i class="r1"></i><i class="r2"></i></div>
+  </div>
+  <span class="ec-close" id="ecClose">✕</span>
+  <div class="ec-player" id="ecPlayer">
+    <button class="ep-btn" id="ecPlayBtn" type="button">▶</button>
+    <span class="ep-track">
+      <span class="ep-name">ЛИДЕР · МЕЛОДИЯ</span>
+      <span class="ep-desc">фоновая музыка кабинета</span>
+    </span>
+    <span class="ep-eq"><i></i><i></i><i></i></span>
+  </div>
+  <audio id="ecAudio" src="bg_music.mp3" loop preload="auto"></audio>
+  <audio id="pageFlipSnd" src="pageflip.mp3" preload="auto"></audio>
+  <div class="ec-decor">
+  <div class="ec-dots"></div>
+  <div class="ec-sheen"></div>
+  <span class="ec-runes" style="left:10%;top:30%">X</span>
+  <span class="ec-runes" style="right:12%;top:38%">✕</span>
+  <span class="ec-runes" style="left:42%;bottom:24%">∞</span>
+  <i class="ec-stars" style="left:70%;top:28%">✦</i>
+  <i class="ec-stars" style="right:30%;top:52%;animation-delay:1.6s">✧</i>
+  <span class="ec-corner tl"></span><span class="ec-corner tr"></span>
+  <span class="ec-corner bl"></span><span class="ec-corner br"></span>
+  <div class="ec-blob b1"></div>
+  <div class="ec-blob b2"></div>
+  <div class="ec-blob b3"></div>
+  <i class="ec-p" style="left:12%;animation-duration:16s"></i>
+  <i class="ec-p" style="left:28%;animation-duration:22s;animation-delay:3s"></i>
+  <i class="ec-p" style="left:47%;animation-duration:19s;animation-delay:7s"></i>
+  <i class="ec-p" style="left:66%;animation-duration:25s;animation-delay:1s"></i>
+  <i class="ec-p" style="left:83%;animation-duration:18s;animation-delay:5s"></i>
+  <i class="ec-p" style="left:92%;animation-duration:23s;animation-delay:9s"></i>
+  <i class="ec-p" style="left:7%;animation-duration:20s;animation-delay:11s"></i>
+  <i class="ec-p" style="left:74%;animation-duration:21s;animation-delay:4s"></i>
+  <i class="ec-p" style="left:55%;animation-duration:26s;animation-delay:8s"></i>
+  <div class="ec-garland">
+    <span class="ec-hang"><span class="ev"></span><span class="er">✠</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✧</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✠</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✧</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✠</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✧</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✠</span></span>
+    <span class="ec-hang"><span class="ev"></span><span class="er">✧</span></span>
+  </div>
+  <i class="ec-wisp" style="top:22%;animation-duration:16s">𓆉</i>
+  <i class="ec-wisp" style="top:60%;animation-duration:22s;animation-delay:3s">𓆉</i>
+  <i class="ec-wisp" style="top:78%;animation-duration:18s;animation-delay:6s">𓆉</i>
+  <div class="ec-grate gl"></div>
+  <div class="ec-grate gr"></div>
+  <div class="ec-ouro"></div>
+  <div class="ec-emblem">
+    <div class="ec-ringtxt">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="ecPathTop" d="M 55,200 A 145,145 0 0 1 345,200"/>
+          <path id="ecPathBot" d="M 345,200 A 145,145 0 0 1 55,200"/>
+        </defs>
+        <text><textPath href="#ecPathTop" startOffset="50%" text-anchor="middle">LEX MEA</textPath></text>
+        <text><textPath href="#ecPathBot" startOffset="50%" text-anchor="middle">NIHIL EXTRA ME</textPath></text>
+        <text class="r-spark"><textPath href="#ecPathTop" startOffset="5%" text-anchor="middle">✧</textPath></text>
+        <text class="r-spark"><textPath href="#ecPathTop" startOffset="95%" text-anchor="middle">✧</textPath></text>
+        <text class="r-spark"><textPath href="#ecPathBot" startOffset="5%" text-anchor="middle">✧</textPath></text>
+        <text class="r-spark"><textPath href="#ecPathBot" startOffset="95%" text-anchor="middle">✧</textPath></text>
+      </svg>
+    </div>
+    <div class="ec-orbits"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i></div>
+    <span class="ec-cardinal c1"></span><span class="ec-cardinal c2"></span>
+    <span class="ec-cardinal c3"></span><span class="ec-cardinal c4"></span>
+    <div class="ec-ringdots"></div>
+    <span class="ec-rune" style="top:30px;left:50%;transform:translateX(-50%)">✠</span>
+    <span class="ec-rune" style="bottom:22px;left:50%;transform:translateX(-50%)">✕</span>
+    <div class="ec-core">
+      <img src="avatar.png" alt="Nova">
+      <span class="ec-shadow"></span>
+</div>
+  </div>
+  <div class="ec-ticker"><div class="tk-track" id="ecTickerTrack"></div></div>
+  <div class="ec-monitor" id="ecMonitor">
+    <div class="mn-head"><span class="mn-dot"></span><span class="mn-dot"></span><span class="mn-dot"></span><span class="mn-title">МОНИТОР ЛИДЕРА</span></div>
+    <div class="mn-tabs">
+      <button class="mn-tab active" data-pane="term" type="button" onclick="ecSwitchMonitor('term')">ТЕРМИНАЛ</button>
+      <button class="mn-tab" data-pane="status" type="button" onclick="ecSwitchMonitor('status')">СОСТОЯНИЕ</button>
+      <button class="mn-tab" data-pane="cams" type="button" onclick="ecSwitchMonitor('cams')">КАМЕРЫ</button>
+    </div>
+    <div class="mn-body">
+      <div class="mn-pane active" id="mnTerm"><span class="cd-cursor"></span></div>
+      <div class="mn-pane mn-status" id="mnStatus"></div>
+      <div class="mn-pane mn-cams" id="mnCams"></div>
+    </div>
+  </div>
+  <div class="ec-cmd-bank">
+    <div class="cb-title"><span class="g">✧</span> КОМАНДНЫЙ ЦЕНТР <span class="g">✧</span></div>
+    <div class="ec-cmd" data-cmd="1"><span class="cm-ico">⚑</span> НАЧАТЬ ОПЕРАЦИЮ<span class="cm-tag">01</span></div>
+    <div class="ec-cmd" data-cmd="2"><span class="cm-ico">☰</span> ОТКРЫТЬ КАНАЛ СВЯЗИ<span class="cm-tag">02</span></div>
+    <div class="ec-cmd" data-cmd="3"><span class="cm-ico">⬢</span> ЗАПРОС ПОДКРЕПЛЕНИЯ<span class="cm-tag">03</span></div>
+    <div class="ec-cmd" data-cmd="4"><span class="cm-ico">⚙</span> СИСТЕМНАЯ ДИАГНОСТИКА<span class="cm-tag">04</span></div>
+  </div>
+  <div class="ec-epic-quote" id="ecEpicQuote">
+    <span class="eq-label">лидер · изречения</span>
+    <span class="eq-text" id="ecEpicQuoteText"></span>
+  </div>
+  <div class="ec-menu">
+    <div class="ec-card" id="ecDocsCard">
+      <span class="cc-ico">📁</span>
+      <span class="cc-tx"><span class="cc-name">ДОКУМЕНТЫ</span><span class="cc-desc">приказы и протоколы</span></span>
+    </div>
+  </div>
+  <div class="ec-secret" id="ecSecret">
+    <div class="es-banner">⚠ СОВЕРШЕННО СЕКРЕТНО</div>
+    <p class="es-txt">Данный архив содержит служебные документы клана X, подписанные лидером.<br>Доступ разрешён только высшим ролям с уровнем допуска X-1.</p>
+    <div class="es-warn">доступ будет зафиксирован в журнале</div>
+    <div class="es-actions">
+      <button class="es-btn es-go" id="esGo" type="button">принять и войти</button>
+      <button class="es-btn es-back" id="esBack" type="button">назад</button>
+    </div>
+  </div>
+  <div class="ec-docs" id="ecDocs">
+    <div class="ec-docs-head" id="ecDocsHead"><button class="dh-back" id="dhBack" type="button">← назад</button><span class="dh-title">АРХИВ ДОКУМЕНТОВ<span class="dh-tl">ТАЙМЛАЙН 1</span></span><span class="dh-tools"><button class="dh-music" id="dhMusic" type="button">♫</button><span class="dh-count" id="dhCount"></span></span></div>
+    <div class="ec-doc-tabs" id="ecDocTabs">
+      <button class="dt-btn active" data-cat="all" type="button">ВСЕ</button>
+      <button class="dt-btn" data-cat="ord" type="button">ПРИКАЗЫ</button>
+      <button class="dt-btn" data-cat="ally" type="button">СОЮЗЫ</button>
+      <button class="dt-btn" data-cat="war" type="button">ВОЙНЫ</button>
+    </div>
+    <div class="ec-docs-body" id="ecDocsBody"></div>
+    <div class="ec-gquote" id="ecGQuote">
+      <div class="gq-ava"><span>✕</span></div>
+      <div class="gq-ring"></div>
+      <span class="gq-scan"></span>
+      <span class="gq-label">✧ X <em>GASTER</em> ✧</span>
+      <span class="gq-text" id="gqText"></span>
+    </div>
+    <div class="ec-doc-sheen"></div>
+    <div class="ec-doc-ouro"></div>
+    <div class="ec-dots"></div>
+    <i class="ec-doc-wisp" style="top:16%;animation-duration:16s">𓆉</i>
+    <i class="ec-doc-wisp" style="top:58%;animation-duration:22s;animation-delay:4s">𓆉</i>
+    <i class="ec-doc-wisp" style="top:80%;animation-duration:19s;animation-delay:8s">𓆉</i>
+    <i class="ec-doc-star" style="left:6%;top:14%">✦</i>
+    <i class="ec-doc-star" style="right:8%;top:72%;animation-delay:1s">✧</i>
+    <i class="ec-doc-star" style="right:24%;top:12%;animation-delay:1.6s">✦</i>
+    <i class="ec-doc-star" style="left:20%;bottom:30%;animation-delay:.6s">✧</i>
+    <i class="ec-doc-star" style="left:46%;top:5%;animation-delay:2.2s">✦</i>
+    <i class="ec-doc-star" style="left:80%;bottom:34%;animation-delay:1.2s">✧</i>
+    <i class="ec-doc-star" style="right:16%;bottom:14%;animation-delay:2.6s">✦</i>
+    <span class="ec-rune" style="left:4%;top:34%">X</span>
+    <span class="ec-rune" style="right:5%;top:40%">✕</span>
+    <span class="ec-rune" style="left:12%;bottom:18%">∞</span>
+    <span class="ec-rune" style="right:12%;top:8%">Ψ</span>
+    <span class="ec-rune" style="left:76%;bottom:8%">👁</span>
+    <div class="ec-book-row"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="ec-corner-sig">X · мой закон</span>
+  </div>
+  <div class="ec-viewer" id="ecViewer">
+    <div class="ec-view-head"><button class="vh-back" id="vhBack" type="button">← к архиву</button><span id="vhTitle">ДОКУМЕНТ</span></div>
+    <div class="ec-view-body" id="ecViewBody"></div>
+  </div>
+  <div class="ec-camview" id="ecCamView">
+    <span class="cv-close" id="cvClose">✕</span>
+    <div class="cv-window">
+      <div class="cv-head">
+        <span class="cv-dot cr"></span><span class="cv-dot cy"></span><span class="cv-dot cg"></span>
+        <span class="cv-title" id="cvTitle">КАМЕРА</span>
+        <span class="cv-rec">REC</span>
+      </div>
+      <div class="cv-screen">
+        <div class="cv-noise"></div>
+        <div class="cv-preview" id="cvPreview"></div>
+      </div>
+      <div class="cv-foot">THE X · СИСТЕМА НАБЛЮДЕНИЯ · ЗАПИСЬ АКТИВНА</div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div id="albumWindow" class="roles-window">
   <div class="rw-head"><span>🖼 АЛЬБОМ КЛАНА</span><span class="rw-close" id="albumClose">✕</span></div>
   <div class="rw-body">
@@ -757,6 +1650,20 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
 </div>
 
 <div id="lightbox" class="lightbox" onclick="closePhoto()"><img id="lightboxImg" src="" alt=""></div>
+
+<div id="wipeWindow" class="roles-window">
+  <div class="rw-head"><span>🗂 СПИСОК ОБНУЛЁННЫХ</span><span class="rw-close" id="wipeClose">✕</span></div>
+  <div class="rw-body">
+    <div class="wipe-pad">
+      <div class="wp-head"><span class="wp-title">СПИСОК ОБНУЛЁННЫХ</span><span class="wp-stamp">ПРИГОВОР КЛАНА X</span></div>
+      <div class="wp-scroll">
+        <div class="wp-entry"><span class="wp-name">ДАСТ</span><span class="wp-ban">БАН · ОБНУЛЁН</span><ul class="wp-reasons"><li>Жалкая попытка членовредительства серверу клана</li><li>Попытка осквернения</li><li>Педофилия</li></ul></div>
+        <div class="wp-entry"><span class="wp-name">YOURFAULT</span><span class="wp-ban">БАН · ОБНУЛЁН</span><ul class="wp-reasons"><li>Попытка принесения вреда клану</li></ul></div>
+      </div>
+      <div class="wp-foot">доступ восстановлению не подлежит</div>
+    </div>
+  </div>
+</div>
 
 <div id="boot">
   <div id="bootRun">
@@ -784,7 +1691,37 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
       <button class="roles-btn" id="linksBtn">🔗 Связи клана</button>
       <button class="roles-btn" id="alBtn">🤝 Союзы · Войны</button>
       <button class="roles-btn" id="albumBtn">🖼 Альбом клана</button>
-      <a class="roles-btn archives-link" href="the_x_archives.html" target="_blank">🗄 Архивы клана</a>
+<a class="roles-btn archives-link" href="the_x_archives.html" target="_blank">🗄 Архивы клана</a>
+      <div class="cab-btn" id="cabBtn" role="button" tabindex="0">
+        <span class="cab-ico">👥</span>
+        <span class="cab-txt"><span class="cab-name">ЛИЧНЫЕ КАБИНЕТЫ</span><span class="cab-desc">профили высших ролей</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="clan-overlay">
+    <div class="clan-banner banner-power">
+      <div class="ban-frame">
+        <img src="the_end_power.gif" alt="THE END · POWER">
+        <span class="ban-cap">✧ THE END · POWER ✧</span>
+      </div>
+    </div>
+    <div class="clan-banner banner-cross">
+      <div class="ban-frame">
+        <img src="cross_chara.gif" alt="CROSS CHARA">
+        <span class="ban-cap">✧ CROSS CHARA ✧</span>
+      </div>
+    </div>
+    <div class="clan-banner banner-floor">
+      <div class="ban-frame">
+        <img src="underverse_xtale.gif" alt="UNDERVERSE · XTALE">
+        <span class="ban-cap">✧ UNDERVERSE · XTALE ✧</span>
+      </div>
+    </div>
+    <div class="clan-welcome">
+      <span class="cw-tag">добро пожаловать</span>
+      <span class="cw-title">THE X · КЛАН</span>
+      <span class="cw-sub">мы снова в сборе. давно не виделись, старые друзья.</span>
+      <span class="cw-line"></span>
     </div>
   </div>
   <div id="quotesBox">
@@ -840,6 +1777,32 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
       <div class="warn-foot">УРОВЕНЬ ДОПУСКА: X-1</div>
     </div>
   </div>
+</div>
+
+<div id="lockdown">
+  <span class="ld-title">⚠ ДОСТУП ОТКЛОНЁН</span>
+  <div class="ld-scan"></div>
+  <div class="ld-log" id="ldLog">> ПОДКЛЮЧЕНИЕ К ПОЧТЕ КЛАНА...</div>
+  <div class="ld-bar"><div class="ld-fill" id="ldFill"></div></div>
+  <div class="ld-hint">защитный протокол активен · ничего не удалено</div>
+  <div class="seal-screen" id="sealScreen">
+    <span class="seal-ico">⛨</span>
+    <span class="seal-main">АКТИВИРОВАН ПРОТОКОЛ БЕЗОПАСНОСТИ</span>
+    <div class="seal-line"></div>
+    <span class="seal-sub">THE X · защита клана · доступ восстановлению не подлежит</span>
+  </div>
+  <div class="rdiary" id="rdiary" role="button" tabindex="0" title="список обнулённых">
+    <span class="rd-book">
+      <span class="rd-cover"><span class="rd-glyph">☠</span></span>
+      <span class="rd-rings rd-r1"></span>
+      <span class="rd-rings rd-r2"></span>
+      <span class="rd-rings rd-r3"></span>
+    </span>
+    <span class="rd-scan"></span>
+    <span class="rd-label">список обнулённых</span>
+  </div>
+  <div id="goldQuote"><span class="gq-body">Порой, даже самый близкий человек, тот кого ты считал братом, может предать.<span class="gq-line"></span></span></div>
+  <span id="goldX" role="button" tabindex="0" title="?">X</span>
 </div>
 
 <span id="logo">THE X · v0.1</span>
@@ -1132,14 +2095,249 @@ body.music-active .x-glow{filter:brightness(calc(1 + var(--bass)*0.5))}
     if(rbtn)rbtn.addEventListener('click',function(){closeAllRoleWindows();rw.classList.add('open');});
     rclose.addEventListener('click',function(){rw.classList.remove('open');});
   }
-  var pairs=[['codexBtn','codexWindow','codexClose'],['linksBtn','linksWindow','linksClose'],['alBtn','alWindow','alClose'],['albumBtn','albumWindow','albumClose']];
+  var pairs=[['codexBtn','codexWindow','codexClose'],['linksBtn','linksWindow','linksClose'],['alBtn','alWindow','alClose'],['albumBtn','albumWindow','albumClose'],['cabBtn','cabWindow','cabClose']];
   for(var i=0;i<pairs.length;i++){
     var b=pairs[i][0],w=pairs[i][1],c=pairs[i][2];
     var bb=document.getElementById(b),ww=document.getElementById(w),cc=document.getElementById(c);
     if(bb&&ww){bb.addEventListener('click',(function(win){return function(){closeAllRoleWindows();win.classList.add('open');};})(ww));}
     if(cc&&ww){cc.addEventListener('click',(function(win){return function(){win.classList.remove('open');};})(ww));}
   }
+  var cabRows=document.querySelectorAll('.cab-row');
+  var cp=document.getElementById('row');
+  var cpTitle=document.getElementById('cpTitle');
+  var cpSub=document.getElementById('cpSub');
+  var cpInput=document.getElementById('cpInput');
+  var cpErr=document.getElementById('cpErr');
+  var cpOk=document.getElementById('cpOk');
+  var cpClose=document.getElementById('cpClose');
+  var curRow=null;
+  function openPass(row){
+    curRow=row;
+    cpTitle.textContent='ЛИЧНЫЙ КАБИНЕТ · '+row.getAttribute('data-name');
+    cpSub.textContent='ВВЕДИ КОД ДОСТУПА';
+    cpInput.value='';cpErr.textContent='';cpErr.className='cp-err';
+    cp.classList.add('open');
+    if(cpInput)setTimeout(function(){cpInput.focus();},50);
+  }
+  function closePass(){cp.classList.remove('open');curRow=null;}
+  function tryEnter(){
+    var pass=curRow?curRow.getAttribute('data-pass'):'';
+    if(cpInput.value===pass){
+      cpErr.className='cp-err ok';cpErr.textContent='ДОСТУП РАЗРЕШЁН';
+      var row=curRow;
+      setTimeout(function(){
+        closePass();
+        if(pass==='173'){
+          openEpicCab();
+        }else{
+          var link=row?row.getAttribute('data-link'):'';
+          if(link)window.open(link,'_blank');
+        }
+      },600);
+    }else{
+      cpErr.className='cp-err';cpErr.textContent='НЕВЕРНЫЙ КОД';
+      cpInput.focus();cpInput.select();
+    }
+  }
+  for(var r=0;r<cabRows.length;r++){
+    (function(row){
+      row.addEventListener('click',function(){openPass(row);});
+    })(cabRows[r]);
+  }
+  if(cpOk)cpOk.addEventListener('click',tryEnter);
+  if(cpInput)cpInput.addEventListener('keydown',function(e){if(e.key==='Enter')tryEnter();});
+  if(cpClose)cpClose.addEventListener('click',closePass);
+  /* Epic cabinet entrance: darken → gold center title → glides to corner → menu */
+  window.openEpicCab=function(){
+    var cab=document.getElementById('epicCab');
+    if(!cab)return;
+    /* reset camera overlay on every entry */
+    var camRes=document.getElementById('ecCamView');
+    if(camRes)camRes.classList.remove('show');
+    var pvRes=document.getElementById('ecViewer');
+    if(pvRes)pvRes.classList.remove('show');
+    var secRes=document.getElementById('ecSecret');
+    if(secRes)secRes.classList.remove('show');
+    var docRes=document.getElementById('ecDocs');
+    if(docRes)docRes.classList.remove('show');
+    /* pause clan playlist if playing */
+    var mxA=document.getElementById('mxAudio');
+    var mxB=document.getElementById('mxPlay');
+    if(mxA&&!mxA.paused){mxA.pause();if(mxB)mxB.textContent='▶';document.body.classList.remove('music-active');}
+    var center=document.getElementById('ecCenter');
+    var head=document.getElementById('ecHead');
+    var ring=document.getElementById('ecRing');
+    var body=cab.querySelector('.ec-body');
+    cab.style.display='flex';
+    requestAnimationFrame(function(){cab.classList.add('on');});
+    /* step 1: center title appears */
+    if(center)setTimeout(function(){
+      center.style.opacity='1';
+      center.style.transition='opacity 1s ease, transform 1s ease';
+    },500);
+    /* step 2: fade center out, bring gold head at center */
+    setTimeout(function(){
+      if(center)center.style.opacity='0';
+      if(head){
+        head.style.opacity='1';
+        head.style.transition='opacity .6s ease, transform 1.4s cubic-bezier(.6,.1,.5,.9), left 1.4s cubic-bezier(.6,.1,.5,.9), top 1.4s cubic-bezier(.6,.1,.5,.9), font-size 1.4s cubic-bezier(.6,.1,.5,.9)';
+        var words=head.querySelectorAll('.ec-word');
+        for(var i=0;i<words.length;i++)words[i].style.animationDelay=(i*0.18)+'s';
+      }
+      if(ring){ring.style.opacity='1';}
+    },1500);
+    /* step 3: after words shown, glide whole head to the top-left corner + show menu */
+    setTimeout(function(){
+      head.style.left='24px';
+      head.style.top='26px';
+      head.style.transform='none';
+      head.style.fontSize='30px';
+      if(ring)ring.style.opacity='1';
+      cab.classList.add('entered');
+      document.body.classList.add('cab-active');
+    },3400);
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      var cv=document.getElementById('ecCamView');
+      if(cv&&cv.classList.contains('show')){cv.classList.remove('show');return;}
+      var cab=document.getElementById('epicCab');if(cab&&cab.classList.contains('entered'))closeEpicCab();
+    }
+  });
+  var ecClose=document.getElementById('ecClose');
+  if(ecClose)ecClose.addEventListener('click',closeEpicCab);
+  var ecAudio=document.getElementById('ecAudio');
+  var ecPlayBtn=document.getElementById('ecPlayBtn');
+  var ecPlayer=document.getElementById('ecPlayer');
+  if(ecAudio&&ecPlayBtn&&ecPlayer){
+    ecAudio.volume=0.35;
+    ecPlayBtn.addEventListener('click',function(){
+      if(ecAudio.paused){
+        ecAudio.play();ecPlayBtn.textContent='❚❚';ecPlayer.classList.add('playing');
+      }else{
+        ecAudio.pause();ecPlayBtn.textContent='▶';ecPlayer.classList.remove('playing');
+      }
+    });
+  }
+  var docsCard=document.getElementById('ecDocsCard');
+  var secret=document.getElementById('ecSecret');
+  var docs=document.getElementById('ecDocs');
+  var esGo=document.getElementById('esGo');
+  var esBack=document.getElementById('esBack');
+  var dhBack=document.getElementById('dhBack');
+  var docsBody=document.getElementById('ecDocsBody');
+  var dhCount=document.getElementById('dhCount');
+  var sampleDocs=[
+    {g:'✕', name:'ПРИКАЗ №1', meta:'создание клана · 12.06.2023', c:['#b06aff','#7c4dff','#c89bff','rgba(150,90,255,.35)'],
+      done:true, cat:'ord',
+      body:'Создание клана было решено спустя пол года, после создания общей группы друзей в AB. Демо-версия сервера была полностью сделана ЭПИКОМ. Уже после в дело подключились Джой, Трой, Ойхо и Псих. Только спустя ещё 4 месяца сервер клана был в своей готовой версии.'},
+    {g:'✖', name:'ПРИКАЗ №2', meta:'принятие устава · 12.06.2023', c:['#4d9bff','#2f6cd0','#9bc4ff','rgba(70,130,255,.35)'], done:true, cat:'ord',
+      body:'Приказ о создании и принятии устава (кодекса) был решён практически сразу после создания сервера. Причина — во избежание конфликтов подчинённых и других кланов. Важная часть была в том, что изначально устав был сделан как особо нейтральный к тимёрству: мы позиционировались как нейтральная сторона обеих мнений (тим-кланы / анти-тим-кланы). Но спустя время, из-за влияния NMT и решения о сближении кланов, устав перешёл на остро анти-тим.'},
+    {g:'☩', name:'ПРИКАЗ №3', meta:'структура высших ролей · 14.07.2023', c:['#ff5c8a','#c22f5a','#ff9ab8','rgba(255,90,140,.35)'], done:true, cat:'ord',
+      body:'Приказ о создании и определении структуры высших ролей. Цель — объединить высшие по значимости роли и подчеркнуть их значимость для поднятия патриотизма и понятия власти. Выделены три высшие роли: ЛИДЕР — абсолютная власть, единый голос клана, принимает конечное решение; ЗАМЕСТИТЕЛЬ — второй после главы, его рука и опора в управлении; ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ — тот, кто приводит приговор в действие, гарант исполнения воли высших. Высшим ролям дан доступ к закрытым только для них частям сервера и возможность лично переговаривать планы. Их приказы не принадлежат обсуждению.'},
+    {g:'✕', name:'ПРИКАЗ №4', meta:'объявление режима об X', c:['#d4af37','#a8871f','#ffe9a3','rgba(212,175,55,.4)'], done:true, cat:'ord', pages:[
+      {t:'ПРИКАЗ №4 · РЕЖИМ ОБ X', body:'С начала создания клана мы были сторонниками анонимности. Разглашение информации о клане было строго запрещено: никто, кроме клана NMT, не должен был знать об X. Но данное решение было принято переосмыслить. Теперь, когда клан встал крепко на ноги, нам нужно больше сторонников и союзов, так же следует показать себя в деле.'},
+      {t:'УКАЗ ПРИНЯТ', stamps:['ЭПИК','ТРОЙ']}
+    ]},
+    {g:'✕', name:'ПЕРВЫЙ СОЮЗ С NMT', meta:'ДОГОВОР', c:['#4dffc8','#1fae85','#9affde','rgba(70,255,180,.35)'], done:true, ttype:'treaty', cat:'ally', stamps:['ЭПИК','HATE'], action:'ПРИВЕДЁН В ДЕЙСТВИЕ · 26.08.2023',
+      body:'Договор об союзе с кланом NMT. Условия союза: 1) прежде чем подписать союз, в клане должны быть минимум 20 участников — выполнено ✓; 2) кланы должны предоставлять помощь по просьбе — выполнено ✓; 3) должен быть пакт о ненападении: участники обеих сторон не должны атаковать друг друга, разрешено только при взаимном согласии; 4) твой враг — мой враг: если один из кланов объявляет войну другому клану, союзник обязан сделать то же самое.'},
+    {g:'✖', name:'СОЮЗ С UC', meta:'предложение · пакт', c:['#ffcf5c','#d69f22','#ffe9a3','rgba(255,200,90,.35)'], done:true, stampText:'ПРОВАЛ', cat:'ally',
+      body:'Союз с кланом UC. Так как UC в клановой роли представляет сверххищника и является главным союзником клана NMT, было принято решение о заключении союза или пакта о ненападении. При попытке связи через соцсети — ничего не вышло. При попытке связи лично через игру запрос был отклонён.'},
+    {g:'☩', name:'СОЮЗ С DC', meta:'ДОГОВОР', c:['#b06aff','#8a5cd8','#d9bcff','rgba(170,100,255,.35)'], done:true, ttype:'treaty', cat:'ally', stamps:['ЭПИК','РОЗАЛИН'], action:'ПРИВЕДЁН В ДЕЙСТВИЕ · 12.11.2023',
+      body:'Договор об союзе с кланом DC. Так как клан DC является кланом с целью анти-тим, было принято решение заключить пакт о ненападении, а после, спустя время, и сам союз. Условия союза: 1) прежде чем подписать союз, в клане должны быть минимум 20 участников — выполнено ✓; 2) кланы должны предоставлять помощь по просьбе — выполнено ✓; 3) должен быть пакт о ненападении: участники обеих сторон не должны атаковать друг друга, разрешено только при взаимном согласии; 4) твой враг — мой враг: если один из кланов объявляет войну другому клану, союзник обязан сделать то же самое.'},
+    {g:'✕', name:'ВОЙНА С TADA', meta:'УКАЗ О ВОЙНЕ', c:['#ff4d5e','#a01220','#ff8f9b','rgba(255,60,90,.4)'], done:true, cat:'war', pages:[
+      {t:'УКАЗ О ВОЙНЕ', body:'Войну объявил наш союзник NMT. Правило «мой враг — твой враг» вступает в силу: война объявлена. Причина войны со стороны NMT — TADA является тим-кланом. Личный приказ Эпика: так как для нашего клана это первая война, это значит, что нам нужно показать себя с лучшей стороны. ПОЛНАЯ МОБИЛИЗАЦИЯ СИЛ НА БОРЬБУ.'},
+      {t:'УКАЗ ПРИНЯТ', stamps:['ЭПИК','ТРОЙ','ПСИХ'], note:'ВОЙНА ОБЪЯВЛЕНА'},
+      {t:'ИТОГ ВОЙНЫ', stamp:'ЗАВЕРШЕНА УСПЕШНО · TADA ПАЛ'}
+    ]},
+    {g:'✕', name:'ЗАЩИТА DC', meta:'УКАЗ · защита союзника', c:['#7c5cff','#4a2fd0','#b59bff','rgba(124,92,255,.4)'], done:true, cat:'ord', pages:[
+      {t:'УКАЗ · ЗАЩИТА DC', body:'Из-за внутреннего конфликта в DC клан NMT сообщил о возможном решении проведения войны. Так как сторона DC и сторона NMT являются значимыми союзниками, мы не можем позволить этому произойти. Был выставлен указ для обсуждения с лидером NMT HATE об заглаживании конфликта.'},
+      {t:'УКАЗ ПРИНЯТ', stamps:['ЭПИК','ТРОЙ','ПСИХ'], note:'ИТОГ: УСПЕШНО · NMT НЕ БУДЕТ ПРОВОДИТЬ ВОЙНУ'}
+    ]},
+    {g:'✕', name:'СЛИЯНИЕ С КЛАН SAT', meta:'УКАЗ · слияние кланов', c:['#3fae9e','#1f7a6d','#8fe0d3','rgba(63,174,158,.4)'], done:true, cat:'ord', pages:[
+      {t:'УКАЗ · СЛИЯНИЕ С SAT', body:'Долгое время клан SAT не был активен, лидер заморозил клан, но живая сила всё ещё представляет ценность. Если мы проведём слияние, то сможем дойти до UC и выполнить последнюю главную цель. Приказ: написать лидеру SAT о предложении и проведении переговоров.'},
+      {t:'УКАЗ ПРИНЯТ', stamps:['ЭПИК','ТРОЙ','ПСИХ'], note:'ИТОГ: С решением об слиянии клана нас опередил клан DC. Задача провалена. Эпик возмущён.'}
+    ]},
+    {g:'☠', name:'ВОЙНА С TVS', meta:'УКАЗ О ВОЙНЕ', c:['#ff4d5e','#b01220','#ff8f9b','rgba(255,60,90,.45)'], done:true, cat:'war', pages:[
+      {t:'УКАЗ · ВОЙНА С TVS', body:'Причина войны: лидер и 70% участников клана являются предателями X. Они нанесли ущерб серверу. Данное дерзкое, наглое и безрассудное решение не будет простительно. Указ: война до полного уничтожения клана TVS.'},
+      {t:'УКАЗ ПРИНЯТ', stamps:['ЭПИК','ТРОЙ','ОЙХО'], note:'ВОЙНА ОБЪЯВЛЕНА'},
+      {t:'ИТОГ ВОЙНЫ', stamp:'ПОЛНАЯ ПОБЕДА · С СИЛАМИ NMT'}
+    ]}
+  ];
+  window.__buildDocArchive=function(){
+    var body=document.getElementById('ecDocsBody');
+    var count=document.getElementById('dhCount');
+    if(!body||body.children.length>0)return;
+    var grid=document.createElement('div');
+    grid.className='ec-docgrid';
+    sampleDocs.forEach(function(d,dix){
+      var cell=document.createElement('div');
+      cell.dataset.cat=d.cat||'all';
+      var book=document.createElement('div');
+      book.className='ec-dbook';
+      book.setAttribute('data-idx',dix);
+      book.style.setProperty('--b1',d.c[0]);
+      book.style.setProperty('--b2',d.c[1]);
+      book.style.setProperty('--bc',d.c[2]);
+      book.style.setProperty('--bs',d.c[3]);
+      book.style.setProperty('--bs2',d.c[3]);
+      book.style.setProperty('--bi',d.c[3]);
+      book.style.setProperty('--sc',d.c[3]);
+      var cover=document.createElement('div');cover.className='ec-dcover';
+      var g=document.createElement('span');g.className='dg';g.textContent=d.g;
+      cover.appendChild(g);
+      var r1=document.createElement('i');r1.className='dr dr1';
+      var r2=document.createElement('i');r2.className='dr dr2';
+      var scan=document.createElement('i');scan.className='ec-dscan';
+      var label=document.createElement('span');label.className='dlabel';label.textContent=d.name;
+      var meta=document.createElement('span');meta.className='dmeta';meta.textContent=d.meta;
+      book.appendChild(cover);book.appendChild(r1);book.appendChild(r2);book.appendChild(scan);
+      cell.appendChild(book);cell.appendChild(label);cell.appendChild(meta);
+      grid.appendChild(cell);
+    });
+    body.appendChild(grid);
+    window.__docGrid=grid;
+    if(count)count.textContent=String(sampleDocs.length)+' док.';
+  };
+  window.__docData=sampleDocs;
 })();
+function docsBackFromDocs(){
+  var doc=document.getElementById('ecDocs');
+  var sec=document.getElementById('ecSecret');
+  var cab=document.getElementById('epicCab');
+  if(doc)doc.classList.remove('show');
+  if(sec)sec.classList.add('show');
+  if(cab)cab.classList.add('docs-open');
+}
+function docsToggleMusic(){
+  var a=document.getElementById('ecAudio');
+  var btn=document.getElementById('dhMusic');
+  if(!a)return;
+  if(a.paused){a.volume=0.35;a.currentTime=0;var p=a.play();if(p&&p.catch)p.catch(function(){});if(btn){btn.textContent='♪';btn.classList.add('playing');}}
+  else{a.pause();if(btn){btn.textContent='♫';btn.classList.remove('playing');}}
+}
+function closeEpicCab(){
+  var cab=document.getElementById('epicCab');
+  if(!cab)return;
+  var center=document.getElementById('ecCenter');
+  var head=document.getElementById('ecHead');
+  var ring=document.getElementById('ecRing');
+  var body=cab.querySelector('.ec-body');
+  var ecAudio=document.getElementById('ecAudio');
+  var ecPlayBtn=document.getElementById('ecPlayBtn');
+  var ecPlayer=document.getElementById('ecPlayer');
+  if(ecAudio&&!ecAudio.paused){ecAudio.pause();}
+  if(ecPlayBtn)ecPlayBtn.textContent='▶';
+  if(ecPlayer)ecPlayer.classList.remove('playing');
+  cab.classList.remove('entered');
+  document.body.classList.remove('cab-active');
+  head.style.opacity='0';center.style.opacity='0';
+  setTimeout(function(){
+    cab.classList.remove('on');
+    cab.style.display='none';
+    head.style='';center.style='';ring.style='';
+  },600);
+}
 function openPhoto(img){
   var lb=document.getElementById('lightbox');
   var lbi=document.getElementById('lightboxImg');
@@ -1154,6 +2352,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closePhoto()
   var plEl=document.getElementById('mxPlayer');
   if(!plEl)return;
   var playlist=[
+    {name:'Меню · Искупление (кавер)', file:'menu_music.mp3'},
     {name:'Underverse — Vanquisher (X Undyne)', file:'nex_music1.mp3'},
     {name:'Underverse — Overwrite (X!Chara)', file:'nex_music2.mp3'},
     {name:'Underverse — DUPLICITY (X!Frisk)', file:'nex_music3.mp3'}
@@ -1374,6 +2573,64 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closePhoto()
   }
 })();
 (function(){
+  var mail=document.getElementById('clanMailLink');
+  if(!mail)return;
+  var badge=document.createElement('span');
+  badge.className='mail-lock';badge.textContent='🔒';
+  mail.appendChild(badge);
+  var ld=document.getElementById('lockdown');
+  var log=document.getElementById('ldLog');
+  var fill=document.getElementById('ldFill');
+  var alarm=document.getElementById('alarmSnd');
+  var night=document.getElementById('nightSnd');
+  var running=false;
+  var steps=[
+    '> ПОДКЛЮЧЕНИЕ К ПОЧТЕ КЛАНА...',
+    '> сканирование отпечатка доступа ...',
+    '> ОБНАРУЖЕН НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП!',
+    '> ИДЕНТИФИКАЦИЯ УГРОЗЫ · КОД X-0x3F',
+    '> АКТИВАЦИЯ ЗАЩИТНОГО ПРОТОКОЛА',
+    '> НАЧАТО УДАЛЕНИЕ ДАННЫХ САЙТА',
+    '> стирание файлов · 47%',
+    '> стирание баз данных · 82%',
+    '> УНИЧТОЖЕНИЕ ЯДРА СИСТЕМЫ ...',
+    '> ПРОЦЕСС ЗАВЕРШЁН'
+  ];
+  mail.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(running)return;running=true;
+    document.querySelectorAll('.roles-window').forEach(function(w){w.classList.remove('open');});
+    /* pause the clan playlist if it was playing */
+    var mxA=document.getElementById('mxAudio');
+    var mxB=document.getElementById('mxPlay');
+    if(mxA&&!mxA.paused){mxA.pause();if(mxB)mxB.textContent='▶';}
+    ld.classList.add('on');
+    fill.style.width='0%';
+    if(alarm){alarm.volume=0.5;alarm.currentTime=0;var ap0=alarm.play();if(ap0&&ap0.catch)ap0.catch(function(){});}
+    var i=0;
+    var stepTime=650;
+    var t=setInterval(function(){
+      if(i<steps.length){
+        log.textContent=steps[i];
+        fill.style.width=((i+1)/steps.length*100)+'%';
+        i++;
+        if(i===steps.length){
+          clearInterval(t);
+          setTimeout(function(){
+            /* full site wipe: hide everything, show sealed security screen */
+            document.body.classList.add('sealed');
+            ld.classList.add('sealed-final');
+            log.textContent='> безопасность восстановлена';
+            /* stop alarm, start the night track instead */
+            if(alarm){alarm.pause();alarm.currentTime=0;}
+            if(night){night.volume=0.6;night.currentTime=0;var np=night.play();if(np&&np.catch)np.catch(function(){});}
+          },800);
+        }
+      }
+    },stepTime);
+  });
+})();
+(function(){
   var mx=document.getElementById('maxwell');
   var meow=document.getElementById('maxSnd');
   if(!mx)return;
@@ -1390,6 +2647,440 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closePhoto()
   var mTimer=null;
   function hideMx(){mx.classList.add('toggle-hide');}
   window.__hideMaxwell=function(){mx.style.pointerEvents='none';hideMx();};
+})();
+(function(){
+  var diary=document.getElementById('rdiary');
+  var win=document.getElementById('wipeWindow');
+  var close=document.getElementById('wipeClose');
+  if(!diary||!win)return;
+  diary.addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.roles-window').forEach(function(w){w.classList.remove('open');});
+    win.classList.add('open');
+  });
+  diary.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();diary.click();}});
+  if(close)close.addEventListener('click',function(){win.classList.remove('open');});
+  var gx=document.getElementById('goldX');
+  var gq=document.getElementById('goldQuote');
+  if(gx&&gq){
+    var gxOn=false;
+    gx.addEventListener('click',function(e){
+      e.stopPropagation();
+      gxOn=!gxOn;
+      gx.classList.toggle('on',gxOn);
+      gq.classList.toggle('on',gxOn);
+    });
+    gx.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();gx.click();}});
+  }
+})();
+</script>
+<script>
+(function(){
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('.dh-back, .dh-music, #ecDocsCard, #esGo, #esBack, .ec-dbook, #vhBack, .dt-btn');
+    if(!t)return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var sec=document.getElementById('ecSecret');
+    var doc=document.getElementById('ecDocs');
+    var cab=document.getElementById('epicCab');
+    if(t.id==='ecDocsCard'){
+      if(cab)cab.classList.add('docs-open');
+      if(sec)sec.classList.add('show');
+      return;
+    }
+    if(t.id==='vhBack'){
+      var view=document.getElementById('ecViewer');
+      if(view)view.classList.remove('show');
+      if(doc)doc.classList.add('show');
+      return;
+    }
+    if(t.classList.contains('ec-dbook')){
+      var idx=parseInt(t.getAttribute('data-idx'),10);
+      var data=(window.__docData||[]);
+      var d=data[idx];
+      var view=document.getElementById('ecViewer');
+      var vbody=document.getElementById('ecViewBody');
+      var vtitle=document.getElementById('vhTitle');
+      if(view&&vbody&&d){
+        if(doc)doc.classList.remove('show');
+        vtitle.textContent=d.name+' · '+d.meta;
+        vbody.innerHTML='';
+        /* build pages: array of functions returning a filled page element */
+        var pages=[];
+        if(d.pages){
+          /* explicit multi-page doc */
+          d.pages.forEach(function(pg){
+            pages.push(function(){
+              var pgEl=document.createElement('div');pgEl.className='ec-docpage pg-1';
+              var t=document.createElement('div');t.className='pg-title';t.textContent=pg.t||d.name;
+              var n=document.createElement('div');n.className='pg-num';n.textContent=d.meta;
+              var b=document.createElement('div');b.className='pg-body';
+              if(pg.body){
+                b.textContent=pg.body;
+              }
+              if(pg.stamps){
+                var st=document.createElement('div');st.className='pg-stamps';
+                pg.stamps.forEach(function(nm){var s=document.createElement('div');s.className='pg-stamp small';s.textContent=nm;st.appendChild(s);});
+                b.appendChild(st);
+              }
+              if(pg.note){
+                var nw=document.createElement('div');nw.style.textAlign='center';var act=document.createElement('div');act.className='pg-action';act.textContent=pg.note;nw.appendChild(act);b.appendChild(nw);
+              }
+              if(pg.stamp){
+                var st2=document.createElement('div');st2.className='pg-stamp';st2.textContent=pg.stamp;b.appendChild(st2);
+              }
+              var sg=document.createElement('div');sg.className='pg-sign';sg.textContent='— ЭПИК';
+              var ln=document.createElement('div');ln.className='pg-line';
+              pgEl.appendChild(t);pgEl.appendChild(n);pgEl.appendChild(b);pgEl.appendChild(sg);pgEl.appendChild(ln);
+              return pgEl;
+            });
+          });
+        }else{
+          /* default: 2 pages (text + stamps) */
+          var page1=function(){
+            var pgEl=document.createElement('div');pgEl.className='ec-docpage pg-1';
+            var t=document.createElement('div');t.className='pg-title';t.textContent=d.name;
+            var n=document.createElement('div');n.className='pg-num';n.textContent=d.meta;
+            var b=document.createElement('div');b.className='pg-body';
+            if(d.ttype==='treaty'&&d.done){
+              var seg=d.body.split(' 1)');
+              var intro=document.createElement('p');intro.textContent=seg[0].trim();b.appendChild(intro);
+              var rest=d.body.slice(seg[0].length).trim();
+              var lines=rest.split(/(?=1\)|2\)|3\)|4\))/).filter(function(s){return s.trim();});
+              var ol=document.createElement('ol');ol.style.paddingLeft='22px';ol.style.margin='10px 0';
+              lines.forEach(function(ln){var li=document.createElement('li');li.style.marginBottom='10px';li.textContent=ln.replace(/^[1-4]\)\s*/,'').trim();ol.appendChild(li);});
+              b.appendChild(ol);
+            }else if(d.done&&d.body){
+              var p=document.createElement('p');p.textContent=d.body;b.appendChild(p);
+            }else{
+              var p2=document.createElement('p');p2.innerHTML='<em>Документ ещё не заполнен.</em>';b.appendChild(p2);
+            }
+            var sg=document.createElement('div');sg.className='pg-sign';sg.textContent='— ЭПИК';
+            var ln=document.createElement('div');ln.className='pg-line';
+            pgEl.appendChild(t);pgEl.appendChild(n);pgEl.appendChild(b);pgEl.appendChild(sg);pgEl.appendChild(ln);
+            return pgEl;
+          };
+          var page2=function(){
+            var pgEl=document.createElement('div');pgEl.className='ec-docpage pg-1';
+            var t=document.createElement('div');t.className='pg-title';t.textContent=d.name;
+            var n=document.createElement('div');n.className='pg-num';n.textContent=d.meta;
+            var b=document.createElement('div');b.className='pg-body';
+            if(d.ttype==='treaty'&&d.done){
+              var st=document.createElement('div');st.className='pg-stamps';
+              (d.stamps||['ЭПИК','HATE']).forEach(function(nm){var s=document.createElement('div');s.className='pg-stamp small';s.textContent=nm;st.appendChild(s);});
+              var act=document.createElement('div');act.className='pg-action';act.textContent=d.action||'ПРИВЕДЁН В ДЕЙСТВИЕ';
+              b.appendChild(st);
+              var nw=document.createElement('div');nw.style.textAlign='center';nw.appendChild(act);b.appendChild(nw);
+            }else if(d.done&&d.body){
+              var st3=document.createElement('div');st3.className='pg-stamp';st3.textContent=d.stampText||'ЗАВЕРШЕНО';
+              if(d.stampText&&(d.stampText.indexOf('ПРОВАЛ')>=0)){st3.style.color='rgba(160,40,45,.85)';st3.style.borderColor='rgba(160,40,45,.85)';}
+              b.appendChild(st3);
+            }
+            var sg=document.createElement('div');sg.className='pg-sign';sg.textContent='— ЭПИК';
+            var ln=document.createElement('div');ln.className='pg-line';
+            pgEl.appendChild(t);pgEl.appendChild(n);pgEl.appendChild(b);pgEl.appendChild(sg);pgEl.appendChild(ln);
+            return pgEl;
+          };
+          pages.push(page1,page2);
+        }
+var total=pages.length;
+        var cur=0;
+        var header=document.createElement('div');header.style.display='flex';header.style.flexDirection='column';header.style.alignItems='center';header.style.gap='14px';
+        var pageSlot=document.createElement('div');pageSlot.style.display='flex';pageSlot.style.flexDirection='column';pageSlot.style.alignItems='center';
+        header.appendChild(pageSlot);
+        function renderPage(n){
+          pageSlot.innerHTML='';
+          var pgEl=pages[n]();
+          var pgNo=document.createElement('div');pgNo.className='pg-page-num';pgNo.textContent='стр. '+(n+1)+' / '+total;
+          pgEl.style.position='relative';pgEl.appendChild(pgNo);
+          pageSlot.appendChild(pgEl);
+        }
+        var nav=document.createElement('div');nav.className='ec-pagenav';
+        var prev=document.createElement('button');prev.type='button';prev.textContent='←';
+        var ind=document.createElement('span');ind.className='pg-ind';
+        var nxt=document.createElement('button');nxt.type='button';nxt.textContent='→';
+        nav.appendChild(prev);nav.appendChild(ind);nav.appendChild(nxt);
+        header.appendChild(nav);
+        var flipSnd=document.getElementById('pageFlipSnd');
+        function playFlip(){if(flipSnd){flipSnd.currentTime=0;var fp=flipSnd.play();if(fp&&fp.catch)fp.catch(function(){});}}
+        function update(){
+          cur=Math.max(0,Math.min(total-1,cur));
+          renderPage(cur);
+          ind.textContent=(cur+1)+' / '+total;
+          prev.disabled=(cur===0);nxt.disabled=(cur===(total-1));
+        }
+        prev.addEventListener('click',function(){if(cur>0){cur--;update();playFlip();}});
+        nxt.addEventListener('click',function(){if(cur<(total-1)){cur++;update();playFlip();}});
+        update();
+        vbody.appendChild(header);
+        view.classList.add('show');
+      }
+      return;
+    }
+    if(t.id==='esGo'){
+      if(sec)sec.classList.remove('show');
+      if(window.__buildDocArchive)window.__buildDocArchive();
+      if(doc)doc.classList.add('show');
+      return;
+    }
+    if(t.id==='esBack'){
+      if(sec)sec.classList.remove('show');
+      if(cab)cab.classList.remove('docs-open');
+      return;
+    }
+    if(t.classList.contains('dh-back')){
+      if(doc)doc.classList.remove('show');
+      if(sec)sec.classList.add('show');
+      if(cab)cab.classList.add('docs-open');
+    }else if(t.classList.contains('dh-music')){
+      var a=document.getElementById('ecAudio');
+      var btn=document.getElementById('dhMusic');
+      if(!a)return;
+      if(a.paused){
+        a.volume=0.35;var p=a.play();if(p&&p.catch)p.catch(function(){});
+        if(btn){btn.textContent='♪';btn.classList.add('playing');}
+        var ep=document.getElementById('ecPlayBtn');if(ep)ep.textContent='❚❚';
+      }else{
+        a.pause();
+        if(btn){btn.textContent='♫';btn.classList.remove('playing');}
+        var epr=document.getElementById('ecPlayBtn');if(epr)epr.textContent='▶';
+      }
+    }else if(t.classList.contains('dt-btn')){
+      var cat=t.getAttribute('data-cat');
+      var grid=window.__docGrid;
+      var btns=document.querySelectorAll('.dt-btn');
+      for(var bi=0;bi<btns.length;bi++)btns[bi].classList.remove('active');
+      t.classList.add('active');
+      if(grid){
+        var cells=grid.children;
+        for(var ci=0;ci<cells.length;ci++){
+          var cc=cells[ci].getAttribute('data-cat')||'all';
+          cells[ci].style.display=(cat==='all'||cc===cat)?'':'none';
+        }
+      }
+    }
+  },true);
+})();
+</script>
+<script>
+(function(){
+  var quotes=[
+    'Когда играешь, не можешь позволить себе волноваться о последствиях.',
+    'Порой то, что мы хотим забыть — с нами навсегда.',
+    'Я вижу всё. Я знаю всё. И это твоя проблема.',
+    'Ты думаешь, что можешь просто отвернуться? Ха-ха-ха.',
+    'В этом мире не всегда есть правильный выбор.',
+    'Ты можешь изменить свою судьбу, но сначала ты должен захотеть её изменить.'
+  ];
+  var el=document.getElementById('gqText');
+  if(!el)return;
+  var i=0;
+  function show(){
+    el.classList.remove('show');el.classList.add('hide');
+    setTimeout(function(){
+      el.textContent=quotes[i];
+      el.classList.remove('hide');el.classList.add('show');
+    },650);
+    i=(i+1)%quotes.length;
+  }
+  el.textContent=quotes[0];el.classList.add('show');
+  setInterval(show,6000);
+})();
+(function(){
+  /* ticker */
+  var tk=document.getElementById('ecTickerTrack');
+  if(tk){
+    var items=['КЛАН X', 'ЛИДЕР ЭПИК', 'LEVEL X-1', 'СИСТЕМА АКТИВНА', 'ПРИОРИТЕТ: ВЕРХ', 'ДОПУСК ПОДТВЕРЖДЁН', 'СЕКТОР ЗАЩИЩЁН', 'THE X'];
+    var html='';
+    for(var a=0;a<2;a++){for(var b=0;b<items.length;b++){html+='<span>'+items[b]+'</span>';}}
+    tk.innerHTML=html;
+  }
+  /* leader monitor: tabs + terminal + status + cams */
+  var mnTerm=document.getElementById('mnTerm');
+  if(mnTerm){
+    var lines=[
+      '> init core...ok','> mount /x //ok','> auth EPIC :: grant X-1','> decrypt ledger....ok',
+      '> sync NMT link....ok','> import rollex_v2', '> monitor TADA :: alert','> beacon ON | 12.06.2023'
+    ];
+    var ci=0;
+    function codeTick(){
+      var ln=lines[ci];
+      var cur='C:\\X\\ '+ln+' <span class="cd-cursor"></span>';
+      var prev=mnTerm.innerHTML.split('\n').slice(0,5).join('\n');
+      mnTerm.innerHTML=cur+'\n'+prev;
+      ci=(ci+1)%lines.length;
+    }
+    codeTick();setInterval(codeTick,2200);
+  }
+  /* status pane */
+  var mnStatus=document.getElementById('mnStatus');
+  if(mnStatus){
+    var statusRows=[
+      ['УЧАСТНИКОВ','111','%'],
+      ['СЕРВЕРОВ АКТИВНО',''+Math.floor(80+Math.random()*20)],
+      ['СОЮЗОВ','3'],
+      ['ВОЙН','2'],
+      ['ПРОТОКОЛ БЕЗОПАСНОСТИ','АКТИВЕН']
+    ];
+    function buildStatus(){
+      var h='';
+      statusRows.forEach(function(r){
+        h+='<div class="st-row"><span class="st-k">'+r[0]+'</span><span class="st-v">'+r[1]+'</span></div>';
+      });
+      h+='<div class="st-row"><span class="st-k">ЗАГРУЗКА СИСТЕМЫ</span><span class="st-v">'+Math.floor(60+Math.random()*30)+'%</span></div><div class="st-bar"><i style="width:'+Math.floor(60+Math.random()*30)+'%"></i></div>';
+      mnStatus.innerHTML=h;
+    }
+    buildStatus();setInterval(buildStatus,4000);
+  }
+  /* cams pane */
+  var mnCams=document.getElementById('mnCams');
+  if(mnCams){
+    var cams=[
+      {name:'ПРЕДУПРЕЖДЕНИЕ',sub:'станция безопасности',rec:true},
+      {name:'ГЛАВНАЯ КЛАНА',sub:'экран загрузки',rec:false},
+      {name:'АРХИВ',sub:'хранилище документов',rec:false},
+      {name:'КАБИНЕТ',sub:'этот экран',rec:true}
+    ];
+    var ch='';
+    cams.forEach(function(c,i){
+      ch+='<div class="cam-row" data-cam="'+(i+1)+'"><span class="cam-ico'+(c.rec?' rec':'')+'">●</span>'+
+          '<span class="cam-tx"><span class="cam-name">'+c.name+'</span><span class="cam-sub">'+c.sub+'</span></span>'+
+          '<span class="cam-live">LIVE</span></div>';
+    });
+    mnCams.innerHTML=ch;
+  }
+  /* tab switching */
+  var mnTabs=document.querySelectorAll('.ec-monitor .mn-tab');
+  for(var mt=0;mt<mnTabs.length;mt++){
+    (function(tab){
+      tab.addEventListener('click',function(e){
+        e.stopPropagation();
+        var all=document.querySelectorAll('.ec-monitor .mn-tab');
+        for(var x=0;x<all.length;x++)all[x].classList.remove('active');
+        tab.classList.add('active');
+        var panes=document.querySelectorAll('.ec-monitor .mn-pane');
+        for(var y=0;y<panes.length;y++)panes[y].classList.remove('active');
+        var tgt=document.getElementById('mn'+tab.getAttribute('data-pane').charAt(0).toUpperCase()+tab.getAttribute('data-pane').slice(1));
+        if(tgt)tgt.classList.add('active');
+      });
+    })(mnTabs[mt]);
+  }
+  /* cams click → open live view overlay */
+  function openCamView(idx){
+    var cv=document.getElementById('ecCamView');
+    var cvt=document.getElementById('cvTitle');
+    var cvp=document.getElementById('cvPreview');
+    var ecClose0=document.getElementById('ecClose');
+    if(!cv||!cvp)return;
+    if(ecClose0)ecClose0.style.display='none';
+    var previews=[
+      {t:'⚠ СТРОГО СЕКРЕТНО ⚠',s:'СТАНЦИЯ БЕЗОПАСНОСТИ — ТОЧКА ВХОДА',b:'Данный терминал содержит материалы ограниченного доступа.\nДоступ разрешён ТОЛЬКО уполномоченному персоналу.\nЛюбая несанкционированная попытка входа передаётся трём высшим ролям клана X.\n\nУРОВЕНЬ ДОПУСКА: X-1'},
+      {t:'CLAN X',s:'ГЛАВНАЯ СТРАНИЦА — ЗАГРУЗКА',b:'Живая панель клана.\nОнлайн: 111 · Люди в клане.\nРежим активен · Серверы на связи.\nЦитаты и хроники клана.\n\nLEX MEA · NIHIL EXTRA ME'},
+      {t:'АРХИВ ДОКУМЕНТОВ',s:'ХРАНИЛИЩЕ — ХРАНЕНИЕ ДОКУМЕНТОВ',b:'Приказы · Союзы · Войны · Таймлайн 1.\nЗапечатанные дневники лидера.\nПечати высших ролей.\nX GASTER наблюдает.\n\nДОСТУП ЗАПРЕЩЁН'},
+      {t:'КАБИНЕТ ЛИДЕРА',s:'ЭТОТ ЭКРАН — КАМЕРА 04',b:'Личный сектор Эпика.\nМонитор лидера активен.\nСистема наблюдения записывает.\n\nЗАПИСЬ АКТИВНА'}
+    ];
+    var p=previews[idx];
+    var camNames=['ПРЕДУПРЕЖДЕНИЕ','ГЛАВНАЯ КЛАНА','АРХИВ','КАБИНЕТ ЛИДЕРА'];
+    cvt.textContent='КАМЕРА '+(idx+1)+' · '+(camNames[idx]||'');
+    cvp.innerHTML='<div class="pv-title">'+p.t+'</div><div class="pv-sub">'+p.s+'</div><div class="pv-body">'+
+      p.b.split('\n').map(function(l){return l.trim()?'<div>'+l+'</div>':'';}).join('')+'</div>';
+    cv.classList.add('show');
+  }
+  function closeCamView(){
+    var cv=document.getElementById('ecCamView');
+    if(cv)cv.classList.remove('show');
+    var ecClose1=document.getElementById('ecClose');
+    if(ecClose1){ecClose1.style.display='';}
+  }
+  document.addEventListener('click',function(ev){
+    var cam=ev.target.closest('.cam-row');
+    if(!cam)return;
+    ev.stopPropagation();
+    var rows=document.querySelectorAll('.cam-row');
+    var idx=0;
+    for(var ri=0;ri<rows.length;ri++){if(rows[ri]===cam){idx=ri;break;}}
+    openCamView(idx);
+  },true);
+  var cvClose=document.getElementById('cvClose');
+  if(cvClose)cvClose.addEventListener('click',function(e){e.stopPropagation();closeCamView();});
+  window.ecCloseCamView=closeCamView;
+  /* epic quotes rotate with fade */
+  var eqq=['я чувствую запах гнили','Мы должны достать до вершины','Эпик размножается эпичнее, чем дерётся','арбуз... дыня.','Я несу большую ответственность за вас.','Ребята, давайте жить дружно','nah i\'m win','sex'];
+  var eqText=document.getElementById('ecEpicQuoteText');
+  var eqLabel=document.querySelector('.ec-epic-quote .eq-label');
+  if(eqText){
+    var qi=0;
+    function showEq(){
+      eqText.classList.remove('show');eqText.classList.add('hide');
+      setTimeout(function(){
+        eqText.textContent=eqq[qi];
+        eqText.classList.remove('hide');eqText.classList.add('show');
+      },750);
+      qi=(qi+1)%eqq.length;
+    }
+    eqText.textContent=eqq[0];eqText.classList.add('show');
+    setInterval(showEq,4500);
+  }
+  /* command buttons feedback */
+  var cmds=document.querySelectorAll('.ec-cmd');
+  var cmdMsgs=['Операция запущена','Канал связи открыт','Подкрепление запрошено','Диагностика завершена: ошибок нет'];
+  for(var c=0;c<cmds.length;c++){
+    (function(btn,i){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        if(eqText&&eqLabel){
+          eqText.textContent='['+(i+1)+'] '+cmdMsgs[i];
+          eqText.classList.remove('hide');eqText.classList.add('show');
+          eqLabel.textContent='система · выполнение';
+          setTimeout(function(){
+            eqLabel.textContent='лидер · изречения';
+            showEq();
+          },2000);
+        }
+      });
+    })(cmds[c],c);
+  }
+})();
+function ecSwitchMonitor(pane){
+  var tabs=document.querySelectorAll('.ec-monitor .mn-tab');
+  for(var a=0;a<tabs.length;a++)tabs[a].classList.remove('active');
+  var sel=document.querySelector('.ec-monitor .mn-tab[data-pane="'+pane+'"]');
+  if(sel)sel.classList.add('active');
+  var panes=document.querySelectorAll('.ec-monitor .mn-pane');
+  for(var b=0;b<panes.length;b++)panes[b].classList.remove('active');
+  var idMap={term:'mnTerm',status:'mnStatus',cams:'mnCams'};
+  var tgt=document.getElementById(idMap[pane]);
+  if(tgt)tgt.classList.add('active');
+}
+(function(){
+  var chat=document.getElementById('clanChat');
+  var head=document.getElementById('ccHead');
+  if(!chat||!head)return;
+  var dragging=false,sx=0,sy=0,ox=0,oy=0;
+  var baseLeft=50,baseTop=58;
+  head.addEventListener('mousedown',function(e){
+    if(e.target.closest('.cc-close')||e.target.closest('#ccX'))return;
+    e.preventDefault();
+    var r=chat.getBoundingClientRect();
+    if(chat.style.left){
+      ox=parseFloat(chat.style.left); oy=parseFloat(chat.style.top);
+    }else{
+      ox=window.innerWidth*baseLeft/100 - r.width/2; oy=window.innerHeight*baseTop/100 - r.height/2;
+    }
+    sx=e.clientX; sy=e.clientY;
+    dragging=true;
+    chat.classList.add('dragging');
+    chat.style.transform='none';
+    chat.style.left=ox+'px'; chat.style.top=oy+'px';
+  });
+  document.addEventListener('mousemove',function(e){
+    if(!dragging)return;
+    var nx=ox+(e.clientX-sx), ny=oy+(e.clientY-sy);
+    nx=Math.max(0,Math.min(window.innerWidth-60,nx)); ny=Math.max(0,Math.min(window.innerHeight-40,ny));
+    chat.style.left=nx+'px'; chat.style.top=ny+'px';
+  });
+  document.addEventListener('mouseup',function(){if(dragging){dragging=false;chat.classList.remove('dragging');}});
 })();
 </script>
 </body>
