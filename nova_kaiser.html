@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23d4af37'%3E%E2%99%9B%3C/text%3E%3C/svg%3E">
 <title>NOVA_PHANSE — KAISER</title>
 <style>
 :root{--bg:#070b14;--bg2:#05070e}
@@ -65,7 +66,8 @@ body{
 .km-ball{position:absolute;left:-13px;top:-13px;width:26px;height:26px;animation:kmBallSpin 1.4s linear infinite;filter:drop-shadow(0 0 4px rgba(210,230,255,.25));opacity:.85}
 @keyframes kmBallSpin{to{transform:rotate(360deg)}}
 .km-ball svg{width:100%;height:100%;display:block}
-.km-tag{display:inline-block;margin-top:16px;font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;letter-spacing:5px;font-size:15px;text-shadow:0 0 16px rgba(212,175,55,.7);text-transform:uppercase}
+.km-tag{display:inline-block;margin-top:16px;font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;letter-spacing:5px;font-size:15px;text-shadow:0 0 16px rgba(212,175,55,.7);text-transform:uppercase;animation:kmNeon 3.5s ease-in-out infinite}
+@keyframes kmNeon{0%,100%{text-shadow:0 0 12px rgba(240,216,120,.6),0 0 26px rgba(79,140,255,.35),0 0 0 1px rgba(212,175,55,.6)}50%{text-shadow:0 0 22px rgba(240,216,120,.95),0 0 46px rgba(79,140,255,.7),0 0 0 1px rgba(212,175,55,.85)}}
 .km-sub{display:block;margin-top:4px;color:#7a8aa8;font-size:10px;letter-spacing:4px;text-transform:uppercase}
 /* ==== imperial horizontal mottos (LEX MEA / NIHIL EXTRA ME) ==== */
 .km-vmotto{position:absolute;top:96px;transform:translateY(-50%);z-index:6;pointer-events:none;user-select:none;
@@ -220,6 +222,8 @@ body.fading-music .hands-top{opacity:0;visibility:hidden;transform:translateY(-1
     1px 1px 0 rgba(212,175,55,.8), -1px 1px 0 rgba(212,175,55,.8), 1px -1px 0 rgba(212,175,55,.8), -1px -1px 0 rgba(212,175,55,.8),
     0 0 26px rgba(79,140,255,.85), 0 0 55px rgba(79,140,255,.5), 0 0 12px rgba(212,175,55,.5)}
 .hands-top .hcrown span{display:inline-block;animation:crownBreatheY 5s ease-in-out 2.2s infinite}
+.hands-top .hcrown{pointer-events:auto;cursor:pointer}
+.km-medal{pointer-events:auto;cursor:pointer}
 body.music-on.km-serious .hcrown{color:#0a0e18;
   text-shadow:
     2.5px 0 0 rgba(212,175,55,.95), -2.5px 0 0 rgba(212,175,55,.95), 0 2.5px 0 rgba(212,175,55,.95), 0 -2.5px 0 rgba(212,175,55,.95),
@@ -261,7 +265,7 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
 .ks-chip:hover{border-color:#f0d878;color:#fff3cf;box-shadow:0 0 14px rgba(79,140,255,.4);background:rgba(79,140,255,.16)}
 .ks-tag{margin-top:16px;color:#7fb2ff;font-size:11px;letter-spacing:2px;text-transform:uppercase}
 /* scroll: NIHIL EXTRA ME, hover to unroll */
-.km-scroll{text-align:center;margin-bottom:0}
+.km-scroll{text-align:center;margin-bottom:0;position:relative;z-index:20}
 .kscroll-roll{position:relative;width:min(480px,100%);height:230px;margin:26px auto 0;perspective:1400px;cursor:pointer}
 .kscroll-panel{position:absolute;inset:0;background:linear-gradient(180deg,#101a30,#070c16 30%,#0a1220);border:1px solid rgba(79,140,255,.35);border-radius:6px;padding:34px 30px 20px;transform:scaleY(.18);transform-origin:top center;opacity:.2;transition:transform .7s cubic-bezier(.4,.1,.2,1),opacity .5s;box-shadow:inset 0 0 30px rgba(0,0,0,.7)}
 .kscroll-panel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(79,140,255,.08) 2px 4px);pointer-events:none}
@@ -307,10 +311,72 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
 .kw2-txt{display:flex;flex-direction:column;text-align:left}
 .kw2-name{font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:15px;letter-spacing:2px;color:#eaf2ff;text-transform:uppercase}
 .kw2-link{font-size:11px;letter-spacing:1px;color:#5a86c4;margin-top:2px}
+/* ==== ego monologue overlay ==== */
+.km-ego{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at center,rgba(10,16,30,.92),rgba(4,6,12,.97));
+  opacity:0;transition:opacity .35s ease;pointer-events:auto}
+.km-ego.open{display:flex;opacity:1}
+.km-ego .eg-box{position:relative;width:min(560px,92vw);padding:40px 34px 34px;text-align:center;
+  background:linear-gradient(180deg,#111c34,#070c16 50%,#0a1220);border:1px solid rgba(79,140,255,.45);border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(79,140,255,.25),inset 0 1px 0 rgba(127,178,255,.1);
+  transform:translateY(14px) scale(.96);transition:transform .35s ease}
+.km-ego.open .eg-box{transform:translateY(0) scale(1)}
+.km-ego .eg-close{position:absolute;right:14px;top:12px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:#7fb2ff;border:1px solid rgba(79,140,255,.3);border-radius:50%;background:rgba(79,140,255,.06);cursor:pointer;transition:.2s}
+.km-ego .eg-close:hover{color:#f0d878;border-color:#f0d878;box-shadow:0 0 14px rgba(212,175,55,.4);transform:rotate(90deg)}
+.km-ego .eg-crown{font-size:64px;color:#f0d878;text-shadow:0 0 20px rgba(212,175,55,.8),0 0 50px rgba(79,140,255,.6);animation:kmEgCrown 3s ease-in-out infinite;line-height:1}
+@keyframes kmEgCrown{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.km-ego .eg-name{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:17px;letter-spacing:5px;margin:18px 0 14px;text-shadow:0 0 14px rgba(212,175,55,.6)}
+.km-ego .eg-line{font-family:'Palatino',Georgia,serif;color:#cfe0f5;font-size:16px;line-height:1.65;font-style:italic}
+.km-ego .eg-role{display:inline-block;margin-top:18px;padding:7px 16px;font-size:11px;letter-spacing:3px;color:#cfe0f5;
+  border:1px solid rgba(79,140,255,.4);border-radius:20px;background:rgba(79,140,255,.08);text-transform:uppercase;text-shadow:0 0 10px rgba(127,178,255,.5)}
+/* about section with switchable tabs */
+.km-about{width:min(620px,100%);margin:26px auto 0;text-align:center;position:relative;z-index:20}
+.ka-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:18px}
+.ka-tab{padding:9px 24px;border-radius:24px;font-family:'Trajan Pro','Palatino',Georgia,serif;font-size:13px;letter-spacing:3px;
+  color:#7aa5e8;border:1px solid rgba(79,140,255,.35);background:rgba(79,140,255,.05);text-transform:uppercase;cursor:pointer;transition:.2s;user-select:none}
+.ka-tab:hover{color:#cfe0f5;border-color:rgba(79,140,255,.6)}
+.ka-tab.act{color:#0a1220;background:linear-gradient(180deg,#d4af37,#8a6d2a);border-color:#f0d878;box-shadow:0 0 16px rgba(212,175,55,.45);text-shadow:0 0 8px rgba(0,0,0,.3)}
+.ka-tab.act.alt{background:linear-gradient(180deg,#8fc2ff,#2a56a0);border-color:#9ecbff;box-shadow:0 0 16px rgba(79,140,255,.5)}
+.ka-panel{display:none}
+.ka-panel.act{display:block;animation:kaFade .3s ease}
+@keyframes kaFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ka-head{font-family:'Trajan Pro','Palatino',Georgia,serif;color:#f0d878;font-size:18px;letter-spacing:4px;margin-bottom:18px;text-shadow:0 0 14px rgba(212,175,55,.5)}
+.ka-abgrid{display:flex;flex-direction:column;gap:12px}
+.ka-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;border:1px solid rgba(79,140,255,.3);background:rgba(79,140,255,.05);transition:.2s}
+.ka-item:hover{border-color:#f0d878;box-shadow:0 0 16px rgba(79,140,255,.35);transform:translateY(-2px)}
+.ka-ico{width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;font-size:21px;color:#f0d878;border:1px solid rgba(212,175,55,.4);border-radius:10px;background:rgba(212,175,55,.08);text-shadow:0 0 10px rgba(240,216,120,.6)}
+.ka-tx{display:flex;flex-direction:column;text-align:left}
+.ka-k{font-size:10px;letter-spacing:3px;color:#f0d878;text-transform:uppercase;opacity:.9}
+.ka-v{font-size:15px;color:#eaf2ff;margin-top:3px;letter-spacing:.5px}
+.ka-v small{color:#5a86c4;font-size:12px}
+.ka-swatches{display:flex;gap:8px;margin-top:6px}
+.ka-sw{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.18);box-shadow:0 0 10px rgba(0,0,0,.4)}
+/* ==== custom cursor + trail + parallax ==== */
+body{cursor:crosshair}
+body a,body button,body .kscroll-roll,body .km-track{pointer-events:auto}
+body a:hover{cursor:none}
+.km-cursor{position:fixed;left:0;top:0;z-index:1200;pointer-events:none;width:26px;height:26px;margin:-13px 0 0 -13px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;color:#f0d878;
+  text-shadow:0 0 8px rgba(240,216,120,.9),0 0 16px rgba(79,140,255,.7);transition:color .15s;opacity:0}
+.km-cursor.on{opacity:1}
+.km-cursor.hover{color:#7fb2ff;text-shadow:0 0 10px rgba(127,178,255,.95),0 0 22px rgba(79,140,255,.8);transform:scale(1.35)}
+.km-cursor::after{content:'';position:absolute;inset:0;border:1px solid rgba(240,216,120,.7);border-radius:50%;
+  box-shadow:0 0 10px rgba(79,140,255,.5);transition:border-color .15s}
+.km-cursor.hover::after{border-color:#7fb2ff}
+#kmTrail{margin:0;padding:0}
+.km-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:1100;mix-blend-mode:screen;
+  box-shadow:0 0 10px currentColor;will-change:transform,opacity}
+.km-parallax{transition:transform .35s ease}
+@media(max-width:767px){body{cursor:auto}.km-cursor,#kmTrail{display:none}}
 @media(max-width:767px){.ks-top{font-size:16px}.kscroll-roll{height:220px}}
 </style>
 </head>
 <body>
+
+<!-- custom cursor + trail -->
+<div class="km-cursor" id="kmCursor">✦</div>
+<div id="kmTrail"></div>
 
 <!-- ambient background -->
 <div class="ka-bg" id="kaBg">
@@ -411,7 +477,7 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
 </div>
 
 <!-- great crown: in-flow element at the top of the page -->
-<div class="hands-top">
+<div class="hands-top km-parallax">
   <div class="hcrown"><span>♛</span></div>
 </div>
 
@@ -436,7 +502,7 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
       <div class="km-ava"><img src="kaiser_ava.jpg" alt=""></div>
     </div>
     <span class="km-tag">NOVA_PHANSE</span>
-    <span class="km-sub">KAISER · ИМПЕРАТОР</span>
+    <span class="km-sub">НИК · KAISER · ИМПЕРАТОР</span>
   </div>
 
   <!-- imperial horizontal mottos flanking the avatar -->
@@ -627,6 +693,28 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
       </div>
     </div>
   </section>
+
+  <!-- about / games switchable tabs -->
+  <div class="km-about">
+    <div class="ka-tabs">
+      <span class="ka-tab act" data-tab="me">Про меня</span>
+      <span class="ka-tab alt" data-tab="games">Игры</span>
+    </div>
+    <div class="ka-panel act" id="pan-me">
+      <div class="ka-abgrid">
+        <div class="ka-item"><div class="ka-ico">🎮</div><div class="ka-tx"><span class="ka-k">С СТАЖ</span><span class="ka-v">Играю с <b>2015</b> года</span></div></div>
+        <div class="ka-item"><div class="ka-ico">🎨</div><div class="ka-tx"><span class="ka-k">ЛЮБИМЫЕ ЦВЕТА</span><span class="ka-v">Голубой · Фиолетовый · Чёрный</span><span class="ka-swatches"><span class="ka-sw" style="background:radial-gradient(circle,#9ecbff,#2f5fa8)"></span><span class="ka-sw" style="background:radial-gradient(circle,#c9a6ff,#7a3fd8)"></span><span class="ka-sw" style="background:radial-gradient(circle,#333,#05070e)"></span></span></div></div>
+        <div class="ka-item"><div class="ka-ico">⚖</div><div class="ka-tx"><span class="ka-k">ПОЗИЦИЯ</span><span class="ka-v">НЕЙТРАЛ</span></div></div>
+      </div>
+    </div>
+    <div class="ka-panel" id="pan-games">
+      <div class="ka-abgrid">
+        <div class="ka-item"><div class="ka-ico">🎖</div><div class="ka-tx"><span class="ka-k">ЛЮБИМАЯ ИГРА</span><span class="ka-v">War Thunder</span></div></div>
+        <div class="ka-item"><div class="ka-ico">🗺</div><div class="ka-tx"><span class="ka-k">ИГРАЮ</span><span class="ka-v">War Thunder · Arma 2 · RimWorld · Project Zomboid</span></div></div>
+        <div class="ka-item"><div class="ka-ico">🕸</div><div class="ka-tx"><span class="ka-k">СТИЛЬ</span><span class="ka-v">Tactical gamer · Survivor · Hating German tanks since forever</span></div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -637,6 +725,17 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
 <div id="petalLayer"></div>
 <!-- serious-mode screen tremor overlay -->
 <div class="km-shake"></div>
+
+<!-- ego monologue overlay -->
+<div class="km-ego" id="kmEgo">
+  <div class="eg-box">
+    <div class="eg-close" id="kmEgoClose">✕</div>
+    <div class="eg-crown">♛</div>
+    <div class="eg-name">NOVA_PHANSE · KAISER</div>
+    <div class="eg-line">«Is it really so hard to reach for the stars? Life is too short for doubt, and nothing in it is impossible — or is it talent that decides?»</div>
+    <span class="eg-role">эго-состояние · КАЙЗЕР</span>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -771,6 +870,73 @@ body.music-on.km-serious .hcrown{color:#0a0e18;
     else if(!want&&petalsOn){petalsOn=false;if(petalTimer){clearInterval(petalTimer);petalTimer=null;}}
   }
   setInterval(check,350);
+})();
+(function(){
+  /* custom cursor + trail + parallax */
+  var cur=document.getElementById('kmCursor');
+  var trailHost=document.getElementById('kmTrail');
+  var par=document.querySelector('.km-parallax');
+  if(!cur||!trailHost)return;
+  var mq=window.matchMedia('(hover:hover)');
+  if(!mq.matches){cur.style.display='none';return;}
+  var mx=innerWidth/2,my=innerHeight/2,px=0,py=0;
+  var hearts=[];
+  window.addEventListener('mousemove',function(e){
+    mx=e.clientX;my=e.clientY;
+    if(!cur.classList.contains('on'))cur.classList.add('on');
+    cur.style.transform='translate('+mx+'px,'+my+'px)';
+    if(par){par.style.transform='translate('+((mx/innerWidth-0.5)*12)+'px,'+((my/innerHeight-0.5)*10)+'px) rotate('+((mx/innerWidth-0.5)*1.6)+'deg)';}
+  },{passive:true});
+  /* trail sparkles */
+  var last=0;
+  function tick(){
+    requestAnimationFrame(tick);
+    var t=Date.now();
+    if(t-last>40){
+      last=t;
+      var s=document.createElement('i');s.className='km-trail';
+      s.style.color=(Math.random()<0.5)?'rgba(240,216,120,.9)':'rgba(127,178,255,.9)';
+      var sz=4+Math.random()*7; s.style.width=sz+'px';s.style.height=sz+'px';
+      s.style.left=mx+'px';s.style.top=my+'px';
+      s.style.background='currentColor';
+      trailHost.appendChild(s);
+      (function(el){setTimeout(function(){el.style.transition='opacity .7s,transform .7s';el.style.opacity='0';el.style.transform='translate('+((Math.random()-0.5)*30)+'px,'+((Math.random()-0.5)*30)+'px)';},10);setTimeout(function(){el.remove();},800);})(s);
+    }
+  }
+  tick();
+  /* enlarge on interactive */
+  document.addEventListener('mouseover',function(e){
+    var t=e.target.closest('a,button,.hcrown,.km-medal');
+    if(t){cur.classList.add('hover');}else{cur.classList.remove('hover');}
+  });
+})();
+(function(){
+  /* ego monologue on crown / avatar click */
+  var ego=document.getElementById('kmEgo');
+  if(!ego)return;
+  var close=document.getElementById('kmEgoClose');
+  function openEgo(){ego.classList.add('open');}
+  function closeEgo(){ego.classList.remove('open');}
+  document.addEventListener('click',function(e){
+    if(e.target.closest('.hcrown')||e.target.closest('.km-medal')){openEgo();return;}
+    if(e.target===close||e.target===ego){closeEgo();}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeEgo();});
+})();
+(function(){
+  /* switchable tabs: Про меня / Игры */
+  var tabs=document.querySelectorAll('.ka-tab');
+  if(!tabs.length)return;
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      var name=this.getAttribute('data-tab');
+      document.querySelectorAll('.ka-tab').forEach(function(x){x.classList.remove('act');});
+      document.querySelectorAll('.ka-panel').forEach(function(p){p.classList.remove('act');});
+      this.classList.add('act');
+      var pan=document.getElementById('pan-'+name);
+      if(pan)pan.classList.add('act');
+    });
+  });
 })();
 </script>
 </body>
